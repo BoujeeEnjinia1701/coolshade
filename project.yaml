@@ -1,0 +1,17 @@
+# Card metadata consumed by https://designmolecule.com
+name: CoolShade
+slug: coolshade
+area: Smart Cities
+status: concept          # concept | design | prototype | tested | released
+shortlisted: false
+pitch: >-
+  A solar-powered shade canopy with fine misting for bus stops, markets and queues, switching on only when heat stress is high.
+problem: >-
+  People waiting outdoors in extreme heat have nowhere to cool down, and public cooling is rarely where they wait.
+budget_usd: 700
+difficulty: 3  # 1 easiest, 5 hardest
+hero_image: media/hero.png
+licenses:
+  hardware: CERN-OHL-S-2.0
+  software: MIT
+tags: [smart-cities, open-hardware, cern-ohl-s]
