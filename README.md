@@ -1,18 +1,18 @@
 # CoolShade
 
-![TRL 2](https://img.shields.io/badge/TRL-2%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
+![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** Smart Cities · **TRL:** 2 of 9 (concept formulated) · **Prototype budget:** about $700 USD · **Difficulty:** 3 of 5
+**Area:** Smart Cities · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $700 USD · **Difficulty:** 3 of 5
 
 A solar-powered shade canopy with fine misting for bus stops, markets and queues, switching on only when heat stress is high.
 
 ![CoolShade concept](media/hero.png)
 
-[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [Review note](docs/REVIEW.md)
+[Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement (PDF)](cad/drawings/CSH-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 
-For a person waiting in the sun, radiant heat from the sun and hot pavement matters as much as air temperature, and shade removes most of it: in Tempe, Arizona, even shade sails cut the daytime mean radiant temperature by about 17 °C ([Middel et al., 2021](https://journals.ametsoc.org/view/journals/bams/102/9/BAMS-D-20-0193.1.xml)). CoolShade therefore starts with shade and adds low-pressure misting only when it helps: when the air is hot and dry enough for evaporation to cool it and someone is actually waiting. Gating on humidity and presence keeps water and energy use low (about 85 L and 205 Wh on a hot, dry day, estimates) and avoids wetting people in humid air.
+For a person waiting in the sun, radiant heat from the sun and hot pavement matters as much as air temperature, and shade removes most of it: in Tempe, Arizona, even shade sails cut the daytime mean radiant temperature by about 17 °C ([Middel et al., 2021](https://journals.ametsoc.org/view/journals/bams/102/9/BAMS-D-20-0193.1.xml)). CoolShade therefore starts with shade and adds low-pressure misting only when it helps: when the air is hot and dry enough for evaporation to cool it and someone is actually waiting. Gating on humidity and presence keeps water and energy use low (85 L and about 204 Wh on a hot, dry day, from the TRL 3 calculations) and avoids wetting people in humid air.
 
 It is open and garage-buildable because the places that need it most, curbside stops, informal markets and distribution queues, rarely have power, budgets or staff for commercial misting systems. The frame is bolted steel tube, the roof is shade cloth, and the power and water parts are generic 12 V solar, pump and irrigation parts. Cities, schools and community groups can build, move, repair and audit it, including the water hygiene plan that any public misting system needs.
 
@@ -57,7 +57,7 @@ People waiting outdoors in extreme heat have nowhere to cool down, and public co
 
 A four-post bolted steel canopy, 3.0 x 2.4 m, with a knitted shade cloth roof, a 100 W solar panel and a 12.8 V LiFePO4 battery. A 12 V diaphragm pump sends filtered water from a 120 L tank at about 7 bar to eight anti-drip nozzles under the roof beams. The controller mists only when the air is 32 °C or more, relative humidity is 60 % or less and a passive infrared sensor sees someone waiting (thresholds proposed); a normally open valve drains the line after every session. No camera or microphone is fitted.
 
-First-order estimates (to be checked at TRL 3): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), about 1.4 °C lower air temperature on average at 1 m/s wind (about 2.7 °C while spraying), about 85 L of water and 205 Wh per hot, dry day, one tank lasting about 1.4 days, and about $735 in parts. Not met: the $700 budget and the 2 °C air cooling target at 1 m/s wind. At risk: wetting from low-pressure droplets, *Legionella* control in warm stored water, and nozzle scaling in hard water.
+TRL 3 calculations ([CSH-CAL-001](docs/04-calcs/01-sizing.md)): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), 1.35 °C lower air temperature on average at 1 m/s wind (2.71 °C while spraying), 85 L of water and 204 Wh per hot, dry day, one tank lasting 1.41 days, headroom of 2,234 mm, and $758 in parts. Not met: the 2 °C air cooling target at 1 m/s wind, wind resistance with the fabric fitted (the fabric's edge pull overloads the roof beams in a 30 m/s gust, so it must come off before storms) and the $700 budget (a rise to $750 awaits Amish). At risk: the energy margin, *Legionella* control in warm stored water and nozzle scaling; wetting cannot be judged until droplet data are in hand.
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [docs/03-requirements.md](docs/03-requirements.md).
 
@@ -74,12 +74,12 @@ Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [doc
 9. Sensor head: temperature and humidity in a radiation shield, PIR presence sensor
 10. Misting pump, 12 V, about 7 bar
 11. Filter, 5 µm, and check valve
-12. Mist line with 8 anti-drip nozzles
-13. Water tank, 120 L, opaque
-14. Normally open drain valve
+12. Mist line loop with 8 anti-drip nozzles
+13. Water tank, 120 L, opaque, strapped
+14. Normally open drain valve and vacuum breaker
 15. Hose and wiring harness
 
-The working bill of materials is in [bom/bom.csv](bom/bom.csv).
+The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is [cad/src/model.py](cad/src/model.py), with STEP and STL exports in `cad/step/` and `cad/stl/`.
 
 ## Safety
 
@@ -87,7 +87,7 @@ The working bill of materials is in [bom/bom.csv](bom/bom.csv).
 >
 > Lithium cells can overheat, vent and burn. Use protected cells or LiFePO4, fuse every pack, charge only within the cell maker's limits and never leave a first build charging unattended.
 >
-> The canopy is a wind-loaded structure: anchor it to a checked slab or footing and remove the fabric before storms. Building it is work at height with heavy steel. The pump line runs at about 7 bar; depressurize it before opening fittings. Install on public land only with the asset owner's permission.
+> The canopy is a wind-loaded structure: anchor it to a checked slab or footing, strap the tank, and remove the fabric before storms. Building it is work at height with heavy steel. The pump line runs at about 7 bar; depressurize it before opening fittings. Install on public land only with the asset owner's permission.
 
 ## Repository layout
 

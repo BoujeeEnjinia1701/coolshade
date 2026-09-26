@@ -3,7 +3,7 @@ doc_id: CSH-PRB-001
 title: CoolShade problem statement
 project: CoolShade
 doc_type: Problem statement
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Populate to TRL 2 (problem, users, context, constraints, prior work, open questions)
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: TRL 3 update; budget constraint stated against the proposed figure, humid edge of the misting window, open questions aligned with CSH-DDR-001 and CSH-CAL-001
 ---
 
 # CoolShade problem statement
@@ -46,14 +50,14 @@ Heat-vulnerable people include older adults, young children, pregnant people, pe
 
 ## Operating environment
 
-- Hot seasons with air temperatures of 32 to 45 °C and strong sun; the design case is 38 °C at 25 % relative humidity (hot and dry) with a check at 35 °C and 60 % (hot and humid).
+- Hot seasons with air temperatures of 32 to 45 °C and strong sun; the design case is 38 °C at 25 % relative humidity (hot and dry) with a check at 35 °C and 60 % (hot and humid). The wettest air in which the unit still mists is 32 °C at 60 %, the humid edge used for the wetting check in CSH-CAL-001.
 - Misting only helps when the air can absorb water. In hot, humid air it adds little cooling and wets people, so the unit must not mist then.
 - Dust, rain, hard water, vandalism and theft; public sites with no staff present most of the time.
-- Wind storms. The shade fabric can act as a sail.
+- Wind storms. The shade fabric can act as a sail, and on the conservative TRL 3 calculation it must come off before gusts of about 16 m/s (58 km/h) (CSH-CAL-001).
 
 ## Constraints
 
-- Garage-buildable prototype, about $700 USD in parts.
+- Garage-buildable prototype, about $700 USD in parts (`budget_usd`). A rise to $750 was recommended at TRL 2 and awaits Amish; the TRL 3 parts cost is $758 (CSH-CAL-001).
 - Off-grid: solar powered, 12 V DC only, no mains connection needed.
 - Water from a refillable tank; mains water connection optional where local rules permit, with backflow prevention.
 - Bolted steel frame; no welding required.
@@ -71,7 +75,7 @@ Heat-vulnerable people include older adults, young children, pregnant people, pe
 ## Prior work
 
 - Shade: the Tempe shade study above measured large radiant heat reductions from shade sails and structures ([Middel et al., 2021](https://journals.ametsoc.org/view/journals/bams/102/9/BAMS-D-20-0193.1.xml)).
-- Misting: a systematic review of water mist spray for outdoor cooling covers technologies, methods and impacts ([Ulpiani, *Applied Energy*, 2019](https://doi.org/10.1016/j.apenergy.2019.113647)). Field evaluations include an outdoor mist fan ([Farnham et al., *Building Research and Information*, 2015](https://doi.org/10.1080/09613218.2015.1004844)) and a shade sail and mist-spray hybrid in a school courtyard ([SSRN preprint, 2023](https://doi.org/10.2139/ssrn.4627041)).
+- Misting: a systematic review of water mist spray for outdoor cooling covers technologies, methods and impacts ([Ulpiani, *Applied Energy*, 2019](https://doi.org/10.1016/j.apenergy.2019.113647)). Field evaluations include an outdoor mist fan ([Farnham, Emura and Mizuno, *Building Research and Information* 43(3), 2015](https://doi.org/10.1080/09613218.2015.1004844)) and a shade sail and mist-spray hybrid in a school courtyard ([Zhao et al., SSRN preprint, 2023](https://doi.org/10.2139/ssrn.4627041)).
 - Lab siblings: HeatMap Node measures street-level heat stress and can identify where shade is most needed. FieldNode is the lab's shared solar and LoRaWAN sensor core, which CoolShade could use for an optional status link.
 
 No open, solar-powered, humidity- and occupancy-controlled misting shade for public waiting spots was found in this review; that is the gap CoolShade targets.
@@ -80,7 +84,7 @@ No open, solar-powered, humidity- and occupancy-controlled misting shade for pub
 
 - Which sites to start with (bus stop, market, clinic queue) and through which partner? Proposed, awaiting Amish.
 - Is misting acceptable to users at all, given concerns about wet clothes, hair and hygiene? To be asked in co-design.
-- Who refills the tank and flushes the lines, and how often can they do it?
+- Who refills the tank and flushes the lines, and can they visit daily on hot days? CSH-CAL-001 assumes a daily drain-and-refill of about 95 L.
 - What local rules apply to public misting (water hygiene, permits, mains backflow)?
 
 ## User research and co-design
