@@ -32,9 +32,9 @@ PARAMS = {
     "plate": 220.0, "plate_t": 10.0, "anchor_d": 16.0, "anchor_pitch": 160.0, "anchor_embed": 125.0,
     # 5 solar panel on two rails over the purlins, rear half of the roof
     "panel": (1000.0, 670.0, 35.0), "panel_y": 500.0,
-    # 8 enclosure (houses 6 battery and 7 MPPT) on the outer face of the rear right post
+    # 8 enclosure (houses 6 battery, 12.8 V 25 Ah per CSH-DDR-002, and 7 MPPT) on the outer face of the rear right post
     "enc": (160.0, 320.0, 420.0), "enc_z": 1650.0,
-    "battery": (80.0, 180.0, 170.0), "mppt": (40.0, 90.0, 140.0),
+    "battery": (100.0, 180.0, 170.0), "mppt": (40.0, 90.0, 140.0),
     # 9 sensor head: multi-plate shield on an arm off the front right post; PIR under the front beam
     "shield_r": 60.0, "shield_z": 2250.0, "arm_l": 300.0,
     # 10 pump, 11 filter, 13 tank (rear left corner), 14 drain valve

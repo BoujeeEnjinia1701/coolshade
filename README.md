@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** Smart Cities · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $700 USD · **Difficulty:** 3 of 5
+**Area:** Smart Cities · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $775 USD · **Difficulty:** 3 of 5
 
 A solar-powered shade canopy with fine misting for bus stops, markets and queues, switching on only when heat stress is high.
 
@@ -47,7 +47,7 @@ Heat also takes work time from people who spend their day outdoors: the ILO proj
 
 ## What sparked the idea
 
-It came out of a September 2026 review of Design Molecule's applied research areas against the open projects already in the lab. It pairs with HeatMap Node. The real-world trigger is the evidence that simple shade sharply reduces the heat a person feels ([Middel et al., 2021](https://journals.ametsoc.org/view/journals/bams/102/9/BAMS-D-20-0193.1.xml)), while summers such as Europe's in 2022 still kill tens of thousands of people ([Ballester et al., 2023](https://www.nature.com/articles/s41591-023-02419-z)).
+The idea traces back to Expo '92 in Seville, where the midday summer heat would have made the open public spaces unlivable without the site's designed microclimate. Its designers combined three measures: shading to block the sun, cold surfaces of vegetation and water, and cold air made by micronizing water in the passage areas where visitors walked and queued ([Castro Medina et al., *Sustainability*, 2022](https://doi.org/10.3390/su142114173)). That system served a showcase site with mains power, piped water and staff on hand. CoolShade takes the same order, shade first and mist second, and asks whether it can fit in a bolted canopy that runs from a panel and a tank at an ordinary bus stop or market lane, with the humidity and presence gating and the hygiene routine that an unattended public site needs.
 
 ## Problem
 
@@ -55,9 +55,9 @@ People waiting outdoors in extreme heat have nowhere to cool down, and public co
 
 ## Concept
 
-A four-post bolted steel canopy, 3.0 x 2.4 m, with a knitted shade cloth roof, a 100 W solar panel and a 12.8 V LiFePO4 battery. A 12 V diaphragm pump sends filtered water from a 120 L tank at about 7 bar to eight anti-drip nozzles under the roof beams. The controller mists only when the air is 32 °C or more, relative humidity is 60 % or less and a passive infrared sensor sees someone waiting (thresholds proposed); a normally open valve drains the line after every session. No camera or microphone is fitted.
+A four-post bolted steel canopy, 3.0 x 2.4 m, with a knitted shade cloth roof, a 100 W solar panel and a 12.8 V LiFePO4 battery. A 12 V diaphragm pump sends filtered water from a 120 L tank at about 7 bar to eight anti-drip nozzles under the roof beams. The controller mists only when the air is 32 °C or more, relative humidity is 60 % or less and a passive infrared sensor sees someone waiting; a normally open valve drains the line after every session. No camera or microphone is fitted.
 
-TRL 3 calculations ([CSH-CAL-001](docs/04-calcs/01-sizing.md)): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), 1.35 °C lower air temperature on average at 1 m/s wind (2.71 °C while spraying), 85 L of water and 204 Wh per hot, dry day, one tank lasting 1.41 days, headroom of 2,234 mm, and $758 in parts. Not met: the 2 °C air cooling target at 1 m/s wind, wind resistance with the fabric fitted (the fabric's edge pull overloads the roof beams in a 30 m/s gust, so it must come off before storms) and the $700 budget (a rise to $750 awaits Amish). At risk: the energy margin, *Legionella* control in warm stored water and nozzle scaling; wetting cannot be judged until droplet data are in hand.
+TRL 3 calculations ([CSH-CAL-001](docs/04-calcs/01-sizing.md)): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), 2.71 °C lower air temperature while spraying at 1 m/s wind (1.35 °C averaged over the spray cycle), 85 L of water and 204 Wh per hot, dry day, a 25 Ah battery lasting 1.26 days without sun, one tank lasting 1.41 days, headroom of 2,234 mm, and $773 in parts against the $775 budget. The frame and anchors are sized to survive a 30 m/s gust with the fabric removed; the fabric goes on only when forecast gusts are below 15 m/s (54 km/h), because its edge pull would overload the roof beams in a storm. No requirement is unmet on paper. At risk: cost (steel is not yet quoted), *Legionella* control in warm stored water and nozzle scaling; wetting cannot be judged until droplet data are in hand. Design decisions: [CSH-DDR-001](docs/decisions/0001-trl2-review-decisions.md) and [CSH-DDR-002](docs/decisions/0002-recommendations-accepted.md).
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [docs/03-requirements.md](docs/03-requirements.md).
 
@@ -68,7 +68,7 @@ Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [doc
 3. Shade fabric, knitted HDPE
 4. Base plates and anchors
 5. Solar panel, 100 W
-6. LiFePO4 battery, 12.8 V 20 Ah
+6. LiFePO4 battery, 12.8 V 25 Ah
 7. MPPT charge controller
 8. Controller in a lockable IP65 enclosure
 9. Sensor head: temperature and humidity in a radiation shield, PIR presence sensor
@@ -87,7 +87,7 @@ The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric mo
 >
 > Lithium cells can overheat, vent and burn. Use protected cells or LiFePO4, fuse every pack, charge only within the cell maker's limits and never leave a first build charging unattended.
 >
-> The canopy is a wind-loaded structure: anchor it to a checked slab or footing, strap the tank, and remove the fabric before storms. Building it is work at height with heavy steel. The pump line runs at about 7 bar; depressurize it before opening fittings. Install on public land only with the asset owner's permission.
+> The canopy is a wind-loaded structure: anchor it to a checked slab or footing, strap the tank, fit the fabric only when forecast gusts are below 15 m/s, and remove it before storms. Building it is work at height with heavy steel. The pump line runs at about 7 bar; depressurize it before opening fittings. Install on public land only with the asset owner's permission.
 
 ## Repository layout
 
@@ -112,4 +112,4 @@ Controlled documents follow the portfolio [documentation standard](.kit/STANDARD
 - **Hardware** (CAD, drawings, BOM, electronics): [CERN-OHL-S v2](LICENSE)
 - **Software** (firmware, scripts, notebooks): [MIT](LICENSE-SOFTWARE)
 
-A project of the [Design Molecule](https://designmolecule.com) lab. Smart cities set.
+A project of the [Design Molecule](https://designmolecule.com) lab.

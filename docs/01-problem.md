@@ -3,7 +3,7 @@ doc_id: CSH-PRB-001
 title: CoolShade problem statement
 project: CoolShade
 doc_type: Problem statement
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: TRL 3 update; budget constraint stated against the proposed figure, humid edge of the misting window, open questions aligned with CSH-DDR-001 and CSH-CAL-001
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # CoolShade problem statement
@@ -53,11 +57,11 @@ Heat-vulnerable people include older adults, young children, pregnant people, pe
 - Hot seasons with air temperatures of 32 to 45 °C and strong sun; the design case is 38 °C at 25 % relative humidity (hot and dry) with a check at 35 °C and 60 % (hot and humid). The wettest air in which the unit still mists is 32 °C at 60 %, the humid edge used for the wetting check in CSH-CAL-001.
 - Misting only helps when the air can absorb water. In hot, humid air it adds little cooling and wets people, so the unit must not mist then.
 - Dust, rain, hard water, vandalism and theft; public sites with no staff present most of the time.
-- Wind storms. The shade fabric can act as a sail, and on the conservative TRL 3 calculation it must come off before gusts of about 16 m/s (58 km/h) (CSH-CAL-001).
+- Wind storms. The shade fabric can act as a sail, and on the conservative TRL 3 calculation it must come off before gusts of about 16 m/s (58 km/h). The fabric is fitted only when forecast gusts are below 15 m/s (54 km/h) (CSH-CAL-001, CSH-DDR-002).
 
 ## Constraints
 
-- Garage-buildable prototype, about $700 USD in parts (`budget_usd`). A rise to $750 was recommended at TRL 2 and awaits Amish; the TRL 3 parts cost is $758 (CSH-CAL-001).
+- Garage-buildable prototype, about $775 USD in parts (`budget_usd`, set by Amish on 2026-09-25, CSH-DDR-002; it was $700). The parts cost is $773 (CSH-CAL-001).
 - Off-grid: solar powered, 12 V DC only, no mains connection needed.
 - Water from a refillable tank; mains water connection optional where local rules permit, with backflow prevention.
 - Bolted steel frame; no welding required.

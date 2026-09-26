@@ -1,4 +1,4 @@
-"""CoolShade sizing calculations, CSH-CAL-001 v0.1 (TRL 3).
+"""CoolShade sizing calculations, CSH-CAL-001 v0.2 (TRL 3).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number quoted in docs/04-calcs/01-sizing.md. Each line carries a tag such as
@@ -46,7 +46,7 @@ JET = 300.0                           # downward jet penetration below the nozzl
 # Energy
 PUMP_W, CTRL_W, VALVE_W = 60.0, 1.2, 5.0
 PANEL_W, PSH, SYS = 100.0, 4.5, 0.75
-BATT_WH, DOD = 12.8 * 20, 0.80
+BATT_WH, DOD = 12.8 * 25, 0.80        # 25 Ah battery (CSH-DDR-002; was 20 Ah)
 V_BATT, VMP = 12.8, 18.0
 MPPT_EFF = 0.95
 # Enclosure heat, under the shade cloth
@@ -70,7 +70,7 @@ A_PERSON = 0.5                        # m2 per standing person (assumption)
 WHEEL = (0.8, 1.2)                    # m, R1 wheelchair space
 BENCH = (1.5, 0.42)                   # m, existing bench footprint (context)
 
-print("CoolShade sizing, CSH-CAL-001 v0.1")
+print("CoolShade sizing, CSH-CAL-001 v0.2")
 print(f"Geometry from cad/src/model.py: roof {P['roof_l']:.0f} x {P['roof_d']:.0f} mm, posts {P['post']:.0f} x {P['post_t']:.0f} SHS "
       f"on {2 * P['post_x']:.0f} x {2 * P['post_y']:.0f} mm, slope {D['slope_deg']:.2f} deg")
 results = {}
@@ -225,11 +225,12 @@ dt_on = q_on / (m_air * CP_A)
 v_need = q_avg / (CV_H / 1000 * CV_L / 1000 * RHO_A * CP_A * 2.0)
 tag("E1", f"Evaporative heat absorbed {q_avg / 1000:.2f} kW averaged, {q_on / 1000:.1f} kW while spraying; air through the zone {m_air:.2f} kg/s at {WIND:.0f} m/s")
 tag("E2", f"Air temperature drop {dt_avg:.2f} degC averaged over the duty cycle, {dt_on:.2f} degC while spraying; transit time {CV_L / 1000 / WIND:.0f} s is shorter than the 20 s pulse, so the drop follows the pulses")
-tag("E3", f"R4 (2 degC averaged) is met at wind speeds below {v_need:.2f} m/s; at 0.3 m/s the averaged drop is {q_avg / (CV_H / 1000 * CV_L / 1000 * 0.3 * RHO_A * CP_A):.1f} degC (wetting risk rises)")
+tag("E3", f"R4 as restated (2 degC while spraying, CSH-DDR-002): {dt_on:.2f} degC at {WIND:.0f} m/s, held while spraying up to {q_on / (CV_H / 1000 * CV_L / 1000 * RHO_A * CP_A * 2.0):.2f} m/s; "
+    f"the former averaged target would need wind below {v_need:.2f} m/s; at 0.3 m/s the averaged drop is {q_avg / (CV_H / 1000 * CV_L / 1000 * 0.3 * RHO_A * CP_A):.1f} degC (wetting risk rises)")
 tw_d = wet_bulb(T_DAY, RH_DAY)
 tag("E4", f"Wet-bulb limit on the design day {tw_d:.1f} degC, {T_DAY - tw_d:.1f} degC below ambient; humidity added {evap / (ACTIVE_H * 3600) / m_air * 1000:.2f} g/kg")
 tag("E5", f"Heat absorbed per design day {evap * HFG / 3.6e6:.0f} kWh")
-results["R4"] = ("Not met", f"{dt_avg:.2f} degC averaged ({dt_on:.2f} while spraying) at 1 m/s; met below {v_need:.2f} m/s")
+results["R4"] = ("Met", f"{dt_on:.2f} degC while spraying at 1 m/s against 2 degC (restated, CSH-DDR-002); {dt_avg:.2f} degC averaged over the cycle")
 results["R3"] = ("Met (literature)", "about 17.3 degC for shade sails (Middel et al., 2021); not verifiable for this fabric at TRL 3")
 
 # ------------------------------------------------------------------ F. Energy (R8)
@@ -251,7 +252,7 @@ a_face = P["enc"][1] * P["enc"][2] / 1e6
 d_t = (ALPHA_ENC * G_ENC * a_face + Q_INT) / (H_ENC * a_enc)
 tag("F5", f"Enclosure {a_enc:.3f} m2, rise above ambient about {d_t:.1f} K: {T_DAY + d_t:.1f} degC on the design day, {T_HOT + d_t:.1f} degC at {T_HOT:.0f} degC air; "
     f"charging stops above {T_CHG_MAX:.0f} degC, i.e. at air above about {T_CHG_MAX - d_t:.1f} degC")
-results["R8"] = ("At risk", f"{e_use:.0f} Wh used vs {e_harv:.0f} Wh harvested; battery {e_batt / e_use:.2f} days (no margin); charging stops above about {T_CHG_MAX - d_t:.0f} degC air")
+results["R8"] = ("Met", f"{e_use:.0f} Wh used vs {e_harv:.0f} Wh harvested; 25 Ah battery {e_batt / e_use:.2f} days without sun; charging stops above about {T_CHG_MAX - d_t:.0f} degC air")
 
 # ------------------------------------------------------------------ G. Structure and wind (R10)
 print("\nG. Structure and wind")
@@ -331,8 +332,42 @@ f_tank = CD_CYL * q * d_tank * h_tank
 m_over = f_tank * h_tank / 2
 m_rest = M_TANK_EMPTY * G * d_tank / 2
 tag("G12", f"Empty tank ({M_TANK_EMPTY:.0f} kg assumed): drag {f_tank:.0f} N, overturning {m_over:.0f} N m against {m_rest:.0f} N m restoring; it tips unless strapped (strap added to item 13)")
-results["R10"] = ("Not met", f"fabric edge pull gives long-beam utilization {sig_edge * GAMMA / FY:.1f} at 30 m/s (fabric solid, 5 % sag); fabric must come off above about {v_fabric:.0f} m/s; "
-                  f"posts {sig * GAMMA / FY:.2f}; anchors not verifiable")
+def wind_case(v, fabric):
+    """Posts, roof members and anchors for a gust v (m/s), with or without the fabric fitted."""
+    qv = 0.5 * RHO_W * v ** 2
+    pw_, pd_, _ = P["panel"]
+    a_pan = pw_ * pd_ / 1e6
+    if fabric:
+        n_v = CF_N * qv * A_roof
+        h_v = n_v * math.sin(slope) + 2 * CFR * qv * A_roof + CD_SQ * qv * P["roof_l"] / 1000 * EDGE_H / 1000
+        e_v = ECC * Dp
+    else:
+        n_v = CF_N * qv * a_pan                                   # panel as a flat plate; bare members add drag only
+        h_v = n_v * math.sin(slope) + CD_SQ * qv * P["roof_l"] / 1000 * (P["beam"] + P["panel"][2]) / 1000
+        e_v = P["panel_y"] / 1000                                 # panel sits on the rear half of the roof
+    m_b = h_v / 4 * hp + CD_SQ * qv * P["post"] / 1000 * hp ** 2 / 2
+    t_p = n_v / 4 + n_v * e_v / (2 * 2 * P["post_y"] / 1000)
+    f_t = GAMMA * t_p - 0.9 * m_dead * G / 4
+    t_b = GAMMA * m_b / (2 * lever) + max(f_t, 0) / 4
+    return qv, n_v, h_v, m_b, m_b * 1e3 / Z_post * GAMMA / FY, t_p, t_b, a_pan
+
+
+_, _, Z_purl = shs_props(P["purlin"], P["purlin_t"])
+q0, n0, h0, mb0, u0, tp0, tb0, a_pan = wind_case(V_GUST, False)
+span_p = P["roof_d"] - 100
+a_p = span_p / 2 + P["panel_y"]
+m_purl = n0 / 2 * a_p * (span_p - a_p) / span_p / 1000            # N m, half the panel on each purlin as a point load
+u_purl = m_purl * 1e3 / Z_purl * GAMMA / FY
+tag("G13", f"R10 restated (CSH-DDR-002), fabric removed, {V_GUST:.0f} m/s: panel {a_pan:.2f} m2 takes {n0 / 1000:.2f} kN normal; roof-level horizontal load {h0 / 1000:.2f} kN; "
+    f"post base moment {mb0 / 1000:.2f} kN m, utilization {u0:.2f}; purlin {P['purlin']:.0f} x {P['purlin_t']:.0f} SHS under the panel utilization {u_purl:.2f}; "
+    f"worst post uplift {tp0 / 1000:.2f} kN against {m_dead * G / 4 / 1000:.2f} kN dead load per post; anchor tension about {tb0 / 1000:.1f} kN factored")
+V_FAB = 15.0
+q1, n1, h1, mb1, u1, tp1, tb1, _ = wind_case(V_FAB, True)
+u_edge1 = sig_edge * GAMMA / FY * (V_FAB / V_GUST) ** 2
+tag("G14", f"R10 restated, fabric fitted, forecast gusts up to {V_FAB:.0f} m/s ({V_FAB * 3.6:.0f} km/h): {q1:.0f} Pa, roof normal force {n1 / 1000:.2f} kN; "
+    f"long-beam utilization from fabric edge pull {u_edge1:.2f} (5 % sag, fabric solid); posts {u1:.2f}; anchor tension about {tb1 / 1000:.1f} kN factored")
+results["R10"] = ("Met on paper", f"restated target (CSH-DDR-002): fabric off at {V_GUST:.0f} m/s, posts {u0:.2f}, purlins {u_purl:.2f}; fabric on to {V_FAB:.0f} m/s, long beams {u_edge1:.2f}; "
+                  f"anchors need about {max(tb0, tb1) / 1000:.1f} kN each, to be confirmed per site; the original fabric-on 30 m/s case gives beam utilization {sig_edge * GAMMA / FY:.1f}")
 
 # ------------------------------------------------------------------ H. Movability and buildability (R17, R14, R16)
 print("\nH. Movability and handling")
@@ -364,12 +399,12 @@ with open(ROOT / "bom" / "bom.csv", newline="") as f:
     bom = list(csv.DictReader(f))
 total = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in bom)
 budget = float(re.search(r"^budget_usd:\s*([\d.]+)", (ROOT / "project.yaml").read_text(), re.M).group(1))
-PROPOSED = 750.0
+TRL2_BUDGET, TRL2_PROPOSED = 700.0, 750.0      # history: budget_usd before CSH-DDR-002, and the TRL 2 proposal
 steel_usd = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in bom if r["item"].split()[0] in ("1", "2", "4"))
 tag("J1", f"BOM {len(bom)} lines, total ${total:,.2f}: ${total - budget:+,.2f} ({(total / budget - 1) * 100:+.1f} %) against budget_usd ${budget:,.0f}; "
-    f"${total - PROPOSED:+,.2f} ({(total / PROPOSED - 1) * 100:+.1f} %) against the proposed ${PROPOSED:,.0f}")
+    f"for the record, ${total - TRL2_BUDGET:+,.2f} against the former ${TRL2_BUDGET:,.0f} and ${total - TRL2_PROPOSED:+,.2f} against the TRL 2 proposal of ${TRL2_PROPOSED:,.0f}")
 tag("J2", f"Steel lines 1, 2 and 4 cost ${steel_usd:,.0f} for about {m_steel:.0f} kg, ${steel_usd / m_steel:.2f}/kg including cutting, drilling and galvanizing: low, so cost is at risk upward until quoted")
-results["R13"] = ("Not met", f"${total:,.0f} against ${budget:,.0f} ({(total / budget - 1) * 100:+.1f} %) and against the proposed ${PROPOSED:,.0f} ({(total / PROPOSED - 1) * 100:+.1f} %)")
+results["R13"] = ("At risk" if total <= budget else "Not met", f"${total:,.0f} against ${budget:,.0f} ({(total / budget - 1) * 100:+.1f} %); steel prices look low, so the margin may vanish when quoted")
 
 # ------------------------------------------------------------------ Summary
 print("\nRequirement status")

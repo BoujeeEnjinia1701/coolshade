@@ -3,7 +3,7 @@ doc_id: CSH-CAL-001
 title: CoolShade sizing calculations
 project: CoolShade
 doc_type: Calculation
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -13,17 +13,21 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: First issue for TRL 3 (shade and space, headroom, misting and water, droplets and wetting, cooling, energy, wind and structure, handling, control and electrical, cost)
+- version: "0.2"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # CoolShade sizing calculations
 
-On paper, CoolShade meets ten of its seventeen requirements (five by calculation, four by design and one on published evidence), has three at risk, one that cannot be judged at TRL 3 and three that are not met. The three misses are R4 (air cooling of 2 °C at 1 m/s wind, where the calculation gives 1.35 °C averaged over the spray cycle), R10 (wind with the fabric fitted, where the fabric's edge pull at a 30 m/s gust overloads the 50 mm roof beams about 3.5 times on the conservative case) and R13 (cost, $758 against the $700 budget and the proposed $750). The posts themselves are adequate: 0.29 utilization in the same gust. The calculations changed four details of the TRL 2 concept: shorter knee braces for headroom, a vacuum breaker so that the mist line can drain past its anti-drip nozzles, a closed mist line loop, and a strap on the tank, which tips over in a 30 m/s gust when empty. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [G7], is the line of that script's output that carries it.
+On paper, CoolShade meets thirteen of its seventeen requirements (seven by calculation, four by design, one on published evidence and one, R10, on paper with the anchors to be confirmed per site), has three at risk (R9 water hygiene, R13 cost and R16 scaling), one that cannot be judged at TRL 3 (R5 wetting) and none that are not met. Version 0.2 applies the recommendations Amish accepted on 2026-09-25 (CSH-DDR-002): R4 is restated as 2 °C while spraying (2.71 °C is met; it was 1.35 °C averaged against 2 °C, not met); R10 is restated as surviving 30 m/s with the fabric removed and keeping the fabric on only in forecast gusts below 15 m/s (met on paper; the original fabric-on 30 m/s case overloads the 50 mm roof beams about 3.5 times); the battery grows from 20 Ah to 25 Ah (1.26 design days without sun, was 1.005); and `budget_usd` rises from $700 to $775, against which the $773 parts cost is $2 under but at risk because the steel prices look low. The calculations changed four details of the TRL 2 concept: shorter knee braces for headroom, a vacuum breaker so that the mist line can drain past its anti-drip nozzles, a closed mist line loop, and a strap on the tank, which tips over in a 30 m/s gust when empty. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [G7], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles screening estimates for a paper proof of concept. They are not a structural design to any code, they do not show that the mist is safe to breathe, and they do not replace an engineer's check of the frame, anchors and slab at a real site, or a water hygiene plan approved by the local health authority. See CSH-PRC-001, Safety.
 
 ## Scope and method
 
-The note checks every requirement in CSH-REQ-001 v0.3 against the design in CSH-PRC-001 v0.3 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS` and derived dimensions, so the post grid, roof heights, brace geometry, nozzle heights and mist line length used here are the ones in the STEP files and in drawing CSH-DWG-001. It also reads `bom/bom.csv` and `budget_usd` in `project.yaml`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
+The note checks every requirement in CSH-REQ-001 v0.4 against the design in CSH-PRC-001 v0.4 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS` and derived dimensions, so the post grid, roof heights, brace geometry, nozzle heights and mist line length used here are the ones in the STEP files and in drawing CSH-DWG-001. It also reads `bom/bom.csv` and `budget_usd` in `project.yaml`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
 
 The design day is unchanged from CSH-REQ-001: 38 °C air at 25 % relative humidity, clear sky, wind about 1 m/s, 5 h of misting demand and 4.5 peak sun hours. The humid edge is the wettest air in which the controller still mists: 32 °C at 60 % relative humidity.
 
@@ -36,7 +40,7 @@ The design day is unchanged from CSH-REQ-001: 38 °C air at 25 % relative humidi
 | Nozzles | Eight 0.4 mm swirl nozzles at 7 bar (100 psi), 4 L/h each; spray 20 s on, 20 s off (50 %) during 5 h of demand; 87 % of the sprayed water evaporates in the air | TRL 2 estimates; flow to confirm from the maker's data |
 | Air | Density 1.15 kg/m³, specific heat 1,006 J/(kg K), latent heat 2.43 MJ/kg; control volume 3.0 m long and 2.0 m high crossed at the wind speed; vapor diffusivity 2.6 x 10⁻⁵ m²/s; viscosity 1.9 x 10⁻⁵ Pa s | Handbook values near 35 °C |
 | Droplets | Surface at the wet-bulb temperature (Stull approximation); Stokes settling; nozzle jet carries droplets 300 mm below the tip before they move with the air; head height 1.5 m | Screening model; jet length assumed |
-| Energy | Pump 60 W while spraying; controller and sensors 1.2 W continuous; normally open drain valve 5 W while held shut; 100 W panel, 4.5 peak sun hours, 0.75 system factor; 256 Wh battery, 80 % usable | TRL 2 estimates |
+| Energy | Pump 60 W while spraying; controller and sensors 1.2 W continuous; normally open drain valve 5 W while held shut; 100 W panel, 4.5 peak sun hours, 0.75 system factor; 320 Wh battery (12.8 V 25 Ah, CSH-DDR-002), 80 % usable | TRL 2 estimates |
 | Enclosure | 200 W/m² on its worst face under the cloth, absorptance 0.5, film coefficient 10 W/(m² K), 5 W internal loss; LiFePO4 charging stops above 45 °C | Screening values; typical cell data |
 | Wind | 30 m/s gust, air 1.2 kg/m³; net normal force coefficient 1.2 on the whole roof with the fabric treated as solid; center of pressure a quarter of the depth off center; friction 0.04 on each face; drag 2.0 on square sections and 0.8 on the tank; roof edge band 100 mm | Conservative screening values, not a code check |
 | Steel | S275 (275 MPa yield), density 7,850 kg/m³; partial factor 1.5 on wind, 0.9 on dead load | Common minimum grade for galvanized hollow sections |
@@ -84,17 +88,17 @@ Between the end of the jet under the rear nozzles and head height there are 784 
 
 - **Heat absorbed.** Evaporation absorbs 9.40 kW averaged over the cycle and 18.8 kW while spraying; 6.90 kg/s of air crosses the zone at 1 m/s [E1].
 - **Air temperature drop.** The drop is 1.35 °C averaged and 2.71 °C while spraying. The air takes 3 s to cross the canopy, less than one 20 s pulse, so people feel the pulses rather than the average [E2].
-- **R4.** The 2 °C averaged target is met only in wind below 0.68 m/s; at 0.3 m/s the drop would be 4.5 °C, but wetting risk rises in still air [E3]. R4 is not met at the design day's 1 m/s.
+- **R4.** R4 is restated under CSH-DDR-002 as a drop of 2 °C or more while spraying. At the design day's 1 m/s the drop while spraying is 2.71 °C, and it stays at 2 °C or more in wind up to 1.35 m/s, so R4 is met. The former averaged target would have needed wind below 0.68 m/s; at 0.3 m/s the averaged drop would be 4.5 °C, but wetting risk rises in still air [E3].
 - **Limits.** The design-day wet bulb is 23.0 °C, 15.0 °C below the air, so misting is far from saturating the air; it adds 0.56 g/kg of humidity [E4]. The design day absorbs about 47 kWh of heat [E5].
 - **Radiant heat (R3).** CoolShade's main benefit remains the shade. The published figure for shade sails in Tempe is a 17.3 °C drop in mean radiant temperature ([Middel et al., 2021](https://journals.ametsoc.org/view/journals/bams/102/9/BAMS-D-20-0193.1.xml)). R3 is taken as met on that evidence, but it is unverified for this fabric, and a globe thermometer measurement is needed later.
 
 ## F. Energy (R8)
 
 - **Use.** The pump takes 150 Wh, the controller and sensors 28.8 Wh and the normally open drain valve 25 Wh while held shut: 203.8 Wh per design day [F1].
-- **Harvest and storage.** The panel yields 337.5 Wh, 1.66 times the use; the battery's 204.8 Wh usable covers 1.005 design days without sun [F2]. R8 is met by a margin of 1 Wh, which is no margin at all.
-- **Latching valve option.** A latching drain valve would cut the use to 179.3 Wh and give 1.14 days, but a latching valve does not open by itself when power fails, so the line could sit full of warm water [F3]. The normally open valve is kept, and the choice is listed for Amish.
-- **Currents.** Peak charge current is 7.4 A (the MPPT is rated 10 A) and the pump draws 4.7 A; the battery recharges from empty in 0.61 design days of sun [F4].
-- **Heat.** The enclosure runs about 3.6 K above the air: 41.6 °C on the design day but 48.6 °C in 45 °C air. The battery stops charging above 45 °C, so charging stops whenever the air is above about 41.4 °C [F5]. On the hottest days the battery can only discharge. R8 is at risk.
+- **Harvest and storage.** The panel yields 337.5 Wh, 1.66 times the use. The battery is now 12.8 V 25 Ah (CSH-DDR-002); its 256.0 Wh usable covers 1.256 design days without sun [F2]. With the former 20 Ah battery it was 204.8 Wh and 1.005 days, a margin of 1 Wh.
+- **Latching valve option.** A latching drain valve would cut the use to 179.3 Wh and give 1.43 days with the 25 Ah battery, but a latching valve does not open by itself when power fails, so the line could sit full of warm water [F3]. The normally open valve is kept (CSH-DDR-002).
+- **Currents.** Peak charge current is 7.4 A (the MPPT is rated 10 A) and the pump draws 4.7 A; the battery recharges from empty in 0.76 design days of sun [F4].
+- **Heat.** The enclosure runs about 3.6 K above the air: 41.6 °C on the design day but 48.6 °C in 45 °C air. The battery stops charging above 45 °C, so charging stops whenever the air is above about 41.4 °C [F5]. On the hottest days the battery can only discharge; the design day (38 °C) is below that limit. R8 is met, with the hot-day charge limit noted.
 
 ## G. Structure and wind (R10)
 
@@ -103,8 +107,10 @@ Between the end of the jet under the rear nozzles and head height there are 784 
 - **Posts.** The horizontal load at roof level is 1.21 kN (the tilted roof, fabric friction and the roof edge) plus 86 N/m of drag on each post. As cantilevers with no help from the braces, the posts see 1.24 kN m each [G3], or 81 MPa with the 1.5 factor, a utilization of 0.29 of S275 [G4]. The TRL 2 figure of about 144 MPa came from applying the whole normal force sideways; that is not a physical load case, but even that bound gives a utilization of 0.80 [G5].
 - **Roof beams in bending.** If the long beams simply carry half the roof pressure over the 2.8 m post spacing, they reach a utilization of 0.70 [G6].
 - **Fabric edge pull.** A tensioned fabric does not load the beams like a floor. It pulls inward on its edges with a force that grows as its sag shrinks. At 5 % sag the edge pull is 3.89 kN/m on each long beam, which bends the 50 x 50 x 2 mm beam sideways at a utilization of 3.52 [G7]. The beams can take 1.11 kN/m. To stay within that, the fabric would need 422 mm of sag (18 % of its span), or its porosity would need to relieve 72 % of the pressure, or it would have to come off above gusts of about 16 m/s (58 km/h) [G8].
-- **R10 is not met** on the conservative, solid-fabric case. Real knitted cloth is porous and stretches, both of which reduce the edge pull, but no data are in hand to show by how much. With the fabric removed, the frame carries only the panel, and the posts and beams are adequate. Removing the fabric before storms (decision D7) is therefore load-bearing, not a convenience. Options are listed in `docs/REVIEW.md`.
-- **Anchors.** With the center of pressure 0.6 m off center, the worst post lifts with 1.83 kN, or 1.46 kN net of dead load and 2.41 kN factored [G9]. Adding the base moment over the 160 mm bolt pitch, each M16 anchor needs a factored tension of about 6.4 kN [G10]. Whether a given anchor in a given slab can provide it depends on the slab's thickness, concrete and edge distances, so the anchors cannot be verified at TRL 3. Without anchors, 324 kg of ballast would be needed [G11], so anchoring stays mandatory.
+- **Original R10 not met** on the conservative, solid-fabric case. Real knitted cloth is porous and stretches, both of which reduce the edge pull, but no data are in hand to show by how much. Amish accepted the recommendation to restate R10 (CSH-DDR-002): the frame and anchors must survive 30 m/s with the fabric removed, and the fabric is fitted only when forecast gusts are below 15 m/s (54 km/h). Removing the fabric before storms (decision D6) is therefore load-bearing, not a convenience.
+- **Restated R10, fabric removed, 30 m/s.** The panel, as a flat plate of 0.67 m², takes 0.43 kN; the horizontal load at roof level is 0.33 kN; the post base moment is 0.60 kN m, a utilization of 0.14; the purlins under the panel reach 0.15; and the worst post lifts with 0.16 kN against 0.37 kN of dead load per post. Each anchor needs about 2.8 kN factored, mostly from the base moment [G13].
+- **Restated R10, fabric fitted, 15 m/s.** The pressure is 135 Pa, a quarter of the 30 m/s value. The fabric's edge pull brings the long beams to a utilization of 0.88 on the same solid-fabric, 5 % sag case; the posts are at 0.07 and each anchor needs about 1.5 kN factored [G14]. The restated R10 is met on paper; the anchors still depend on the slab at each site. A cord lacing that releases the fabric at a set load was recommended for study at TRL 4, which is on hold.
+- **Anchors, original fabric-on 30 m/s case.** With the center of pressure 0.6 m off center, the worst post lifts with 1.83 kN, or 1.46 kN net of dead load and 2.41 kN factored [G9]. Adding the base moment over the 160 mm bolt pitch, each M16 anchor needs a factored tension of about 6.4 kN [G10]. Whether a given anchor in a given slab can provide it depends on the slab's thickness, concrete and edge distances, so the anchors cannot be verified at TRL 3. Under the restated R10 the governing anchor load falls to about 2.8 kN [G13]. Without anchors, 324 kg of ballast would be needed [G11], so anchoring stays mandatory.
 - **Tank.** An empty 8 kg tank sees 163 N of drag; its overturning moment of 57 N m is well above the 21 N m that holds it down, so it would tip [G12]. A strap to the rear left post and two small anchors are added to BOM item 13.
 
 ## H. Handling (R17, R14)
@@ -119,7 +125,7 @@ The heaviest part is a front post with its brace at 22.0 kg, against R17's 40 kg
 
 ## J. Cost (R13)
 
-The BOM has 16 lines, all priced, totaling $758.00. That is $58.00 (8.3 %) over the $700 `budget_usd` and $8.00 (1.1 %) over the $750 proposed at TRL 2, which awaits Amish [J1]. The TRL 3 changes added $23 (strap, vacuum breaker and a longer mist line). The steel lines (1, 2 and 4) come to $230 for about 143 kg, about $1.61/kg including cutting, drilling and galvanizing, which looks low for small quantities, so cost is at risk of rising further until quoted [J2]. R13 is not met against either figure.
+The BOM has 16 lines, all priced, totaling $773.00. Amish set `budget_usd` at $775 on 2026-09-25 (CSH-DDR-002; it was $700, and $750 was proposed at TRL 2), so the parts cost is $2.00 (0.3 %) under budget [J1]. The TRL 3 changes added $23 (strap, vacuum breaker and a longer mist line), and the 25 Ah battery adds $15 (was $758.00). The steel lines (1, 2 and 4) come to $230 for about 143 kg, about $1.61/kg including cutting, drilling and galvanizing, which looks low for small quantities, so cost is at risk of rising further until quoted [J2]. R13 is met by $2.00 but at risk.
 
 ## K. Results against every requirement
 
@@ -127,13 +133,13 @@ The BOM has 16 lines, all priced, totaling $758.00. That is $58.00 (8.3 %) over 
 
 | ID | Requirement | Value | Target | Status |
 | --- | --- | --- | --- | --- |
-| R4 | Air cooling from misting | 1.35 °C averaged (2.71 °C while spraying) at 1 m/s [E2] | 2 °C or more | **Not met**; met below 0.68 m/s [E3] |
-| R10 | Wind resistance | Long-beam utilization 3.52 from fabric edge pull at 30 m/s [G7]; posts 0.29 [G4]; anchors 6.4 kN each [G10] | Survive 30 m/s with fabric fitted | **Not met** (conservative case); fabric must come off above about 16 m/s [G8] |
-| R13 | Cost | $758 [J1] | $700 or less ($750 proposed) | **Not met**: +8.3 % and +1.1 % |
-| R8 | Energy autonomy | 203.8 Wh used, 337.5 Wh harvested; battery 1.005 days [F2] | Energy-neutral; 1 day without sun | At risk: no margin; no charging above about 41 °C air [F5] |
+| R13 | Cost | $773 [J1] | $775 or less | At risk: $2 (0.3 %) under; steel prices look low [J2] |
 | R9 | Water hygiene | Water under 24 h old with the routine [C5]; line drains in about 27 s [C7]; tank about 34 °C [I3] | Age 48 h or less; drained within 5 min | At risk: water sits in the *Legionella* growth range |
 | R16 | Maintenance | Scaling of 0.4 mm orifices | Descaling interval 1 month or more | At risk; not verifiable at TRL 3 |
 | R5 | No wetting | Needs Dv0.9 below about 81 µm at 7 bar [D3] | No wetting at 1.5 m | Not verifiable at TRL 3 (no droplet data) |
+| R4 | Air cooling from misting | 2.71 °C while spraying (1.35 °C averaged) at 1 m/s [E2] | 2 °C or more while spraying (restated) | Met; holds to 1.35 m/s [E3] |
+| R8 | Energy autonomy | 203.8 Wh used, 337.5 Wh harvested; 25 Ah battery 1.256 days [F2] | Energy-neutral; 1 day without sun | Met; no charging above about 41 °C air [F5] |
+| R10 | Wind resistance | Fabric off at 30 m/s: posts 0.14, purlins 0.15 [G13]; fabric on at 15 m/s: long beams 0.88 [G14]; anchors about 2.8 kN each | Restated: survive 30 m/s with fabric removed; fabric on only below 15 m/s | Met on paper; anchors to be confirmed per site. Original fabric-on case: beams 3.52 [G7] |
 | R1 | Shaded waiting area | 6.30 m² or more shadow above 45° sun [A2]; 7 standing + 3 seated + wheelchair [A3] | 6 m²; 6 people and a wheelchair | Met |
 | R2 | Headroom | 2,234 mm at the rear braces [B2] | 2,200 mm or more | Met |
 | R3 | Radiant heat reduction | About 17.3 °C for shade sails (literature) | 15 °C or more | Met on published evidence; unverified for this fabric |
@@ -145,12 +151,12 @@ The BOM has 16 lines, all priced, totaling $758.00. That is $58.00 (8.3 %) over 
 | R15 | Refill interval | 1.41 design days [C4] | 1 day or more | Met |
 | R17 | Movability | Heaviest part 22.0 kg [H1] | 40 kg or less | Met |
 
-In summary: 3 not met (R4, R10, R13), 3 at risk (R8, R9, R16), 1 not verifiable at TRL 3 (R5) and 10 met (R1, R2, R3, R6, R7, R11, R12, R14, R15, R17).
+In summary: none not met, 3 at risk (R9, R13, R16), 1 not verifiable at TRL 3 (R5) and 13 met (R1, R2, R3, R4, R6, R7, R8, R10, R11, R12, R14, R15, R17). In v0.1, before CSH-DDR-002, the count was 3 not met (R4, R10, R13), 3 at risk (R8, R9, R16), 1 not verifiable and 10 met.
 
 ## Checks against the TRL 2 figures
 
 - Water (85 L), tank endurance (1.4 days), energy use (about 205 Wh), harvest (about 340 Wh), battery (about 205 Wh) and cooling (1.4 °C averaged and 2.7 °C while spraying) all stand.
-- Parts cost rises from about $735 to $758.
+- Parts cost rises from about $735 to $758 at TRL 3, and to $773 with the 25 Ah battery (v0.2).
 - The post stress of about 144 MPa at TRL 2 was an upper bound; the physical case gives 54 MPa unfactored. R10 moves from "unverified" to "not met" because of the fabric edge pull, which the TRL 2 estimate did not consider.
 - Headroom under the rear braces rises from about 2.1 m to 2,234 mm, so R2 is now met with margin.
 - The TRL 2 structure mass of about 130 kg becomes about 143 kg of steel before brackets and bolts.

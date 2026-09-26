@@ -37,17 +37,17 @@ Requirements not met or at risk:
 - **R16 (maintenance) at risk** in hard-water areas from nozzle scaling.
 - **R2 (headroom) marginal:** about 2.1 m under the rear knee braces, which sit at the edge of the waiting area.
 
-### Proposed, awaiting Amish
+### Proposed at TRL 2 (status updated 2026-09-25, see CSH-DDR-002)
 
-1. **Budget.** Options: (a) raise `budget_usd` to $750; (b) cut cost to reach $700, for example by dropping to 60 mm posts with larger knee braces (needs the wind check) or a smaller 80 L tank; (c) keep $700 and treat the anchors and tank as site-supplied. Recommendation: (a), because the post section and tank size carry safety and service margins. `project.yaml` is unchanged.
-2. **Misting pressure class.** Low pressure (about 7 bar, 12 V, off-grid) versus mid pressure (about 10 to 20 bar, finer droplets, more pump power) versus high pressure (about 70 bar, mains). Recommendation: low pressure for the first concept, with droplet size and wetting as the first thing to check.
-3. **Activation thresholds.** Fixed 32 °C and 60 % RH with PIR presence, versus a heat index or WBGT threshold. Recommendation: fixed thresholds first, since they are easy to explain and audit.
-4. **Fans.** None, versus two 12 V fans (about 20 to 40 W more). Recommendation: none at TRL 2; revisit if R4 remains unmet at TRL 3.
-5. **Water supply.** Tank only, versus tank with an optional mains float valve and backflow preventer. Recommendation: tank as standard, mains optional where local rules allow.
-6. **Canopy size and structure.** 3.0 x 2.4 m, four 80 x 80 x 3 mm posts with knee braces, bolted to an existing slab. Recommendation: keep for TRL 3 and check by calculation.
-7. **Storm practice.** Fabric removed before forecast storms versus fabric designed to stay on. Recommendation: removable fabric.
-8. **Status link.** None, versus a FieldNode-compatible LoRaWAN link reporting counts and levels only. Recommendation: none for the first prototype.
-9. **First site type and partner** for co-design (bus stop, market or queue).
+1. **Budget.** Options: (a) raise `budget_usd` to $750; (b) cut cost to reach $700, for example by dropping to 60 mm posts with larger knee braces (needs the wind check) or a smaller 80 L tank; (c) keep $700 and treat the anchors and tank as site-supplied. Recommendation: (a), because the post section and tank size carry safety and service margins. **Decided by Amish, 2026-09-25: go with recommendation**, at the later TRL 3 recommendation of $775.
+2. **Misting pressure class.** Low pressure (about 7 bar, 12 V, off-grid) versus mid pressure (about 10 to 20 bar, finer droplets, more pump power) versus high pressure (about 70 bar, mains). Recommendation: low pressure for the first concept, with droplet size and wetting as the first thing to check. **Decided by Amish, 2026-09-25: go with recommendation.**
+3. **Activation thresholds.** Fixed 32 °C and 60 % RH with PIR presence, versus a heat index or WBGT threshold. Recommendation: fixed thresholds first, since they are easy to explain and audit. **Decided by Amish, 2026-09-25: go with recommendation.**
+4. **Fans.** None, versus two 12 V fans (about 20 to 40 W more). Recommendation: none at TRL 2; revisit if R4 remains unmet at TRL 3. **Decided by Amish, 2026-09-25: go with recommendation.**
+5. **Water supply.** Tank only, versus tank with an optional mains float valve and backflow preventer. Recommendation: tank as standard, mains optional where local rules allow. **Decided by Amish, 2026-09-25: go with recommendation.**
+6. **Canopy size and structure.** 3.0 x 2.4 m, four 80 x 80 x 3 mm posts with knee braces, bolted to an existing slab. Recommendation: keep for TRL 3 and check by calculation. **Decided by Amish, 2026-09-25: go with recommendation.**
+7. **Storm practice.** Fabric removed before forecast storms versus fabric designed to stay on. Recommendation: removable fabric. **Decided by Amish, 2026-09-25: go with recommendation.**
+8. **Status link.** None, versus a FieldNode-compatible LoRaWAN link reporting counts and levels only. Recommendation: none for the first prototype. **Decided by Amish, 2026-09-25: go with recommendation.**
+9. **First site type and partner** for co-design (bus stop, market or queue). No recommendation; still Proposed, awaiting Amish.
 
 ### Safety concerns
 
@@ -104,15 +104,15 @@ Key numbers: 32 L/h while spraying; 203.8 Wh used and 337.5 Wh harvested per des
 
 ### Decisions recorded (CSH-DDR-001)
 
-Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for his review: D1 low-pressure 7 bar misting; D2 fixed thresholds (32 °C, 60 % RH, presence in 2 min, tank level); D3 no fans at TRL 3; D4 tank standard, mains optional; D5 3.0 x 2.4 m bolted four-post canopy; D6 removable fabric before storms; D7 no status link. No pitch or problem rewording was recommended, so none was applied. CoolShade uses no shared component from this batch (FieldNode link not fitted), so there is no interface conflict.
+Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, now **Decided by Amish, 2026-09-25: go with recommendation** (CSH-DDR-002): D1 low-pressure 7 bar misting; D2 fixed thresholds (32 °C, 60 % RH, presence in 2 min, tank level); D3 no fans at TRL 3; D4 tank standard, mains optional; D5 3.0 x 2.4 m bolted four-post canopy; D6 removable fabric before storms; D7 no status link. No pitch or problem rewording was recommended, so none was applied. CoolShade uses no shared component from this batch (FieldNode link not fitted), so there is no interface conflict.
 
-### Still awaiting Amish
+### Still awaiting Amish at the end of TRL 3 (status updated 2026-09-25, see CSH-DDR-002)
 
-1. **O1, budget.** The TRL 2 recommendation was to raise `budget_usd` to $750. It is not applied: `budget_usd` stays at $700. The parts cost is now $758, over both figures. Options: (a) $775, which covers the TRL 3 changes with a little room for quotes; (b) $750 and cut the tank to 100 L or accept site-supplied anchors; (c) keep $700 and treat the tank and anchors as site-supplied. Recommendation: (a), because the steel prices look low and quotes may raise them further.
-2. **O2, first site type and co-design partner.** No recommendation; stays open.
-3. **New, R10 fabric-on wind case.** Options: (a) restate R10 as "frame and anchors survive 30 m/s with the fabric removed; fabric fitted only in forecast gusts below 15 m/s (54 km/h)", which the design meets on paper; (b) keep R10 and upsize the long beams (for example to 80 x 80 mm), which costs money and mass; (c) keep R10 and fit a cord lacing that releases the fabric at a set load. Recommendation: (a) now, with (c) studied at TRL 4 if allowed later, because the fabric's porosity and stretch are unknown and a release that fails safe is worth having. Not applied.
-4. **New, R4 and fans (revisit under D3).** R4 remains unmet at 1 m/s. Options: (a) relax R4 to "2 °C while spraying", which is met (2.71 °C); (b) add two 12 V fans (about 20 to 40 W, which would break the R8 energy balance without a larger battery); (c) keep R4 as a stretch target. Recommendation: (a), because the shade gives most of the relief and the battery has no margin for fans. Not applied.
-5. **New, R8 energy margin.** Options: (a) a 25 Ah battery instead of 20 Ah (about 1.26 design days); (b) a latching drain valve (1.14 days, but it does not open on power loss). Recommendation: (a), keeping the fail-safe normally open valve. Not applied.
+1. **O1, budget.** The TRL 2 recommendation was to raise `budget_usd` to $750. It is not applied: `budget_usd` stays at $700. The parts cost is now $758, over both figures. Options: (a) $775, which covers the TRL 3 changes with a little room for quotes; (b) $750 and cut the tank to 100 L or accept site-supplied anchors; (c) keep $700 and treat the tank and anchors as site-supplied. Recommendation: (a), because the steel prices look low and quotes may raise them further. **Decided by Amish, 2026-09-25: go with recommendation** ($775).
+2. **O2, first site type and co-design partner.** No recommendation; stays open (Proposed, awaiting Amish).
+3. **New, R10 fabric-on wind case.** Options: (a) restate R10 as "frame and anchors survive 30 m/s with the fabric removed; fabric fitted only in forecast gusts below 15 m/s (54 km/h)", which the design meets on paper; (b) keep R10 and upsize the long beams (for example to 80 x 80 mm), which costs money and mass; (c) keep R10 and fit a cord lacing that releases the fabric at a set load. Recommendation: (a) now, with (c) studied at TRL 4 if allowed later, because the fabric's porosity and stretch are unknown and a release that fails safe is worth having. **Decided by Amish, 2026-09-25: go with recommendation**: (a) applied; (c) on hold with TRL 4.
+4. **New, R4 and fans (revisit under D3).** R4 remains unmet at 1 m/s. Options: (a) relax R4 to "2 °C while spraying", which is met (2.71 °C); (b) add two 12 V fans (about 20 to 40 W, which would break the R8 energy balance without a larger battery); (c) keep R4 as a stretch target. Recommendation: (a), because the shade gives most of the relief and the battery has no margin for fans. **Decided by Amish, 2026-09-25: go with recommendation.**
+5. **New, R8 energy margin.** Options: (a) a 25 Ah battery instead of 20 Ah (about 1.26 design days); (b) a latching drain valve (1.14 days, but it does not open on power loss). Recommendation: (a), keeping the fail-safe normally open valve. **Decided by Amish, 2026-09-25: go with recommendation.**
 
 Suggestion only, not in the repo: a continuous spray at half the flow (smaller nozzles) instead of 20 s pulses would give a steadier temperature drop at the same water use.
 
@@ -135,3 +135,46 @@ Suggestion only, not in the repo: a continuous spray at half the flow (smaller n
 ### Recommended next step
 
 TRL 4 is on hold by Amish's instruction; this repo stops at TRL 3. Amish's review is needed on the budget (O1), the first site (O2) and the new R10, R4 and R8 items above. For the record only, TRL 4 would need: nozzle flow and droplet size measured at 7 bar at both the design day and the humid edge; a bench spray and drain rig showing the line empties past the anti-drip nozzles; wind data or a test for the chosen fabric; a lab test report (TST, `environment: lab`); and build log entries. None of this has been started.
+
+## Session 2026-09-25: recommendations accepted
+
+On 2026-09-25 Amish wrote, in chat: "i accept all your recommendations, go with them across all repos." Every item with a recommendation is now "Decided by Amish, 2026-09-25: go with recommendation" and recorded in `docs/decisions/0002-recommendations-accepted.md` (CSH-DDR-002 v0.1). CSH-DDR-001 is revised to v0.2 and the earlier lists in this note are annotated.
+
+### Decisions applied and what changed
+
+| Item | Decision | Before | After |
+| --- | --- | --- | --- |
+| D1 to D7 | Pressure class, thresholds, no fans, tank supply, canopy structure, removable fabric, no status link | Adopted for TRL 3, open for review | Decided; no design change |
+| O1 Budget | $775 (TRL 3 recommendation, supersedes $750) | `budget_usd` 700 | `budget_usd` 775 |
+| R10 wind | Restate: frame and anchors survive 30 m/s with fabric removed; fabric on only in forecast gusts below 15 m/s | Not met: long-beam utilization 3.52 with fabric on at 30 m/s; anchors about 6.4 kN | Met on paper: fabric off at 30 m/s posts 0.14, purlins 0.15; fabric on at 15 m/s beams 0.88; anchors about 2.8 kN, per site |
+| R10 release lacing | Study at TRL 4 | Option | Decided, on hold (TRL 4) |
+| R4 cooling | Restate as 2 °C while spraying; no fans | Not met: 1.35 °C averaged at 1 m/s | Met: 2.71 °C while spraying at 1 m/s (holds to 1.35 m/s) |
+| R8 energy | 25 Ah battery, keep normally open drain valve | At risk: 20 Ah, 1.005 design days | Met: 25 Ah, 1.256 design days |
+| Parts cost | Consequence of the battery | $758.00 | $773.00 ($2.00, 0.3 %, under $775) |
+
+Files changed: `project.yaml` (`budget_usd`, evidence list); `README.md` (budget, concept and results text, battery, new "What sparked the idea"); `docs/01-problem.md` (CSH-PRB-001 v0.4); `docs/02-concept.md` (CSH-PRC-001 v0.4); `docs/03-requirements.md` (CSH-REQ-001 v0.4, R4, R10 and R13 targets); `docs/04-calcs/sizing.py` and `01-sizing.md` (CSH-CAL-001 v0.2, new lines G13 and G14); `docs/decisions/0001-trl2-review-decisions.md` (v0.2); `bom/bom.csv` (line 6 battery 25 Ah, $85 to $100; line 3 note) and `bom/bom-notes.md`; `cad/src/model.py` (battery envelope 80 to 100 mm wide), STEP and STL re-exported; `cad/src/sheets.py` and `cad/drawings/CSH-DWG-001.*` (Rev P1 to P2: battery and wind notes, anchor load 6.4 to 2.8 kN); `cad/src/concept_media.py` and all of `media/` re-rendered (key figures, battery label); `docs/pdf/` rebuilt. The site footer is now designmolecule.com in every regenerated file.
+
+### Requirement status now (CSH-CAL-001 v0.2)
+
+| Status | Requirements |
+| --- | --- |
+| Not met | None (was R4, R10, R13) |
+| At risk | R13 cost ($773 against $775; steel prices look low), R9 water hygiene (tank water about 34 °C), R16 nozzle scaling |
+| Not verifiable at TRL 3 | R5 wetting (needs Dv0.9 below about 81 µm at 7 bar) |
+| Met | R1, R2, R3 (published evidence), R4, R6, R7, R8, R10 (on paper; anchors per site), R11, R12, R14, R15, R17 |
+
+### Still awaiting Amish
+
+- O2, first site type (bus stop, market or queue) and co-design partner: no recommendation was made, so it stays Proposed, awaiting Amish.
+
+### Cross-repo actions
+
+- None. No FieldNode status link is fitted (D7), so CoolShade asks nothing of another repo. HeatMap Node remains a related project only.
+
+### Safety
+
+The safety sections are unchanged in substance. The wind rule is now explicit: the fabric goes on only when forecast gusts are below 15 m/s (54 km/h) and comes off before storms. *Legionella* control (R9) remains the main hazard.
+
+### TRL
+
+`trl: 3` and `trl_target: 3` are unchanged. TRL 4 remains on hold by Amish's instruction: the load-release lacing study, nozzle and droplet measurement, wind tests, firmware and any build or purchase have not been started.

@@ -1,4 +1,4 @@
-"""CoolShade general arrangement sheet CSH-DWG-001, Rev P1 (TRL 3).
+"""CoolShade general arrangement sheet CSH-DWG-001, Rev P2 (TRL 3).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CSH-DWG-001.svg, .pdf and .png from the parametric model in
@@ -94,10 +94,11 @@ def main():
     asm, _ = assembly()
     views = safe_project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="CoolShade", title="General arrangement", dwg_no="CSH-DWG-001", rev="P1",
+    s = Sheet(project="CoolShade", title="General arrangement", dwg_no="CSH-DWG-001", rev="P2",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="Galvanized S275 SHS frame; bought-in parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
-              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC")])
+              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
+                         ("P2", "Recommendations accepted (DDR-002): 25 Ah battery, R10 wind notes", DATE, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -162,11 +163,11 @@ def main():
         f"Roof {P['roof_l']:,.0f} x {P['roof_d']:,.0f} ({D['roof_area_m2']:.1f} m2), mono-pitch {D['slope_deg']:.1f} deg, high at the street",
         f"Posts {P['post']:.0f} x {P['post']:.0f} x {P['post_t']:.0f} SHS on {2 * PX:,.0f} x {2 * PY:,.0f}; beams {P['beam']:.0f} x {P['beam_t']:.0f} SHS",
         f"Knee braces {P['brace_od']:.0f} OD, {P['brace_drop']:.0f} down x {P['brace_reach']:.0f} along; headroom {D['brace_low_rear']:,.0f} min.",
-        f"Base plates {P['plate']:.0f} x {P['plate']:.0f} x {P['plate_t']:.0f}, 4 x M{P['anchor_d']:.0f} at {P['anchor_pitch']:.0f}; anchors about 6.4 kN factored",
+        f"Base plates {P['plate']:.0f} x {P['plate']:.0f} x {P['plate_t']:.0f}, 4 x M{P['anchor_d']:.0f} at {P['anchor_pitch']:.0f}; anchors about 2.8 kN factored",
         f"Mist loop {D['line_len_mm'] / 1000:.1f} m, {P['line_id']:.1f} bore, 8 nozzles {P['nozzle_orifice']} mm; vacuum breaker at front",
         f"Tank {P['tank_nominal_l']:.0f} L, strapped to the rear left post; drain valve at the low point",
-        f"Enclosure {P['enc'][0]:.0f} x {P['enc'][1]:.0f} x {P['enc'][2]:.0f} on the rear right post, {D['enc_bot']:,.0f} to {D['enc_top']:,.0f}",
-        "Fabric off before storms: beams overloaded with fabric above about 16 m/s (CSH-CAL-001)",
+        f"Enclosure {P['enc'][0]:.0f} x {P['enc'][1]:.0f} x {P['enc'][2]:.0f} on the rear right post, {D['enc_bot']:,.0f} to {D['enc_top']:,.0f}; battery 25 Ah",
+        "Fabric fitted only in forecast gusts below 15 m/s; frame checked fabric-off at 30 m/s (CSH-CAL-001)",
         "Third-angle; front view from the street (-Y); slab by others, checked per site",
     ], x=276, y=146, width=146)
     out = s.save(ROOT / "cad" / "drawings" / "CSH-DWG-001")

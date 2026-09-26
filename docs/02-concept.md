@@ -3,7 +3,7 @@ doc_id: CSH-PRC-001
 title: CoolShade design precis
 project: CoolShade
 doc_type: Design precis
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -21,13 +21,17 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: TRL 3 update from CSH-CAL-001 and CSH-DDR-001 (numbers checked, shorter knee braces, vacuum breaker, closed mist line loop, tank strap, design choices adopted for TRL 3, GA drawing CSH-DWG-001)
+- version: "0.4"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # CoolShade design precis
 
 ## Summary
 
-CoolShade is a bolted steel shade canopy, 3.0 x 2.4 m in plan, with a knitted shade cloth roof, a 100 W solar panel, a 12 V battery and a low-pressure misting line. It gives shade all day and mists only when the air is hot and dry enough for misting to help and a person is waiting. The TRL 3 calculations (CSH-CAL-001) give, for a hot, dry design day (38 °C, 25 % relative humidity), 85 L of water and 203.8 Wh of electricity per day, an average air temperature drop of 1.35 °C at 1 m/s wind (2.71 °C while spraying) and, from published shade sail data, a drop in mean radiant temperature of about 17 °C, which is where most of the relief comes from. Three requirements are not met: air cooling at 1 m/s (R4), wind resistance with the fabric fitted (R10, because of the fabric's edge pull on the roof beams) and cost (R13, $758 against the $700 budget and the proposed $750). The design choices below are adopted for TRL 3 work under Amish's 2026-09-25 instruction, open for his review (CSH-DDR-001).
+CoolShade is a bolted steel shade canopy, 3.0 x 2.4 m in plan, with a knitted shade cloth roof, a 100 W solar panel, a 12 V battery and a low-pressure misting line. It gives shade all day and mists only when the air is hot and dry enough for misting to help and a person is waiting. The TRL 3 calculations (CSH-CAL-001) give, for a hot, dry design day (38 °C, 25 % relative humidity), 85 L of water and 203.8 Wh of electricity per day, an air temperature drop of 2.71 °C while spraying at 1 m/s wind (1.35 °C averaged over the cycle) and, from published shade sail data, a drop in mean radiant temperature of about 17 °C, which is where most of the relief comes from. On 2026-09-25 Amish accepted the recommendations (CSH-DDR-001 and CSH-DDR-002): R4 is now judged while spraying, R10 with the fabric removed above 15 m/s gusts, the battery is 25 Ah and the budget is $775. With those, no requirement is not met; water hygiene (R9), cost (R13, $773 against $775) and nozzle scaling (R16) are at risk, and wetting (R5) needs droplet data.
 
 ![Hero render](../media/hero.png)
 
@@ -36,9 +40,9 @@ CoolShade is a bolted steel shade canopy, 3.0 x 2.4 m in plan, with a knitted sh
 ## How it works
 
 1. **Shade.** Four 80 mm square steel posts on a 2.8 x 2.1 m grid carry a mono-pitch roof frame (7.1°, high edge at the street) with knitted HDPE shade cloth. The cloth blocks most direct sun while letting hot air escape.
-2. **Harvest and store.** A 100 W panel on rails over the rear half of the roof charges a 12.8 V, 20 Ah LiFePO4 battery through an MPPT controller. Everything runs at 12 V DC.
+2. **Harvest and store.** A 100 W panel on rails over the rear half of the roof charges a 12.8 V, 25 Ah LiFePO4 battery through an MPPT controller. Everything runs at 12 V DC.
 3. **Sense.** A temperature and humidity sensor in a radiation shield on an arm off the front post measures the ambient air outside the mist zone. A passive infrared sensor under the front beam detects whether anyone is waiting. No camera or microphone is fitted.
-4. **Decide.** The controller mists only when air temperature is 32 °C or more, relative humidity is 60 % or less, someone has been detected in the last 2 min, and the tank is above its low level (thresholds adopted for TRL 3, CSH-DDR-001 D2). A 10 s control loop with a 20 s debounce stops the spray within 30 s of a condition failing. In humid air it does not mist, because misting would add little cooling and wet people.
+4. **Decide.** The controller mists only when air temperature is 32 °C or more, relative humidity is 60 % or less, someone has been detected in the last 2 min, and the tank is above its low level (thresholds decided by Amish, CSH-DDR-001 D2). A 10 s control loop with a 20 s debounce stops the spray within 30 s of a condition failing. In humid air it does not mist, because misting would add little cooling and wet people.
 5. **Mist.** A 12 V diaphragm pump draws from a 120 L opaque tank through a 5 µm filter and pushes water at about 7 bar through a closed loop of mist line under all four roof beams to eight anti-drip nozzles under the front and rear beams, in cycles of 20 s on and 20 s off. Fine droplets evaporate and cool the air under the canopy.
 6. **Drain.** When the pump stops at the end of a session, a normally open drain valve at the low point empties the line in about 30 s, while a vacuum breaker at the front, highest point of the loop lets air in past the anti-drip nozzles. On design days the tank is drained of its residual and refilled with about 95 L daily, so no water is more than 24 h old, and it is disinfected weekly.
 
@@ -52,14 +56,14 @@ Numbers match the exploded view (Figure 3) and `bom/bom.csv`.
 
 Table 1. Main components.
 
-| # | Component | Proposed choice | Notes |
+| # | Component | Choice | Notes |
 | --- | --- | --- | --- |
 | 1 | Posts with knee braces | 80 x 80 x 3 mm galvanized SHS, 2.62 to 2.89 m, one 32 mm tube brace each, 400 mm down and 400 mm along the beam | Utilization 0.29 in a 30 m/s gust (CSH-CAL-001) |
 | 2 | Roof frame | 50 x 50 mm SHS perimeter, two 40 x 40 mm purlins, bolted brackets | About 7° mono-pitch |
-| 3 | Shade fabric | Knitted HDPE, about 90 % UV block, 3.0 x 2.4 m, corded to the frame | Removable before storms (CSH-DDR-001, D6) |
+| 3 | Shade fabric | Knitted HDPE, about 90 % UV block, 3.0 x 2.4 m, corded to the frame | Fitted only in forecast gusts below 15 m/s (CSH-DDR-001, D6; CSH-DDR-002) |
 | 4 | Base plates and anchors | 220 x 220 x 10 mm plates, four M16 anchors each, into an existing slab | Footing checked per site |
 | 5 | Solar panel | 100 W monocrystalline on two rails | About 1,000 x 670 mm |
-| 6 | Battery | 12.8 V, 20 Ah LiFePO4 with BMS and cold-charge cutoff | Inside item 8, fused |
+| 6 | Battery | 12.8 V, 25 Ah LiFePO4 with BMS and cold-charge cutoff | Inside item 8, fused; 25 Ah for energy margin (CSH-DDR-002) |
 | 7 | MPPT charge controller | 12 V, 10 A, LiFePO4 profile | Inside item 8 |
 | 8 | Controller and enclosure | Lockable IP65 box on the rear right post, about 1.45 to 1.85 m high; microcontroller, pump and valve drivers, fuses | Firmware not started (TRL 4) |
 | 9 | Sensor head | SHT4x-class temperature and humidity sensor in a multi-plate shield, plus a PIR presence sensor | No camera or microphone |
@@ -78,7 +82,7 @@ Table 1. Main components.
 
 *Figure 4. Concept sheet CSH-DWG-010 with orthographic and isometric views and key figures.*
 
-The general arrangement drawing CSH-DWG-001 (Rev P1, `cad/drawings/CSH-DWG-001.pdf`) gives the main dimensions and interfaces from the parametric model `cad/src/model.py`. It is preliminary and not for fabrication.
+The general arrangement drawing CSH-DWG-001 (Rev P2, `cad/drawings/CSH-DWG-001.pdf`) gives the main dimensions and interfaces from the parametric model `cad/src/model.py`. It is preliminary and not for fabrication.
 
 No cutaway is provided: the canopy is open, and the only enclosed parts (items 6 to 8) are shown in the exploded view.
 
@@ -116,15 +120,16 @@ Table 3. Cooling on the design day.
 | Heat absorbed by evaporation, averaged | 9.40 kW | 13.9 L/h evaporated x 2.43 MJ/kg [E1] |
 | Heat absorbed while spraying | 18.8 kW | 27.8 L/h evaporated |
 | Air through the zone at 1 m/s | 6.90 kg/s | 6 m² x 1 m/s x 1.15 kg/m³ |
-| Air temperature drop at 1 m/s | 1.35 °C averaged, 2.71 °C while spraying | Q / (m x cp) [E2] |
-| Wind speed for a 2 °C averaged drop | 0.68 m/s or less | Same method [E3] |
+| Air temperature drop at 1 m/s | 2.71 °C while spraying, 1.35 °C averaged | Q / (m x cp) [E2] |
+| Wind speed for a 2 °C drop while spraying (R4 as restated) | 1.35 m/s or less | Same method [E3] |
+| Wind speed for a 2 °C averaged drop (former R4) | 0.68 m/s or less | Same method [E3] |
 | Air temperature drop at 0.3 m/s | 4.5 °C averaged | Wetting risk rises in still air [E3] |
 | Wet-bulb temperature, 38 °C and 25 % RH | 23.0 °C | Stull approximation; far from the limit [E4] |
 | Humidity added at 1 m/s | 0.56 g/kg | Small against about 10 g/kg ambient |
 | Heat absorbed per day | 47 kWh | 69.6 L x 2.43 MJ/kg [E5] |
 | Mean radiant temperature drop from shade | about 17 °C | Shade sails in Tempe ([Middel et al., 2021](https://journals.ametsoc.org/view/journals/bams/102/9/BAMS-D-20-0193.1.xml)) |
 
-The shade does most of the work: a 17 °C drop in mean radiant temperature matters more to a person standing in the sun than a 1 to 3 °C drop in air temperature. Misting adds a noticeable but smaller benefit, and only in dry air. This is why the controller must never mist in humid air, and why R4 is not met at 1 m/s wind. Fans were left out for TRL 3 (CSH-DDR-001, D3); a revisit is listed for Amish in `docs/REVIEW.md`.
+The shade does most of the work: a 17 °C drop in mean radiant temperature matters more to a person standing in the sun than a 1 to 3 °C drop in air temperature. Misting adds a noticeable but smaller benefit, and only in dry air. This is why the controller must never mist in humid air. R4 is judged while spraying (CSH-DDR-002), where the 2.71 °C drop at 1 m/s meets the 2 °C target; averaged over the cycle it would need calmer air. No fans are fitted (CSH-DDR-001, D3, confirmed in CSH-DDR-002), because the shade gives most of the relief and fans would need a larger battery.
 
 ### Energy
 
@@ -137,9 +142,9 @@ Table 4. Daily energy budget on the design day.
 | Drain valve held closed while active | 25 Wh | 5 W x 5 h |
 | **Total use** | **203.8 Wh** | |
 | Panel harvest | 337.5 Wh | 100 W x 4.5 h x 0.75 [F2] |
-| Battery usable | 204.8 Wh | 256 Wh x 80 %; 1.005 design days |
+| Battery usable | 256.0 Wh | 12.8 V 25 Ah, 320 Wh x 80 %; 1.256 design days |
 
-The panel covers the design day 1.66 times, but the battery covers one design day without sun with only 1 Wh to spare, so R8 is at risk. A latching drain valve would save 24.5 Wh, but it would not open by itself if power failed [F3]. The enclosure runs about 3.6 K above the air, so the battery stops charging (at 45 °C) when the air is above about 41.4 °C [F5].
+The panel covers the design day 1.66 times, and the 25 Ah battery covers 1.256 design days without sun, so R8 is met (the former 20 Ah battery gave 1.005 days, with 1 Wh to spare). A latching drain valve would save 24.5 Wh, but it would not open by itself if power failed, so the normally open valve is kept [F3]. The enclosure runs about 3.6 K above the air, so the battery stops charging (at 45 °C) when the air is above about 41.4 °C [F5].
 
 ### Structure and wind
 
@@ -156,19 +161,21 @@ Table 5. Wind check.
 | Long beam, roof pressure as a simple span | Utilization 0.70 | 50 x 50 x 2 SHS over 2.8 m [G6] |
 | Long beam, fabric edge pull at 5 % sag | 3.89 kN/m, utilization 3.52 | Membrane tension p L² / (8 f) [G7] |
 | Fabric-on gust limit for the beams | about 16 m/s (58 km/h) | Edge pull the beams can take, 1.11 kN/m [G8] |
-| Anchor tension, factored | about 6.4 kN per M16 anchor | Uplift plus base moment [G10] |
+| Anchor tension, factored, original fabric-on case | about 6.4 kN per M16 anchor | Uplift plus base moment [G10] |
+| Restated R10, fabric off at 30 m/s | Posts 0.14, purlins 0.15; anchors about 2.8 kN | Panel as a flat plate [G13] |
+| Restated R10, fabric on at 15 m/s | Long beams 0.88, posts 0.07; anchors about 1.5 kN | Same solid-fabric case [G14] |
 | Ballast needed if not anchored | 324 kg | Uplift less dead load [G11] |
 
-The posts are adequate. The weak point is the fabric: a tensioned cloth pulls its edges inward far harder than the pressure alone suggests, and on the conservative solid-fabric case it overloads the 50 mm long beams in a 30 m/s gust, so R10 is not met. Porosity and stretch would reduce the pull, but no data are in hand. Taking the fabric off before storms (CSH-DDR-001, D6) is therefore structurally necessary. The anchors must be checked against the chosen anchor's data and the actual slab. The unit must be anchored; ballast alone is impractical. An empty tank would tip over in the same gust, so it is strapped to the rear left post [G12].
+The posts are adequate. The weak point is the fabric: a tensioned cloth pulls its edges inward far harder than the pressure alone suggests, and on the conservative solid-fabric case it overloads the 50 mm long beams in a 30 m/s gust. Porosity and stretch would reduce the pull, but no data are in hand. R10 is therefore restated (CSH-DDR-002): the frame and anchors survive 30 m/s with the fabric removed, and the fabric is fitted only when forecast gusts are below 15 m/s (54 km/h), where the beams reach 0.88. The restated R10 is met on paper. Taking the fabric off before storms (CSH-DDR-001, D6) is structurally necessary. The anchors must be checked against the chosen anchor's data and the actual slab. The unit must be anchored; ballast alone is impractical. An empty tank would tip over in the same gust, so it is strapped to the rear left post [G12].
 
 ### Mass and cost
 
-- Steel about 143 kg before brackets and bolts (a front post with its brace 22.0 kg, the heaviest part); panel about 7 kg; battery about 2.5 kg; full tank about 128 kg [G1, H1].
-- Parts $758 (indicative, see `bom/bom.csv`), against the $700 `budget_usd` and the $750 proposed at TRL 2, which awaits Amish [J1]. The steel prices look low for small quantities, so cost is at risk of rising [J2].
+- Steel about 143 kg before brackets and bolts (a front post with its brace 22.0 kg, the heaviest part); panel about 7 kg; battery about 3 kg; full tank about 128 kg [G1, H1].
+- Parts $773 (indicative, see `bom/bom.csv`), against the $775 `budget_usd` set by Amish on 2026-09-25 (was $700) [J1]. The steel prices look low for small quantities, so cost is at risk of rising [J2].
 
 ## Key design choices
 
-Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for his review (CSH-DDR-001).
+Decided by Amish, 2026-09-25: go with recommendation (CSH-DDR-001, CSH-DDR-002).
 
 1. Low-pressure (about 7 bar) 12 V misting rather than high-pressure (about 70 bar) mains misting, so the unit runs off-grid and stays low-voltage. The trade-off is larger droplets and a higher wetting risk.
 2. Humidity and presence gating with fixed thresholds, so water and energy are used only when misting helps someone.
@@ -191,7 +198,7 @@ Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for 
 >
 > **Safety:** The pump line runs at about 7 bar. Depressurize before opening fittings, and wear eye protection when working on it.
 >
-> **Safety:** The canopy is a wind-loaded structure. Anchor it to a checked slab or footing, strap the tank, remove the fabric before forecast storms (on the conservative calculation the roof beams are overloaded with the fabric on above gusts of about 16 m/s), and inspect bolts and anchors regularly. Building it is work at height with heavy steel; use two people, stable ladders and gloves, and deburr all cut edges.
+> **Safety:** The canopy is a wind-loaded structure. Anchor it to a checked slab or footing, strap the tank, fit the fabric only when forecast gusts are below 15 m/s (54 km/h) and remove it before storms (on the conservative calculation the roof beams are overloaded with the fabric on above gusts of about 16 m/s), and inspect bolts and anchors regularly. Building it is work at height with heavy steel; use two people, stable ladders and gloves, and deburr all cut edges.
 >
 > **Safety:** Wet surfaces can be slippery. Set nozzles and duty cycle so people and the ground stay dry; stop misting and adjust if puddles form.
 >
@@ -200,10 +207,9 @@ Adopted as recommended for TRL 3 under Amish's 2026-09-25 instruction, open for 
 ## Open questions
 
 - [ ] Nozzle flow and droplet spectrum at 7 bar from the maker's data (R5, R7).
-- [ ] Fabric porosity and stretch under wind, which decide the fabric's edge pull (R10); or a fabric-on wind limit.
-- [ ] Whether to add small 12 V fans to mix cooled air down into the waiting zone, at about 20 to 40 W extra (R4).
+- [ ] Fabric porosity and stretch under wind, which decide the fabric's edge pull; a load-release cord lacing (TRL 4, on hold).
 - [ ] Water hygiene plan acceptable to the local health authority, including sampling (R9).
 - [ ] Hard water scaling and a descaling method (R16).
 - [ ] Site anchor details on different slabs; footing option where no slab exists.
-- [ ] Budget: $758 against $700 and the proposed $750 (R13).
+- [ ] Steel quotes, since the $773 parts cost is only $2 under the $775 budget (R13).
 - [ ] First site type and co-design partner (proposed, awaiting Amish).
