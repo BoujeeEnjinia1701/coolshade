@@ -178,3 +178,43 @@ The safety sections are unchanged in substance. The wind rule is now explicit: t
 ### TRL
 
 `trl: 3` and `trl_target: 3` are unchanged. TRL 4 remains on hold by Amish's instruction: the load-release lacing study, nozzle and droplet measurement, wind tests, firmware and any build or purchase have not been started.
+
+## Session 2026-09-26: product appearance model and photoreal renders
+
+Amish chose CoolShade for the first batch of product renders on 2026-09-26. This session adds an appearance model for photoreal renders; it changes no design figure, requirement, calculation, drawing or BOM line.
+
+### What was done
+
+- `cad/src/product_model.py` (new): `product_parts()` returns 102 named parts (64 shell, 32 internal, 6 context) with colour, material, BOM line, group and explode offset; `TITLE` and `RENDER_VIEWS` define three views: "hero" (canopy, water plant and context), "exploded" and "detail" (the water plant only, since the mannequin makes the hero scene tall). All dimensions, positions and interfaces come from `PARAMS` and `derived()` in `cad/src/model.py`, and its `box()`, `rod()`, `zcyl()` and `shs()` helpers are reused.
+- `README.md`: the hero image now points to `media/render-hero.png`, and the links line starts with the exploded render. The render files are produced separately by the orchestrator.
+
+What the appearance model adds:
+
+- Structure: posts with rounded SHS corners; knee braces with bolted end sleeves; base plates with anchor washers and nuts; roof frame with black end caps.
+- Roof: shade cloth with a reinforced hem band and 28 eyelets; 100 W panel with an aluminium frame, 36 cells, busbars, glass, clamps, rail caps and a junction box on slotted rails.
+- Mist system: loop on hanger clips, eight slip-lok tees with brass nozzles, a vacuum breaker at the front, and a riser clipped up the rear left post.
+- Power and sensing: enclosure with a door, a window onto the MPPT controller's lit display, a lock, hinges, a rain hood, a lit green status lamp, a label, glands and post clamps, with the battery, MPPT and controller board inside; louvred radiation shield with its probe, arm and clamp; PIR with a Fresnel dome.
+- Water plant: opaque tank with rolling hoops, screw lid, lock hasp, "potable water only" label, outlet tap, anchor cleats, strap, ratchet and post eye; vented pump box with a window onto the pump; clear-bowl filter with its cartridge; solenoid drain valve; hoses.
+- Context: compact paved patch with a curb, an existing slatted bench and the shared clay mannequin (1.75 m, standing) under the canopy.
+
+### Differences from model.py (appearance only)
+
+Each item is Proposed, awaiting Amish.
+
+1. **Filter in the suction path.** `model.py` routes the supply hose from the tank straight to the pump, while the precis says the pump draws through the filter. The appearance model keeps the model.py hose and adds a short hose from the filter to the pump box. Recommendation: at the next model update, reroute the model.py hose from the tank to the filter and then to the pump, and leave the render as is until then.
+2. **Pump shelf bracket.** `model.py` shows the pump box about 10 mm clear of the rear left post with no support. The appearance model adds a steel shelf bracket bolted to the post. Recommendation: add the bracket to `model.py` and to BOM line 16 hardware (no new line or cost).
+3. **Drain valve connection.** `model.py` has no pipe between the riser and the drain valve. The appearance model adds a short tee from the riser and a 40 mm downturned spout below the valve envelope. Recommendation: adopt, since the valve must connect to the line to drain it.
+4. **Enclosure details outside the model.py box.** The rain hood adds 12 mm at the sides and 6 mm on top; post clamps wrap the post; hinges, lock and lamp stand a few millimeters proud of the door. Recommendation: adopt as appearance detail; the 420 x 320 x 160 mm envelope is unchanged.
+5. **Tank lid and hoops.** The screw lid and neck add about 50 mm to the 700 mm tank height, and the rolling hoops add 7 mm to the radius. Recommendation: adopt; this is typical of a 120 L drum and does not affect the post, strap or pump positions.
+6. **Sensor head and PIR shapes.** The shield plates are louvred cones on spacer rods instead of flat discs; the PIR housing is 40 mm tall with a dome below it, ending 5 mm lower than the model.py block. Recommendation: adopt.
+7. **Scene context.** The paved patch (3.7 x 2.9 m with a curb) replaces the larger sidewalk, curb and road of `concept_media.py`, and the bench moves 40 mm toward the rear and is shown as a slatted timber bench. Recommendation: keep for product renders only; the concept media are unchanged.
+
+The shade cloth, beams, posts, panel, mist line, nozzle positions and enclosure envelope keep the model.py dimensions (the cloth has 40 mm rounded corners inside the full-size hem).
+
+### Checks
+
+All parts are valid solids and tessellate at `tessellate(0.05, 0.1)`; `.kit/product_export.py` exports them; `python .kit/render.py --check` passes. Matplotlib previews (clear parts omitted) were used to check the three views.
+
+### TRL
+
+This is an appearance model only: no tolerances, fabrication detail, PCB layout or build work. `trl: 3` and `trl_target: 3` are unchanged, and TRL 4 remains on hold by Amish's instruction.
