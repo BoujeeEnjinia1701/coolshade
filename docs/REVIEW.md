@@ -257,7 +257,7 @@ On 2026-09-30 Amish approved the build plan format and asked for it across all r
 
 ### Key results (CSH-CAL-001 v0.3)
 
-- Requirement status: **1 not met (R13 cost: $882.00 against $775, +13.8 %)**, 2 at risk (R9, R16), 1 not verifiable at TRL 3 (R5), 13 met. Before this session: none not met, 3 at risk.
+- Requirement status: **1 over its value-engineering target (R13 cost: estimated $882.00 against the $775 target, +13.8 %)**, 2 at risk (R9, R16), 1 not verifiable at TRL 3 (R5), 13 met. Before this session: none not met, 3 at risk.
 - Headroom 2,223 mm (R2 met, was 2,234); clear floor 2.72 x 2.27 m (8 standing, 3 seated and a wheelchair); nozzle tips 2,559 and 2,835 mm.
 - Steel 167 kg; heaviest part a front post, 21.0 kg; 79 bolts and anchors.
 - Fabric off at 30 m/s: posts 0.14, panel bearer 0.02, purlins 0.07, rear beam 0.11; anchors about 2.8 kN factored. Largest rivet nut pull about 0.16 kN factored.
@@ -265,9 +265,8 @@ On 2026-09-30 Amish approved the build plan format and asked for it across all r
 
 ### Proposed, awaiting Amish (see CSH-DEC-001)
 
-1. Budget: $925 recommended (options $925, $900, or keep $775 and cut cost). `budget_usd` is unchanged at $775.
-2. R14 tool list: add a hand rivet nut tool and a bench vice (recommended).
-3. First site type and co-design partner (no recommendation; carried over).
+1. R14 tool list: add a hand rivet nut tool and a bench vice (recommended).
+2. First site type and co-design partner (no recommendation; carried over).
 
 ### Stale media (made on Amish's Mac; not regenerated here)
 
@@ -279,4 +278,4 @@ Unchanged in substance. The build plan adds safety stops S1 to S9 (slab drilling
 
 ### Recommended next step
 
-Amish reviews CSH-DDR-003 and decides the budget (CSH-DEC-001, item 1). TRL 4 (building to this plan) stays on hold by his instruction.
+Amish reviews CSH-DDR-003 and the open decisions in CSH-DEC-001; the Value engineering section there holds the $775 target, the $882 estimate and the savings worth trying. TRL 4 (building to this plan) stays on hold by his instruction.

@@ -3,9 +3,9 @@ doc_id: CSH-CAL-001
 title: CoolShade sizing calculations
 project: CoolShade
 doc_type: Calculation
-version: "0.3"
+version: "0.4"
 status: Draft
-date: '2026-09-30'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -21,11 +21,15 @@ revisions:
   date: '2026-09-30'
   author: Amish Chadha
   change: 'Constructable design (CSH-DDR-003): post grid, headroom, mist line, masses, panel support, rivet nuts, fixings and cost updated; R13 not met against $775'
+- version: "0.4"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # CoolShade sizing calculations
 
-On paper, CoolShade meets thirteen of its seventeen requirements (seven by calculation, four by design, one on published evidence and one, R10, on paper with the anchors to be confirmed per site), has two at risk (R9 water hygiene and R16 scaling), one that cannot be judged at TRL 3 (R5 wetting) and one not met: R13, cost, because the parts added to make the design buildable (CSH-DDR-003, version 0.3 of this note) bring the parts to $882.00 against the $775 budget; a new budget is proposed, awaiting Amish. Version 0.3 also takes the constructable geometry: posts on a 2,800 x 2,350 mm grid, flattened-end knee braces with a lowest point of 2,223 mm, a longer mist line, the panel on a bearer and L-feet at the rear edge, and 167 kg of steel. Version 0.2 applies the recommendations Amish accepted on 2026-09-25 (CSH-DDR-002): R4 is restated as 2 °C while spraying (2.71 °C is met; it was 1.35 °C averaged against 2 °C, not met); R10 is restated as surviving 30 m/s with the fabric removed and keeping the fabric on only in forecast gusts below 15 m/s (met on paper; the original fabric-on 30 m/s case overloads the 50 mm roof beams about 3.5 times); the battery grows from 20 Ah to 25 Ah (1.26 design days without sun, was 1.005); and `budget_usd` rises from $700 to $775, against which the $773 parts cost is $2 under but at risk because the steel prices look low. The calculations changed four details of the TRL 2 concept: shorter knee braces for headroom, a vacuum breaker so that the mist line can drain past its anti-drip nozzles, a closed mist line loop, and a strap on the tank, which tips over in a 30 m/s gust when empty. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [G7], is the line of that script's output that carries it.
+On paper, CoolShade meets thirteen of its seventeen requirements (seven by calculation, four by design, one on published evidence and one, R10, on paper with the anchors to be confirmed per site), has two at risk (R9 water hygiene and R16 scaling), one that cannot be judged at TRL 3 (R5 wetting) and one over its value-engineering target: R13, cost, because the parts added to make the design buildable (CSH-DDR-003, version 0.3 of this note) bring the estimated parts cost to $882.00 against the $775 target (a hypothetical control target), $107 over; savings worth trying are in CSH-DEC-001. Version 0.3 also takes the constructable geometry: posts on a 2,800 x 2,350 mm grid, flattened-end knee braces with a lowest point of 2,223 mm, a longer mist line, the panel on a bearer and L-feet at the rear edge, and 167 kg of steel. Version 0.2 applies the recommendations Amish accepted on 2026-09-25 (CSH-DDR-002): R4 is restated as 2 °C while spraying (2.71 °C is met; it was 1.35 °C averaged against 2 °C, not met); R10 is restated as surviving 30 m/s with the fabric removed and keeping the fabric on only in forecast gusts below 15 m/s (met on paper; the original fabric-on 30 m/s case overloads the 50 mm roof beams about 3.5 times); the battery grows from 20 Ah to 25 Ah (1.26 design days without sun, was 1.005); and `budget_usd` rises from $700 to $775, against which the $773 parts cost is $2 under but at risk because the steel prices look low. The calculations changed four details of the TRL 2 concept: shorter knee braces for headroom, a vacuum breaker so that the mist line can drain past its anti-drip nozzles, a closed mist line loop, and a strap on the tank, which tips over in a 30 m/s gust when empty. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [G7], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles screening estimates for a paper proof of concept. They are not a structural design to any code, they do not show that the mist is safe to breathe, and they do not replace an engineer's check of the frame, anchors and slab at a real site, or a water hygiene plan approved by the local health authority. See CSH-PRC-001, Safety.
 
@@ -130,7 +134,7 @@ The heaviest part is a front post at 21.0 kg (its brace now bolts on separately)
 
 ## J. Cost (R13)
 
-The BOM has 16 lines, all priced, totaling $882.00 against the $775 `budget_usd` Amish set on 2026-09-25 (CSH-DDR-002): $107.00 (13.8 %) over [J1]. The concept came to $773.00; the parts added to make it buildable (CSH-DDR-003: cleats, rivet nuts, panel bearer and mounting kit, base cleats, equipment plate, enclosure rails, sensor arm, line clips, tank level switch, I2C extender, cloth notch and more fixings) add $109. The steel lines (1, 2 and 4) come to $269 for about 167 kg, about $1.61/kg including cutting, drilling and galvanizing, which still looks low for small quantities [J2]. R13 is not met; a budget of $925 is proposed, awaiting Amish (CSH-DEC-001). `budget_usd` is not changed.
+The BOM has 16 lines, all priced, totaling an estimated $882.00 against the $775 value-engineering target (`budget_usd`, set on 2026-09-25 under CSH-DDR-002; a hypothetical control target, not a limit): $107.00 (13.8 %) over [J1]. The concept came to $773.00; the parts added to make it buildable (CSH-DDR-003: cleats, rivet nuts, panel bearer and mounting kit, base cleats, equipment plate, enclosure rails, sensor arm, line clips, tank level switch, I2C extender, cloth notch and more fixings) add $109. The steel lines (1, 2 and 4) come to $269 for about 167 kg, about $1.61/kg including cutting, drilling and galvanizing, which still looks low for small quantities [J2]. R13 is over the value-engineering target by $107; savings worth trying are in CSH-DEC-001. `budget_usd` is not changed.
 
 ## K. Results against every requirement
 
@@ -138,7 +142,7 @@ The BOM has 16 lines, all priced, totaling $882.00 against the $775 `budget_usd`
 
 | ID | Requirement | Value | Target | Status |
 | --- | --- | --- | --- | --- |
-| R13 | Cost | $882 [J1] | $775 or less | **Not met**: $107 (13.8 %) over after the parts added for construction; new budget proposed, awaiting Amish |
+| R13 | Cost | $882 [J1] | $775 or less (value-engineering target) | **Over the value-engineering target by $107** (13.8 %) after the parts added for construction |
 | R9 | Water hygiene | Water under 24 h old with the routine [C5]; line drains in about 30 s [C7]; tank about 34 °C [I3] | Age 48 h or less; drained within 5 min | At risk: water sits in the *Legionella* growth range |
 | R16 | Maintenance | Scaling of 0.4 mm orifices | Descaling interval 1 month or more | At risk; not verifiable at TRL 3 |
 | R5 | No wetting | Needs Dv0.9 below about 80 µm at 7 bar [D3] | No wetting at 1.5 m | Not verifiable at TRL 3 (no droplet data) |
@@ -156,7 +160,7 @@ The BOM has 16 lines, all priced, totaling $882.00 against the $775 `budget_usd`
 | R15 | Refill interval | 1.41 design days [C4] | 1 day or more | Met |
 | R17 | Movability | Heaviest part 21.0 kg [H1] | 40 kg or less | Met |
 
-In summary: 1 not met (R13), 2 at risk (R9, R16), 1 not verifiable at TRL 3 (R5) and 13 met (R1, R2, R3, R4, R6, R7, R8, R10, R11, R12, R14, R15, R17). In v0.2, before CSH-DDR-003, R13 was at risk ($773 against $775). In v0.1, before CSH-DDR-002, the count was 3 not met (R4, R10, R13), 3 at risk (R8, R9, R16), 1 not verifiable and 10 met.
+In summary: 1 over its value-engineering target (R13), 2 at risk (R9, R16), 1 not verifiable at TRL 3 (R5) and 13 met (R1, R2, R3, R4, R6, R7, R8, R10, R11, R12, R14, R15, R17). In v0.2, before CSH-DDR-003, R13 was at risk ($773 against $775). In v0.1, before CSH-DDR-002, the count was 3 not met (R4, R10, R13), 3 at risk (R8, R9, R16), 1 not verifiable and 10 met.
 
 ## Checks against the TRL 2 figures
 

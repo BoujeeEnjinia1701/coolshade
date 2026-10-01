@@ -3,9 +3,9 @@ doc_id: CSH-DDR-003
 title: CoolShade design for construction
 project: CoolShade
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-09-30'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
   date: '2026-09-30'
   author: Amish Chadha
   change: Changes that make the concept physically buildable, with the reason for each; made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review
+- version: "0.2"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target, with cost question A1 replaced by the register's Value engineering section
 ---
 
 # 0003: Design for construction
@@ -58,7 +62,7 @@ The changes keep what CoolShade does and its pitch: a bolted four-post canopy, 3
 | Mist line | 11.91 m, 0.40 L, drains in about 30 s (was 10.96 m, 0.36 L, 27 s) [C7]. | P1, P13 |
 | Structure | Steel 167 kg (was 143 kg before brackets and bolts) [G1]. Fabric off at 30 m/s: posts 0.14, panel bearer 0.02, purlins 0.07 (were 0.15), rear beam from the panel feet 0.11; anchors about 2.8 kN factored, unchanged [G13]. Fabric on at 15 m/s: long beams 0.88, unchanged [G14]. | P1, P5, P7 |
 | Fixings | 79 bolts and anchors, 36 of them M8 into rivet nuts (was about 48) [H2]. Two added hand tools: a rivet nut tool and a bench vice. | P2 to P16 |
-| Cost | BOM lines 1 to 5, 8 to 10, 12, 13 and 16 updated: $882.00 (was $773.00), $107 (13.8 %) over the $775 `budget_usd`. R13 moves from at risk to not met. `budget_usd` is not changed: a new budget is proposed in Table 3. | Parts added for construction |
+| Cost | BOM lines 1 to 5, 8 to 10, 12, 13 and 16 updated: $882.00 (was $773.00), $107 (13.8 %) over the $775 value-engineering target (`budget_usd`). R13 moves from at risk to over the value-engineering target. `budget_usd` is not changed; savings worth trying are in the register's Value engineering section. | Parts added for construction |
 | Drawings | General arrangement CSH-DWG-001 Rev P4; making sketches CSH-DWG-101 to 116 added. | Follows the model |
 | Documents | CSH-CAL-001 v0.3, CSH-PRC-001 v0.5, CSH-REQ-001 v0.5, BOM and BOM notes. | Follows the model |
 | Concept media | Hero, exploded view, blueprint and 3D viewer regenerated from the new model. | Follows the model |
@@ -67,12 +71,11 @@ The changes keep what CoolShade does and its pitch: a bolted four-post canopy, 3
 
 | # | Question | Options | Recommendation |
 | --- | --- | --- | --- |
-| A1 | The parts cost is now $882.00 against the $775 budget (R13 not met). | (a) raise `budget_usd` to $925, which covers the parts added for construction with about 5 % for quotes; (b) $900; (c) keep $775 and cut cost, for example by leaving out the base plates (the cleats anchor straight to the slab) and making the panel rails from steel angle, which saves about $40 and still leaves about $67 over. | (a), because the steel prices still look low until quoted [J2]. |
 | A2 | R14 lists the tools as a drill, angle grinder, spanners and a ladder; the constructable design adds a hand rivet nut tool and a bench vice (for the brace ends). | (a) add both to R14's tool list; (b) use through bolts instead of rivet nuts, which puts nuts under the cloth and can crush the tubes. | (a). |
 
 ## Consequences
 
 - `design_state: constructable` in `project.yaml`. The build plan CSH-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); open items are in the design decisions register CSH-DEC-001.
-- Requirement status (CSH-CAL-001 v0.3): 1 not met (R13 cost, pending A1), 2 at risk (R9 water hygiene, R16 nozzle scaling), 1 not verifiable at TRL 3 (R5 wetting), 13 met. Before this record it was none not met, 3 at risk (R9, R13, R16), 1 not verifiable and 13 met.
+- Requirement status (CSH-CAL-001 v0.3): 1 over its value-engineering target (R13 cost), 2 at risk (R9 water hygiene, R16 nozzle scaling), 1 not verifiable at TRL 3 (R5 wetting), 13 met. Before this record it was none not met, 3 at risk (R9, R13, R16), 1 not verifiable and 13 met.
 - The photoreal renders (`media/render-hero.png`, `render-exploded.png`, `render-detail.png`), `media/card.png`, `media/social-preview.png` and the appearance model `cad/src/product_model.py` still show the concept: posts on the 2.1 m grid, the panel in the middle of the rear half on top of the cloth, the tank against the post and the hose bypassing the filter. They need updating on Amish's Mac, where Blender is.
 - Nothing here authorizes building, buying or testing; TRL 4 stays on hold by Amish's instruction.

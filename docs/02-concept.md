@@ -3,9 +3,9 @@ doc_id: CSH-PRC-001
 title: CoolShade design precis
 project: CoolShade
 doc_type: Design precis
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-09-30'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,13 +29,17 @@ revisions:
   date: '2026-09-30'
   author: Amish Chadha
   change: Constructable design (CSH-DDR-003) and build plan CSH-BLD-001; posts on a 2.8 x 2.35 m grid, panel at the rear edge, cleats and rivet nuts, cost $882 (R13 not met, new budget proposed)
+- version: "0.6"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # CoolShade design precis
 
 ## Summary
 
-CoolShade is a bolted steel shade canopy, 3.0 x 2.4 m in plan, with a knitted shade cloth roof, a 100 W solar panel, a 12 V battery and a low-pressure misting line. It gives shade all day and mists only when the air is hot and dry enough for misting to help and a person is waiting. The TRL 3 calculations (CSH-CAL-001) give, for a hot, dry design day (38 °C, 25 % relative humidity), 85 L of water and 203.8 Wh of electricity per day, an air temperature drop of 2.71 °C while spraying at 1 m/s wind (1.35 °C averaged over the cycle) and, from published shade sail data, a drop in mean radiant temperature of about 17 °C, which is where most of the relief comes from. On 2026-09-25 Amish accepted the recommendations (CSH-DDR-001 and CSH-DDR-002): R4 is now judged while spraying, R10 with the fabric removed above 15 m/s gusts, the battery is 25 Ah and the budget is $775. On 2026-09-30 the design was made constructable (CSH-DDR-003): every part is now modelled as it is made or bought and every joint as it is bolted, and the prototype build plan CSH-BLD-001 shows how to build it. The parts added for that bring the cost to $882 against the $775 budget, so R13 is not met until Amish decides on a new budget (proposed $925, CSH-DEC-001); water hygiene (R9) and nozzle scaling (R16) are at risk, and wetting (R5) needs droplet data.
+CoolShade is a bolted steel shade canopy, 3.0 x 2.4 m in plan, with a knitted shade cloth roof, a 100 W solar panel, a 12 V battery and a low-pressure misting line. It gives shade all day and mists only when the air is hot and dry enough for misting to help and a person is waiting. The TRL 3 calculations (CSH-CAL-001) give, for a hot, dry design day (38 °C, 25 % relative humidity), 85 L of water and 203.8 Wh of electricity per day, an air temperature drop of 2.71 °C while spraying at 1 m/s wind (1.35 °C averaged over the cycle) and, from published shade sail data, a drop in mean radiant temperature of about 17 °C, which is where most of the relief comes from. On 2026-09-25 Amish accepted the recommendations (CSH-DDR-001 and CSH-DDR-002): R4 is now judged while spraying, R10 with the fabric removed above 15 m/s gusts, the battery is 25 Ah and the value-engineering target is $775. On 2026-09-30 the design was made constructable (CSH-DDR-003): every part is now modelled as it is made or bought and every joint as it is bolted, and the prototype build plan CSH-BLD-001 shows how to build it. The parts added for that bring the estimated cost to $882 against the $775 value-engineering target (a hypothetical control target), so R13 is over the target by $107 (savings worth trying are in CSH-DEC-001); water hygiene (R9) and nozzle scaling (R16) are at risk, and wetting (R5) needs droplet data.
 
 ![Hero render](../media/hero.png)
 
@@ -175,7 +179,7 @@ The posts are adequate. The weak point is the fabric: a tensioned cloth pulls it
 ### Mass and cost
 
 - Steel about 167 kg with its cleats and plates (a front post 21.0 kg, the heaviest part); panel about 7 kg; battery about 3 kg; full tank about 128 kg [G1, H1].
-- Parts $882 (indicative, see `bom/bom.csv`), against the $775 `budget_usd` set by Amish on 2026-09-25 (was $700) [J1]: $107 over after the parts added to make the design buildable (CSH-DDR-003). A $925 budget is proposed, awaiting Amish (CSH-DEC-001). The steel prices look low for small quantities [J2].
+- Value-engineering target: $775 (`budget_usd`, a hypothetical control target, not a limit). Estimated cost of the constructable design: $882 (indicative, see `bom/bom.csv`), $107 over the target after the parts added to make the design buildable (CSH-DDR-003) [J1]. Savings worth trying are in CSH-DEC-001. The steel prices look low for small quantities [J2].
 
 ## Key design choices
 
@@ -218,5 +222,5 @@ Open decisions and items to confirm are kept in the design decisions register (`
 - [ ] Water hygiene plan acceptable to the local health authority, including sampling (R9).
 - [ ] Hard water scaling and a descaling method (R16).
 - [ ] Site anchor details on different slabs; footing option where no slab exists.
-- [ ] Steel quotes and the budget, since the $882 parts cost is over the $775 budget (R13).
+- [ ] Steel quotes, since the $882 estimated parts cost is over the $775 value-engineering target (R13).
 - [ ] First site type and co-design partner (proposed, awaiting Amish).

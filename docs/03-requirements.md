@@ -3,9 +3,9 @@ doc_id: CSH-REQ-001
 title: CoolShade requirements
 project: CoolShade
 doc_type: Requirements
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-09-30'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,11 +29,15 @@ revisions:
   date: '2026-09-30'
   author: Amish Chadha
   change: Status from CSH-CAL-001 v0.3 for the constructable design (CSH-DDR-003); R13 not met against $775, new budget proposed
+- version: "0.6"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # CoolShade requirements
 
-These are first-pass requirements for the concept. Targets are proposals for review, not yet validated with users, and will be revised after co-design sessions (see CSH-PRB-001). The status column comes from the TRL 3 calculations in CSH-CAL-001 v0.3, for the constructable design of CSH-DDR-003: one requirement is not met (R13 cost: the parts added to make the design buildable bring it to $882 against $775; a new budget is proposed, awaiting Amish), two are at risk (R9 water hygiene, R16 scaling), one cannot be judged at TRL 3 (R5 wetting, for lack of droplet data) and thirteen are met, four of them by design and R10 on paper. On 2026-09-25 Amish accepted the recommendations (CSH-DDR-002), which changed three targets: R4 is restated as 2 °C while spraying (was 2 °C averaged, not met at 1 m/s); R10 is restated as surviving 30 m/s with the fabric removed, with the fabric fitted only in forecast gusts below 15 m/s (was 30 m/s with the fabric fitted, not met); and R13 is $775 (was $700). The R6 thresholds are decided by Amish (CSH-DDR-001, D2).
+These are first-pass requirements for the concept. Targets are proposals for review, not yet validated with users, and will be revised after co-design sessions (see CSH-PRB-001). The status column comes from the TRL 3 calculations in CSH-CAL-001 v0.3, for the constructable design of CSH-DDR-003: one requirement is over its value-engineering target (R13 cost: the parts added to make the design buildable bring the estimate to $882 against the $775 target, $107 over), two are at risk (R9 water hygiene, R16 scaling), one cannot be judged at TRL 3 (R5 wetting, for lack of droplet data) and thirteen are met, four of them by design and R10 on paper. On 2026-09-25 Amish accepted the recommendations (CSH-DDR-002), which changed three targets: R4 is restated as 2 °C while spraying (was 2 °C averaged, not met at 1 m/s); R10 is restated as surviving 30 m/s with the fabric removed, with the fabric fitted only in forecast gusts below 15 m/s (was 30 m/s with the fabric fitted, not met); and the R13 value-engineering target is $775 (was $700). The R6 thresholds are decided by Amish (CSH-DDR-001, D2).
 
 **Design day:** 38 °C air, 25 % relative humidity, clear sky, wind about 1 m/s, 5 h of misting demand, 4.5 peak sun hours. **Humid edge:** 32 °C and 60 % relative humidity, the wettest air in which the controller still mists.
 
@@ -53,7 +57,7 @@ Table 1. Requirements, targets and status after the TRL 3 calculations (CSH-CAL-
 | R10 | Wind resistance | Frame and anchors survive a 3 s gust of 30 m/s (108 km/h) with the fabric removed; fabric fitted only when forecast gusts are below 15 m/s (54 km/h); fabric removable in 15 min or less (restated, CSH-DDR-002; was 30 m/s with the fabric fitted) | Structural calculation at TRL 3 | Met on paper: fabric off at 30 m/s, posts 0.14, panel bearer 0.02 and purlins 0.07 utilization [G13]; fabric on at 15 m/s, long beams 0.88 [G14]; anchors need about 2.8 kN each, to be confirmed per site. The original case gives 3.52 on the beams [G7] |
 | R11 | Privacy | No camera or microphone; presence by passive infrared only; if a status link is fitted, only counts and levels (on-time, water used, temperature, humidity, faults) leave the device | Design review | Met by design; no status link fitted (CSH-DDR-001, D7) |
 | R12 | Electrical safety | 12 V DC only, no mains; battery fused at the terminal; all electronics in a lockable IP65 enclosure; LiFePO4 chemistry with BMS and cold-charge cutoff | Design review | Met by design: 15 A terminal fuse, margin 2.0 on the largest current [I2] |
-| R13 | Cost | Parts for one prototype $775 or less (`budget_usd`, set by Amish under CSH-DDR-002; was $700) | BOM | **Not met:** $882, $107 (13.8 %) over, after the parts added to make the design buildable (CSH-DDR-003); a new budget is proposed, awaiting Amish (CSH-DEC-001) [J1, J2] |
+| R13 | Cost | Estimated parts cost for one prototype within the $775 value-engineering target (`budget_usd`, a hypothetical control target set under CSH-DDR-002; was $700) | BOM | **Over the value-engineering target by $107:** estimated $882, 13.8 % over, after the parts added to make the design buildable (CSH-DDR-003); savings worth trying are in CSH-DEC-001 [J1, J2] |
 | R14 | Buildability | Bolted assembly; no welding; built with a drill, angle grinder, spanners and a ladder by two people in 2 days or less | Assembly review | Met by design: 79 bolts and anchors, 36 of them into rivet nuts, no welds [H2]; adds a hand rivet nut tool and a vice (open decision in CSH-DEC-001); build time unverified |
 | R15 | Refill interval | 1 design day or more between tank refills | Water balance | Met: 1.41 design days per full tank [C4] |
 | R16 | Maintenance | Nozzles cleanable or replaceable without tools in 15 min or less; filter changed in 10 min or less; descaling interval 1 month or longer | Design review; later field log | **At risk** in hard-water areas: scale can block 0.4 mm orifices; not verifiable at TRL 3 |
