@@ -224,3 +224,59 @@ This is an appearance model only: no tolerances, fabrication detail, PCB layout 
 - Kit 1.5.0 synced: STANDARDS v1.5 (sections 12 to 15: product renders, storefront images and image quality, public release, authorship and signing), `.kit/cards.py`, `.kit/image_qc.py`, `.kit/release_gate.py`, issue templates, and the `/render-product` and `/release` commands. `CLAUDE.md` now matches `.kit/CLAUDE.md`.
 - Every `media/render-*.png` recaptioned from its original render with the new layout: the title, concept label and repository sit in a band above the render and the view note in a band below it, each line wrapped to the image width, so no text overlaps other text or the render or runs off the image. `media/card.png` and `media/social-preview.png` regenerated with the same rules.
 - `python .kit/image_qc.py` and `python .kit/release_gate.py` pass. trl stays 3.
+
+## Session 2026-09-30: constructable design and prototype build plan (kit 1.7.0)
+
+On 2026-09-30 Amish approved the build plan format and asked for it across all repos, with outstanding decisions kept out of the build plan in a separate design decisions register, and wrote: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." This session installed kit 1.7.0 and ran `/build-plan` on that instruction. It stopped at TRL 3: nothing was built, bought or tested.
+
+### What was done
+
+- Kit 1.7.0 installed (`.kit/`, `.claude/commands/`); `CLAUDE.md` replaced by `.kit/CLAUDE.md`.
+- `cad/src/model.py` rewritten as a constructable model: 61 parts, each modelled as it is made or bought, with every bolt and cable hole cut, and 117 build123d constructability checks (`python cad/src/model.py --check`): overlap of every neighbouring pair, contact at every joint, headroom and the sensor shield's height. All pass. STEP and STL re-exported (`coolshade-assembly`, `frame`, `water-system`).
+- `docs/decisions/0003-design-for-construction.md` (CSH-DDR-003 v0.1, Draft): every change, made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review.
+- `docs/05-build-plan.md` (CSH-BLD-001 v0.1): the illustrated build plan, with 16 making sketches (`cad/drawings/CSH-DWG-101` to `116`), 13 joint close-ups, 17 assembly step pictures, an overview, a slab layout, post and beam hole charts, block wiring and the water circuit, all drawn from the model by `cad/src/build_plan_media.py`.
+- `docs/06-design-decisions.md` (CSH-DEC-001 v0.1): 3 open decisions, 13 items to confirm when parts are bought or the site is chosen, and every decision made.
+- `docs/04-calcs/sizing.py` and `01-sizing.md` (CSH-CAL-001 v0.3), `docs/02-concept.md` (CSH-PRC-001 v0.5), `docs/03-requirements.md` (CSH-REQ-001 v0.5), `bom/bom.csv`, `bom/bom-notes.md`, `README.md` (links line and "Building the prototype"), `project.yaml` (`design_state: constructable`, evidence list).
+- General arrangement `cad/drawings/CSH-DWG-001` Rev P4 and the concept media (`media/hero.png`, `exploded.png`, `concept-blueprint.*`, `flow.png`, `model.glb`, `viewer.html`) regenerated from the new model. PDFs rebuilt in `docs/pdf/`.
+
+### Design changes made for construction (CSH-DDR-003)
+
+1. Posts moved out across the sidewalk from 2,100 to 2,350 mm between centres so the long beams sit on the post tops at the roof's edges and the cloth has a tube under every edge; end beams moved to the roof ends.
+2. Long beams horizontal and square on the post tops; end beams, purlins and a new panel bearer cut 7° off square to butt against the beam faces.
+3. Head cleats at every post top and base cleats at every post foot (angle, bolted); no welding.
+4. Roof joints made with 50 x 50 x 5 mm angle frame cleats; every bolt into a closed beam goes into an M8 or M5 steel rivet nut, so nothing stands proud under the cloth.
+5. Knee braces with flattened, bent, bolted ends; bends 350 mm down and along (was 400 mm), lowest point 2,223 mm.
+6. Solar panel moved to the rear edge on two rails and four L-feet on the panel bearer and the rear beam; a 1,020 x 670 mm notch in the cloth under it; purlins moved from 450 to 530 mm off centre to frame the notch.
+7. Enclosure on two through-bolted rails; battery, MPPT and controller board placed inside; three cable glands.
+8. Sensor arm made from 40 x 40 x 4 mm angle on the street face of the front right post, raised to 2.4 m (shield's lowest plate 2,266 mm); bought shield unit hung on one bolt; PIR on a bracket.
+9. Pump, filter and drain valve on an equipment plate on the rear left post; the down pipe ends in the drain valve with a tee to the pump outlet; hoses tank to filter to pump (REVIEW 2026-09-26, items 1 to 3).
+10. Tank moved clear of the post base; strap round tank and post; two stop cleats with M10 anchors.
+11. Mist line loop moved 70 mm inboard of the long beams and under the end beams, on 18 hanger clips.
+12. Cables routed inside the posts and beams through grommeted holes.
+13. Added parts needed for the decided function: a tank low-level switch (R6) and an I2C bus extender for the 7 m sensor cable.
+
+### Key results (CSH-CAL-001 v0.3)
+
+- Requirement status: **1 not met (R13 cost: $882.00 against $775, +13.8 %)**, 2 at risk (R9, R16), 1 not verifiable at TRL 3 (R5), 13 met. Before this session: none not met, 3 at risk.
+- Headroom 2,223 mm (R2 met, was 2,234); clear floor 2.72 x 2.27 m (8 standing, 3 seated and a wheelchair); nozzle tips 2,559 and 2,835 mm.
+- Steel 167 kg; heaviest part a front post, 21.0 kg; 79 bolts and anchors.
+- Fabric off at 30 m/s: posts 0.14, panel bearer 0.02, purlins 0.07, rear beam 0.11; anchors about 2.8 kN factored. Largest rivet nut pull about 0.16 kN factored.
+- Mist line 11.91 m, 0.40 L, drains in about 30 s.
+
+### Proposed, awaiting Amish (see CSH-DEC-001)
+
+1. Budget: $925 recommended (options $925, $900, or keep $775 and cut cost). `budget_usd` is unchanged at $775.
+2. R14 tool list: add a hand rivet nut tool and a bench vice (recommended).
+3. First site type and co-design partner (no recommendation; carried over).
+
+### Stale media (made on Amish's Mac; not regenerated here)
+
+The design changed visibly, so `media/render-hero.png`, `media/render-exploded.png`, `media/render-detail.png`, `media/card.png` and `media/social-preview.png` are stale: they show posts on the 2.1 m grid, the panel in the middle of the rear half on top of the cloth, the tank against the post and the concept braces. `cad/src/product_model.py` still builds the concept appearance (it reads `model.py`'s parameters, so the posts move, but its panel, rails, tank and equipment details follow the concept); it needs updating before the renders are redone.
+
+### Safety
+
+Unchanged in substance. The build plan adds safety stops S1 to S9 (slab drilling, lifting posts, work at height, battery, pressurizing the line, misting near people, fitting the cloth, public use). *Legionella* control (R9) remains the main hazard.
+
+### Recommended next step
+
+Amish reviews CSH-DDR-003 and decides the budget (CSH-DEC-001, item 1). TRL 4 (building to this plan) stays on hold by his instruction.

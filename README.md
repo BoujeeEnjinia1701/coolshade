@@ -2,13 +2,13 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827) [![DOI](https://zenodo.org/badge/1388475805.svg)](https://zenodo.org/badge/latestdoi/1388475805) [![REUSE compliant](https://github.com/BoujeeEnjinia1701/coolshade/actions/workflows/reuse.yml/badge.svg)](https://github.com/BoujeeEnjinia1701/coolshade/actions/workflows/reuse.yml) [![Archived in Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/BoujeeEnjinia1701/coolshade/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/BoujeeEnjinia1701/coolshade)
 
-**Area:** Smart Cities · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $775 USD · **Difficulty:** 3 of 5
+**Area:** Smart Cities · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** about $775 USD (parts now $882; a new budget is proposed) · **Difficulty:** 3 of 5
 
 A solar-powered shade canopy with fine misting for bus stops, markets and queues, switching on only when heat stress is high.
 
 ![CoolShade: solar-powered shade canopy with fine misting, product render](media/render-hero.png)
 
-[Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement (PDF)](cad/drawings/CSH-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
+[Prototype build plan](docs/05-build-plan.md) · [Design decisions](docs/06-design-decisions.md) · [Exploded render](media/render-exploded.png) · [Detail render](media/render-detail.png) · [Interactive 3D model](media/viewer.html) · [Concept blueprint (PDF)](media/concept-blueprint.pdf) · [General arrangement (PDF)](cad/drawings/CSH-DWG-001.pdf) · [Sizing calculations](docs/04-calcs/01-sizing.md) · [Review note](docs/REVIEW.md)
 
 ## Concept rationale
 
@@ -55,31 +55,37 @@ People waiting outdoors in extreme heat have nowhere to cool down, and public co
 
 ## Concept
 
-A four-post bolted steel canopy, 3.0 x 2.4 m, with a knitted shade cloth roof, a 100 W solar panel and a 12.8 V LiFePO4 battery. A 12 V diaphragm pump sends filtered water from a 120 L tank at about 7 bar to eight anti-drip nozzles under the roof beams. The controller mists only when the air is 32 °C or more, relative humidity is 60 % or less and a passive infrared sensor sees someone waiting; a normally open valve drains the line after every session. No camera or microphone is fitted.
+A four-post bolted steel canopy, 3.0 x 2.4 m, on a 2.8 x 2.35 m post grid, with a knitted shade cloth roof laced over the frame, a 100 W solar panel and a 12.8 V LiFePO4 battery. A 12 V diaphragm pump sends filtered water from a 120 L tank at about 7 bar to eight anti-drip nozzles under the roof beams. The controller mists only when the air is 32 °C or more, relative humidity is 60 % or less and a passive infrared sensor sees someone waiting; a normally open valve drains the line after every session. No camera or microphone is fitted.
 
-TRL 3 calculations ([CSH-CAL-001](docs/04-calcs/01-sizing.md)): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), 2.71 °C lower air temperature while spraying at 1 m/s wind (1.35 °C averaged over the spray cycle), 85 L of water and 204 Wh per hot, dry day, a 25 Ah battery lasting 1.26 days without sun, one tank lasting 1.41 days, headroom of 2,234 mm, and $773 in parts against the $775 budget. The frame and anchors are sized to survive a 30 m/s gust with the fabric removed; the fabric goes on only when forecast gusts are below 15 m/s (54 km/h), because its edge pull would overload the roof beams in a storm. No requirement is unmet on paper. At risk: cost (steel is not yet quoted), *Legionella* control in warm stored water and nozzle scaling; wetting cannot be judged until droplet data are in hand. Design decisions: [CSH-DDR-001](docs/decisions/0001-trl2-review-decisions.md) and [CSH-DDR-002](docs/decisions/0002-recommendations-accepted.md).
+TRL 3 calculations ([CSH-CAL-001](docs/04-calcs/01-sizing.md)): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), 2.71 °C lower air temperature while spraying at 1 m/s wind (1.35 °C averaged over the spray cycle), 85 L of water and 204 Wh per hot, dry day, a 25 Ah battery lasting 1.26 days without sun, one tank lasting 1.41 days, headroom of 2,223 mm, and $882 in parts against the $775 budget once every part needed to build it is counted (a $925 budget is proposed, awaiting Amish). The frame and anchors are sized to survive a 30 m/s gust with the fabric removed; the fabric goes on only when forecast gusts are below 15 m/s (54 km/h), because its edge pull would overload the roof beams in a storm. One requirement is not met on paper: cost (R13), until the budget is decided. At risk: *Legionella* control in warm stored water and nozzle scaling; wetting cannot be judged until droplet data are in hand. Design decisions: [CSH-DDR-001](docs/decisions/0001-trl2-review-decisions.md), [CSH-DDR-002](docs/decisions/0002-recommendations-accepted.md) and [CSH-DDR-003](docs/decisions/0003-design-for-construction.md) (design for construction), indexed in the [design decisions register](docs/06-design-decisions.md).
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [docs/03-requirements.md](docs/03-requirements.md).
 
 ## Key components
 
 1. Posts, 80 x 80 mm galvanized steel, with knee braces
-2. Roof frame, 50 x 50 mm steel
+2. Roof frame, 50 x 50 mm steel, joined by angle cleats and rivet nuts
 3. Shade fabric, knitted HDPE
-4. Base plates and anchors
-5. Solar panel, 100 W
+4. Base plates, base cleats and anchors
+5. Solar panel, 100 W, on rails at the roof's rear edge
 6. LiFePO4 battery, 12.8 V 25 Ah
 7. MPPT charge controller
 8. Controller in a lockable IP65 enclosure
 9. Sensor head: temperature and humidity in a radiation shield, PIR presence sensor
-10. Misting pump, 12 V, about 7 bar
+10. Misting pump, 12 V, about 7 bar, on an equipment plate
 11. Filter, 5 µm, and check valve
 12. Mist line loop with 8 anti-drip nozzles
-13. Water tank, 120 L, opaque, strapped
+13. Water tank, 120 L, opaque, strapped, with a low-level switch
 14. Normally open drain valve and vacuum breaker
 15. Hose and wiring harness
 
-The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is [cad/src/model.py](cad/src/model.py), with STEP and STL exports in `cad/step/` and `cad/stl/`.
+The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is [cad/src/model.py](cad/src/model.py), with STEP and STL exports in `cad/step/` and `cad/stl/`; `python cad/src/model.py --check` runs its constructability checks.
+
+## Building the prototype
+
+The prototype build plan ([docs/05-build-plan.md](docs/05-build-plan.md), CSH-BLD-001) shows, in pictures drawn from the model, how to make each of the canopy's steel parts and how to put the whole prototype together in 17 steps. Every joint is bolted: angle cleats join the tubes, bolts into the closed beams go into rivet nuts, and there is no welding. Making the design buildable changed some of the concept (posts moved out to carry the cloth's edges, the panel moved to the rear edge on its own bearer, and more); the changes are in [CSH-DDR-003](docs/decisions/0003-design-for-construction.md), and decisions still open are in the [design decisions register](docs/06-design-decisions.md). It is a plan, not yet built.
+
+![CoolShade prototype: every component, pulled apart and numbered in build order](docs/05-build-plan/overview.png)
 
 ## Safety
 

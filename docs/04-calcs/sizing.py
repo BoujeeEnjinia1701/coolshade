@@ -1,4 +1,4 @@
-"""CoolShade sizing calculations, CSH-CAL-001 v0.2 (TRL 3).
+"""CoolShade sizing calculations, CSH-CAL-001 v0.3 (TRL 3, constructable design CSH-DDR-003).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number quoted in docs/04-calcs/01-sizing.md. Each line carries a tag such as
@@ -70,7 +70,7 @@ A_PERSON = 0.5                        # m2 per standing person (assumption)
 WHEEL = (0.8, 1.2)                    # m, R1 wheelchair space
 BENCH = (1.5, 0.42)                   # m, existing bench footprint (context)
 
-print("CoolShade sizing, CSH-CAL-001 v0.2")
+print("CoolShade sizing, CSH-CAL-001 v0.3")
 print(f"Geometry from cad/src/model.py: roof {P['roof_l']:.0f} x {P['roof_d']:.0f} mm, posts {P['post']:.0f} x {P['post_t']:.0f} SHS "
       f"on {2 * P['post_x']:.0f} x {2 * P['post_y']:.0f} mm, slope {D['slope_deg']:.2f} deg")
 results = {}
@@ -139,9 +139,11 @@ results["R1"] = ("Met", f"{shade_min:.1f} m2 shadow at any sun elevation of 45 d
 # ------------------------------------------------------------------ B. Headroom (R2)
 print("\nB. Headroom")
 tag("B1", f"Beam underside {D['beam_under_front']:.0f} mm (front) and {D['beam_under_rear']:.0f} mm (rear)")
-tag("B2", f"Knee brace low end, at the post face: {D['brace_low_rear']:.0f} mm (rear posts), {D['brace_low_front']:.0f} mm (front posts); "
-    f"brace {P['brace_drop']:.0f} mm down, {P['brace_reach']:.0f} mm along, {D['brace_len']:.0f} mm long (was 520 mm down at TRL 2, low end about 2,110 mm)")
-tag("B3", f"Nozzle tips {D['nozzle_tip_rear']:.0f} mm (rear row) and {D['nozzle_tip_front']:.0f} mm (front row); sensor arm 2,300 mm, outboard of the front right post")
+tag("B2", f"Knee brace lowest point (bottom of its flattened lower end, on the post face): {D['brace_low_rear']:.0f} mm (rear posts), {D['brace_low_front']:.0f} mm (front posts); "
+    f"bends {P['brace_drop']:.0f} mm down the post and {P['brace_reach']:.0f} mm along the beam, {P['brace_tab']:.0f} mm flattened ends, {D['brace_len']:.0f} mm long in all "
+    f"(TRL 3 concept: 400 mm down, low point 2,234 mm; TRL 2: about 2,110 mm)")
+tag("B3", f"Nozzle tips {D['nozzle_tip_rear']:.0f} mm (rear row) and {D['nozzle_tip_front']:.0f} mm (front row); sensor arm {D['arm_z']:.0f} mm with the shield's lowest disc at "
+    f"{D['shield_low']:.0f} mm, outboard of the front right post")
 hmin = min(D["brace_low_rear"], D["nozzle_tip_rear"])
 results["R2"] = ("Met", f"lowest point {hmin:.0f} mm (rear knee braces) against 2,200 mm")
 
@@ -271,13 +273,20 @@ A_brace = math.pi / 4 * (P["brace_od"] ** 2 - (P["brace_od"] - 2 * P["brace_t"])
 kgm = lambda a: a * 1e-6 * STEEL
 m_posts = 2 * kgm(A_post) * D["post_len_front"] / 1000 + 2 * kgm(A_post) * D["post_len_rear"] / 1000
 m_braces = 4 * kgm(A_brace) * D["brace_len"] / 1000
-m_beams = kgm(A_beam) * (2 * P["roof_l"] + 2 * P["roof_d"]) / 1000
-m_purl = kgm(A_purl) * 2 * (P["roof_d"] - 100) / 1000
+m_beams = kgm(A_beam) * (2 * D["long_beam_len"] + 2 * D["end_beam_len"] + D["bearer_len"]) / 1000
+m_purl = kgm(A_purl) * 2 * D["purlin_len"] / 1000
 m_plates = 4 * P["plate"] ** 2 * P["plate_t"] * 1e-9 * STEEL
-m_steel = m_posts + m_braces + m_beams + m_purl + m_plates
-m_dead = m_steel - m_plates + M_PANEL + M_FABRIC + M_ENC_ALL + M_PUMP + 2.0
-tag("G1", f"Steel: posts {m_posts:.1f} kg (front {kgm(A_post) * D['post_len_front'] / 1000:.1f} kg each), braces {m_braces:.1f}, beams {m_beams:.1f}, purlins {m_purl:.1f}, "
-    f"plates {m_plates:.1f}; total {m_steel:.0f} kg before brackets and bolts. Dead load on the anchors {m_dead:.0f} kg ({m_dead * G / 1000:.2f} kN)")
+ang = lambda leg, t: t * (2 * leg - t)                       # equal angle section area, mm2
+m_bcleat = 8 * kgm(ang(P["base_cleat"], P["base_cleat_t"])) * 0.220
+m_cleats = kgm(ang(P["cleat"], P["cleat_t"])) * (8 * P["head_cleat_l"] + 4 * 40 + 6 * 30) / 1000
+x0p, x1p, z0p, z1p, tpl = P["eq_plate"]
+m_other = ((x1p - x0p) * (z1p - z0p) * tpl + 2 * P["enc_rail"][0] * P["enc_rail"][1] * P["enc_rail"][2]) * 1e-9 * STEEL \
+    + kgm(ang(P["arm"], P["arm_t"])) * (P["arm_l"] + 75) / 1000
+m_steel = m_posts + m_braces + m_beams + m_purl + m_plates + m_bcleat + m_cleats + m_other
+m_dead = m_steel - m_plates - m_bcleat + M_PANEL + 3.0 + M_FABRIC + M_ENC_ALL + M_PUMP + 2.0
+tag("G1", f"Steel: posts {m_posts:.1f} kg (front {kgm(A_post) * D['post_len_front'] / 1000:.1f} kg each), braces {m_braces:.1f}, beams and bearer {m_beams:.1f}, purlins {m_purl:.1f}, "
+    f"base plates {m_plates:.1f}, base cleats {m_bcleat:.1f}, head and frame cleats {m_cleats:.1f}, equipment plate, enclosure rails and sensor arm {m_other:.1f}; "
+    f"total {m_steel:.0f} kg before bolts. Dead load on the anchors {m_dead:.0f} kg ({m_dead * G / 1000:.2f} kN), with 3 kg of panel rails and feet")
 q = 0.5 * RHO_W * V_GUST ** 2
 A_roof = L * Dp
 N = CF_N * q * A_roof
@@ -354,30 +363,41 @@ def wind_case(v, fabric):
 
 _, _, Z_purl = shs_props(P["purlin"], P["purlin_t"])
 q0, n0, h0, mb0, u0, tp0, tb0, a_pan = wind_case(V_GUST, False)
-span_p = P["roof_d"] - 100
-a_p = span_p / 2 + P["panel_y"]
-m_purl = n0 / 2 * a_p * (span_p - a_p) / span_p / 1000            # N m, half the panel on each purlin as a point load
+# the panel stands on four L-feet: two on the bearer, two on the rear long beam (CSH-DDR-003)
+foot = n0 / 4
+a_b = (D["bearer_len"] / 2 - P["rail_x"]) / 1000
+u_bear = foot * a_b * 1e3 / Z_beam * GAMMA / FY                   # bearer, simply supported between the purlins
+span_p = 2 * (P["post_y"] - P["beam"] / 2) / 1000
+a_p = (P["bearer_y"] + P["post_y"] - P["beam"] / 2) / 1000
+m_purl = foot * a_p * (span_p - a_p) / span_p                     # N m, the bearer's end reaction on each purlin
 u_purl = m_purl * 1e3 / Z_purl * GAMMA / FY
-tag("G13", f"R10 restated (CSH-DDR-002), fabric removed, {V_GUST:.0f} m/s: panel {a_pan:.2f} m2 takes {n0 / 1000:.2f} kN normal; roof-level horizontal load {h0 / 1000:.2f} kN; "
-    f"post base moment {mb0 / 1000:.2f} kN m, utilization {u0:.2f}; purlin {P['purlin']:.0f} x {P['purlin_t']:.0f} SHS under the panel utilization {u_purl:.2f}; "
-    f"worst post uplift {tp0 / 1000:.2f} kN against {m_dead * G / 4 / 1000:.2f} kN dead load per post; anchor tension about {tb0 / 1000:.1f} kN factored")
+u_rear = foot * (P["post_x"] - P["rail_x"]) / 1000 * 1e3 / Z_beam * GAMMA / FY
+tag("G13", f"R10 restated (CSH-DDR-002), fabric removed, {V_GUST:.0f} m/s: panel {a_pan:.2f} m2 takes {n0 / 1000:.2f} kN normal, {foot:.0f} N at each L-foot; "
+    f"roof-level horizontal load {h0 / 1000:.2f} kN; post base moment {mb0 / 1000:.2f} kN m, utilization {u0:.2f}; bearer utilization {u_bear:.2f}, purlins {u_purl:.2f}, "
+    f"rear beam from the feet {u_rear:.2f}; worst post uplift {tp0 / 1000:.2f} kN against {m_dead * G / 4 / 1000:.2f} kN dead load per post; "
+    f"anchor tension about {tb0 / 1000:.1f} kN factored")
+riv = max(tp0 / 2, foot) * GAMMA
+tag("G15", f"Rivet nuts: the largest pull on one M8 rivet nut is about {riv / 1000:.2f} kN factored (post uplift shared by a post's two head cleat nuts, or one L-foot), "
+    f"to compare with the rivet nut maker's pull-out rating in a 2 mm wall")
 V_FAB = 15.0
 q1, n1, h1, mb1, u1, tp1, tb1, _ = wind_case(V_FAB, True)
 u_edge1 = sig_edge * GAMMA / FY * (V_FAB / V_GUST) ** 2
 tag("G14", f"R10 restated, fabric fitted, forecast gusts up to {V_FAB:.0f} m/s ({V_FAB * 3.6:.0f} km/h): {q1:.0f} Pa, roof normal force {n1 / 1000:.2f} kN; "
     f"long-beam utilization from fabric edge pull {u_edge1:.2f} (5 % sag, fabric solid); posts {u1:.2f}; anchor tension about {tb1 / 1000:.1f} kN factored")
-results["R10"] = ("Met on paper", f"restated target (CSH-DDR-002): fabric off at {V_GUST:.0f} m/s, posts {u0:.2f}, purlins {u_purl:.2f}; fabric on to {V_FAB:.0f} m/s, long beams {u_edge1:.2f}; "
+results["R10"] = ("Met on paper", f"restated target (CSH-DDR-002): fabric off at {V_GUST:.0f} m/s, posts {u0:.2f}, bearer {u_bear:.2f}, purlins {u_purl:.2f}; fabric on to {V_FAB:.0f} m/s, long beams {u_edge1:.2f}; "
                   f"anchors need about {max(tb0, tb1) / 1000:.1f} kN each, to be confirmed per site; the original fabric-on 30 m/s case gives beam utilization {sig_edge * GAMMA / FY:.1f}")
 
 # ------------------------------------------------------------------ H. Movability and buildability (R17, R14, R16)
 print("\nH. Movability and handling")
-heaviest = kgm(A_post) * D["post_len_front"] / 1000 + kgm(A_brace) * D["brace_len"] / 1000
-tag("H1", f"Heaviest part: front post with brace {heaviest:.1f} kg; long beam {kgm(A_beam) * P['roof_l'] / 1000:.1f} kg; panel {M_PANEL:.0f} kg; empty tank {M_TANK_EMPTY:.0f} kg (assumed); "
-    f"full tank about {P['tank_nominal_l'] + M_TANK_EMPTY:.0f} kg (drain before moving)")
-n_bolts = 16 + 4 * 4 + 8 + 8
-tag("H2", f"Bolted joints: about {n_bolts} bolts and anchors (16 anchors, 4 per post-to-beam bracket, 8 brace bolts, 8 purlin bolts); no welding")
+heaviest = kgm(A_post) * D["post_len_front"] / 1000
+tag("H1", f"Heaviest part: a front post {heaviest:.1f} kg (its brace, {kgm(A_brace) * D['brace_len'] / 1000:.1f} kg, now bolts on separately); long beam {kgm(A_beam) * P['roof_l'] / 1000:.1f} kg; "
+    f"panel {M_PANEL:.0f} kg; empty tank {M_TANK_EMPTY:.0f} kg (assumed); full tank about {P['tank_nominal_l'] + M_TANK_EMPTY:.0f} kg (drain before moving)")
+n_anch, n_m12, n_m10, n_rn = 16, 8, 4 + 4, 8 + 4 + 20 + 4
+n_other = 4 + 3 + 2 + 2
+tag("H2", f"Bolted joints (CSH-DDR-003): {n_anch} M16 anchors, {n_m12} M12 and {n_m10} M10 through bolts, {n_rn} M8 bolts into rivet nuts in the beams, and {n_other} bolts "
+    f"for the enclosure rails, sensor arm, equipment plate and tank stops: {n_anch + n_m12 + n_m10 + n_rn + n_other} in all; no welding")
 results["R17"] = ("Met", f"heaviest part {heaviest:.0f} kg against 40 kg")
-results["R14"] = ("Met by design", "bolted, no welding; build time not verifiable at TRL 3")
+results["R14"] = ("Met by design", "bolted, no welding; adds a hand rivet nut tool and a vice for flattening the brace ends; build time not verifiable at TRL 3")
 results["R16"] = ("At risk", "scaling of 0.4 mm orifices in hard water; interval not verifiable at TRL 3")
 
 # ------------------------------------------------------------------ I. Control, privacy, electrical, hygiene (R6, R9, R11, R12)
@@ -404,7 +424,9 @@ steel_usd = sum(float(r["qty"]) * float(r["unit_cost_usd"]) for r in bom if r["i
 tag("J1", f"BOM {len(bom)} lines, total ${total:,.2f}: ${total - budget:+,.2f} ({(total / budget - 1) * 100:+.1f} %) against budget_usd ${budget:,.0f}; "
     f"for the record, ${total - TRL2_BUDGET:+,.2f} against the former ${TRL2_BUDGET:,.0f} and ${total - TRL2_PROPOSED:+,.2f} against the TRL 2 proposal of ${TRL2_PROPOSED:,.0f}")
 tag("J2", f"Steel lines 1, 2 and 4 cost ${steel_usd:,.0f} for about {m_steel:.0f} kg, ${steel_usd / m_steel:.2f}/kg including cutting, drilling and galvanizing: low, so cost is at risk upward until quoted")
-results["R13"] = ("At risk" if total <= budget else "Not met", f"${total:,.0f} against ${budget:,.0f} ({(total / budget - 1) * 100:+.1f} %); steel prices look low, so the margin may vanish when quoted")
+results["R13"] = ("At risk" if total <= budget else "Not met",
+                  f"${total:,.0f} against ${budget:,.0f} ({(total / budget - 1) * 100:+.1f} %) after the parts added for construction (CSH-DDR-003); "
+                  f"a new budget is proposed, awaiting Amish (CSH-DEC-001); steel prices look low until quoted")
 
 # ------------------------------------------------------------------ Summary
 print("\nRequirement status")

@@ -3,9 +3,9 @@ doc_id: CSH-CAL-001
 title: CoolShade sizing calculations
 project: CoolShade
 doc_type: Calculation
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-30'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,17 +17,21 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002)
+- version: "0.3"
+  date: '2026-09-30'
+  author: Amish Chadha
+  change: 'Constructable design (CSH-DDR-003): post grid, headroom, mist line, masses, panel support, rivet nuts, fixings and cost updated; R13 not met against $775'
 ---
 
 # CoolShade sizing calculations
 
-On paper, CoolShade meets thirteen of its seventeen requirements (seven by calculation, four by design, one on published evidence and one, R10, on paper with the anchors to be confirmed per site), has three at risk (R9 water hygiene, R13 cost and R16 scaling), one that cannot be judged at TRL 3 (R5 wetting) and none that are not met. Version 0.2 applies the recommendations Amish accepted on 2026-09-25 (CSH-DDR-002): R4 is restated as 2 °C while spraying (2.71 °C is met; it was 1.35 °C averaged against 2 °C, not met); R10 is restated as surviving 30 m/s with the fabric removed and keeping the fabric on only in forecast gusts below 15 m/s (met on paper; the original fabric-on 30 m/s case overloads the 50 mm roof beams about 3.5 times); the battery grows from 20 Ah to 25 Ah (1.26 design days without sun, was 1.005); and `budget_usd` rises from $700 to $775, against which the $773 parts cost is $2 under but at risk because the steel prices look low. The calculations changed four details of the TRL 2 concept: shorter knee braces for headroom, a vacuum breaker so that the mist line can drain past its anti-drip nozzles, a closed mist line loop, and a strap on the tank, which tips over in a 30 m/s gust when empty. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [G7], is the line of that script's output that carries it.
+On paper, CoolShade meets thirteen of its seventeen requirements (seven by calculation, four by design, one on published evidence and one, R10, on paper with the anchors to be confirmed per site), has two at risk (R9 water hygiene and R16 scaling), one that cannot be judged at TRL 3 (R5 wetting) and one not met: R13, cost, because the parts added to make the design buildable (CSH-DDR-003, version 0.3 of this note) bring the parts to $882.00 against the $775 budget; a new budget is proposed, awaiting Amish. Version 0.3 also takes the constructable geometry: posts on a 2,800 x 2,350 mm grid, flattened-end knee braces with a lowest point of 2,223 mm, a longer mist line, the panel on a bearer and L-feet at the rear edge, and 167 kg of steel. Version 0.2 applies the recommendations Amish accepted on 2026-09-25 (CSH-DDR-002): R4 is restated as 2 °C while spraying (2.71 °C is met; it was 1.35 °C averaged against 2 °C, not met); R10 is restated as surviving 30 m/s with the fabric removed and keeping the fabric on only in forecast gusts below 15 m/s (met on paper; the original fabric-on 30 m/s case overloads the 50 mm roof beams about 3.5 times); the battery grows from 20 Ah to 25 Ah (1.26 design days without sun, was 1.005); and `budget_usd` rises from $700 to $775, against which the $773 parts cost is $2 under but at risk because the steel prices look low. The calculations changed four details of the TRL 2 concept: shorter knee braces for headroom, a vacuum breaker so that the mist line can drain past its anti-drip nozzles, a closed mist line loop, and a strap on the tank, which tips over in a 30 m/s gust when empty. Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [G7], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles screening estimates for a paper proof of concept. They are not a structural design to any code, they do not show that the mist is safe to breathe, and they do not replace an engineer's check of the frame, anchors and slab at a real site, or a water hygiene plan approved by the local health authority. See CSH-PRC-001, Safety.
 
 ## Scope and method
 
-The note checks every requirement in CSH-REQ-001 v0.4 against the design in CSH-PRC-001 v0.4 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS` and derived dimensions, so the post grid, roof heights, brace geometry, nozzle heights and mist line length used here are the ones in the STEP files and in drawing CSH-DWG-001. It also reads `bom/bom.csv` and `budget_usd` in `project.yaml`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
+The note checks every requirement in CSH-REQ-001 v0.5 against the design in CSH-PRC-001 v0.5 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS` and derived dimensions, so the post grid, roof heights, brace geometry, nozzle heights and mist line length used here are the ones in the STEP files and in drawing CSH-DWG-001. It also reads `bom/bom.csv` and `budget_usd` in `project.yaml`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
 
 The design day is unchanged from CSH-REQ-001: 38 °C air at 25 % relative humidity, clear sky, wind about 1 m/s, 5 h of misting demand and 4.5 peak sun hours. The humid edge is the wettest air in which the controller still mists: 32 °C at 60 % relative humidity.
 
@@ -52,13 +56,13 @@ The design day is unchanged from CSH-REQ-001: 38 °C air at 25 % relative humidi
 
 - **Shade area.** The roof is 7.20 m² in plan and 7.26 m² on the slope [A1]. Its shadow is 7.20 m² with the sun overhead and at least 6.30 m² for any sun elevation of 45° or more [A2], so R1's 6 m² is met.
 - **Where the shadow falls.** With the sun at 60° elevation from the street side, only 2.11 m² of the shadow falls inside the canopy's own footprint; from along the curb, 3.33 m² [A2]. The shaded waiting spot moves with the sun, so the sun path check at each site (R1's verification) matters more than the roof area.
-- **Space.** The clear floor between the posts is 2.72 x 2.02 m (5.49 m²). After the tank and pump, the bench and one wheelchair space, 3.59 m² remains, room for seven people standing plus three seated [A3]. R1 (six people and one wheelchair space) is met.
+- **Space.** The clear floor between the posts is 2.72 x 2.27 m (6.17 m²; it was 2.72 x 2.02 m before the posts moved out under CSH-DDR-003). After the tank and pump, the bench and one wheelchair space, 4.27 m² remains, room for eight people standing plus three seated [A3]. R1 (six people and one wheelchair space) is met.
 
 ## B. Headroom (R2)
 
-- The roof beam underside is 2,896 mm at the front and 2,634 mm at the rear [B1].
-- At TRL 2 the rear knee braces dropped 520 mm below the beam, leaving about 2,110 mm at the post face, below R2's 2,200 mm. The braces are now 400 mm down and 400 mm along the beam (45°, 566 mm long), and their low end is at 2,234 mm at the rear posts and 2,496 mm at the front posts [B2].
-- The nozzle tips are at 2,584 mm (rear row) and 2,829 mm (front row); the sensor arm is at 2,300 mm and outboard of the front right post [B3]. R2 is met, with 34 mm to spare at the rear braces.
+- The long beams are horizontal and sit on the posts at the roof's edges (CSH-DDR-003); their underside is 2,912 mm at the front and 2,618 mm at the rear [B1].
+- At TRL 2 the rear knee braces dropped 520 mm below the beam, leaving about 2,110 mm at the post face, below R2's 2,200 mm; the TRL 3 concept shortened them to 400 mm (low end 2,234 mm). The constructable braces have flattened ends 45 mm long bolted flat to the post and beam, so their bends are 350 mm down the post and 350 mm along the beam, and the bottom of the lower flattened end, the lowest point overhead, is at 2,223 mm at the rear posts and 2,517 mm at the front posts [B2].
+- The nozzle tips are at 2,559 mm (rear row) and 2,835 mm (front row); the sensor arm is at 2,400 mm, and the shield's lowest plate at 2,266 mm, outboard of the front right post [B3]. R2 is met, with 23 mm to spare at the rear braces.
 
 ## C. Misting and water (R7, R15, R9)
 
@@ -67,7 +71,7 @@ The design day is unchanged from CSH-REQ-001: 38 °C air at 25 % relative humidi
 - **Tank.** A full 120 L tank lasts 1.41 design days [C4]; R15 is met.
 - **Drain-and-refill routine.** R9 limits tank water to 48 h old. Topping up a part-full tank never guarantees this, so the routine is to drain the residual and refill. Filling 95 L each design day leaves about 10 L to drain at the next visit, keeps every liter under 24 h old and draws 95 L per day; filling to 120 L and draining the rest would draw 120 L and miss R7 [C5].
 - **Pump.** The hydraulic power is 6.2 W, so the assumed 60 W draw implies 10 % wire-to-water efficiency [C6], a conservative figure for a small diaphragm pump near its pressure limit.
-- **Draining the mist line.** The line is now a closed loop under all four roof beams plus a down pipe: 10.96 m of 6.5 mm bore, holding 0.36 L. Through a 3 mm valve orifice at 0.5 m head it drains in about 27 s [C7], well inside R9's 5 min, but only if air can get in. Anti-drip nozzles close when the pressure drops, so the TRL 2 line would have held its water. A vacuum breaker at the front, highest point of the loop is added to BOM item 14.
+- **Draining the mist line.** The line is a closed loop 70 mm inboard of the long beams and under the end beams, plus a down pipe to the drain valve: 11.91 m of 6.5 mm bore, holding 0.40 L. Through a 3 mm valve orifice at 0.5 m head it drains in about 30 s [C7], well inside R9's 5 min, but only if air can get in. Anti-drip nozzles close when the pressure drops, so the TRL 2 line would have held its water. A vacuum breaker at the front, highest point of the loop is added to BOM item 14.
 
 ## D. Droplets and wetting (R5)
 
@@ -82,7 +86,7 @@ A droplet stops being a wetting risk once it has evaporated. On the design day t
 | 80 µm | 3.44 s, 316 mm | 8.12 s, 745 mm |
 | 100 µm | 5.38 s, 771 mm | 12.68 s, 1,819 mm |
 
-Between the end of the jet under the rear nozzles and head height there are 784 mm. Droplets up to about 100 µm evaporate before reaching a head on the design day, and up to about 81 µm on the humid edge [D3]. R5 is therefore met only if the nozzle's droplet spectrum has nearly all its volume (Dv0.9) below about 80 µm at 7 bar. No maker's droplet data are in hand, so R5 cannot be judged at TRL 3. At 1 m/s wind, a 50 µm droplet drifts about 1.3 m before it is gone, and larger ones leave the canopy [D2]; this is the drift loss in the water balance.
+Between the end of the jet under the rear nozzles and head height there are 759 mm. Droplets up to about 100 µm evaporate before reaching a head on the design day, and up to about 80 µm on the humid edge [D3]. R5 is therefore met only if the nozzle's droplet spectrum has nearly all its volume (Dv0.9) below about 80 µm at 7 bar. No maker's droplet data are in hand, so R5 cannot be judged at TRL 3. At 1 m/s wind, a 50 µm droplet drifts about 1.3 m before it is gone, and larger ones leave the canopy [D2]; this is the drift loss in the water balance.
 
 ## E. Cooling (R4, R3)
 
@@ -102,20 +106,21 @@ Between the end of the jet under the rear nozzles and head height there are 784 
 
 ## G. Structure and wind (R10)
 
-- **Mass.** The steel weighs about 143 kg before brackets and bolts: four posts 79.9 kg (a front post 20.9 kg), braces 4.1 kg, beams 32.6 kg, purlins 11.0 kg and base plates 15.2 kg. The dead load on the anchors, with panel, fabric, equipment and pump, is 152 kg (1.49 kN) [G1].
+- **Mass.** The steel weighs about 167 kg before bolts: four posts 79.9 kg (a front post 21.0 kg), braces 4.2 kg, long beams, end beams and panel bearer 35.1 kg, purlins 11.1 kg, base plates 15.2 kg, base cleats 11.9 kg, head and frame cleats 2.6 kg, and the equipment plate, enclosure rails and sensor arm 6.9 kg. The dead load on the anchors, with panel, rails, fabric, equipment and pump, is 167 kg (1.64 kN) [G1].
 - **Wind.** A 30 m/s (108 km/h) gust gives 540 Pa, and with the fabric treated as solid, a normal force of 4.67 kN on the roof [G2].
-- **Posts.** The horizontal load at roof level is 1.21 kN (the tilted roof, fabric friction and the roof edge) plus 86 N/m of drag on each post. As cantilevers with no help from the braces, the posts see 1.24 kN m each [G3], or 81 MPa with the 1.5 factor, a utilization of 0.29 of S275 [G4]. The TRL 2 figure of about 144 MPa came from applying the whole normal force sideways; that is not a physical load case, but even that bound gives a utilization of 0.80 [G5].
+- **Posts.** The horizontal load at roof level is 1.21 kN (the tilted roof, fabric friction and the roof edge) plus 86 N/m of drag on each post. As cantilevers with no help from the braces, the posts see 1.24 kN m each [G3], or 82 MPa with the 1.5 factor, a utilization of 0.30 of S275 [G4] (the posts are 13 mm longer at the front than in v0.2). The TRL 2 figure of about 144 MPa came from applying the whole normal force sideways; that is not a physical load case, but even that bound gives a utilization of 0.81 [G5].
 - **Roof beams in bending.** If the long beams simply carry half the roof pressure over the 2.8 m post spacing, they reach a utilization of 0.70 [G6].
 - **Fabric edge pull.** A tensioned fabric does not load the beams like a floor. It pulls inward on its edges with a force that grows as its sag shrinks. At 5 % sag the edge pull is 3.89 kN/m on each long beam, which bends the 50 x 50 x 2 mm beam sideways at a utilization of 3.52 [G7]. The beams can take 1.11 kN/m. To stay within that, the fabric would need 422 mm of sag (18 % of its span), or its porosity would need to relieve 72 % of the pressure, or it would have to come off above gusts of about 16 m/s (58 km/h) [G8].
 - **Original R10 not met** on the conservative, solid-fabric case. Real knitted cloth is porous and stretches, both of which reduce the edge pull, but no data are in hand to show by how much. Amish accepted the recommendation to restate R10 (CSH-DDR-002): the frame and anchors must survive 30 m/s with the fabric removed, and the fabric is fitted only when forecast gusts are below 15 m/s (54 km/h). Removing the fabric before storms (decision D6) is therefore load-bearing, not a convenience.
-- **Restated R10, fabric removed, 30 m/s.** The panel, as a flat plate of 0.67 m², takes 0.43 kN; the horizontal load at roof level is 0.33 kN; the post base moment is 0.60 kN m, a utilization of 0.14; the purlins under the panel reach 0.15; and the worst post lifts with 0.16 kN against 0.37 kN of dead load per post. Each anchor needs about 2.8 kN factored, mostly from the base moment [G13].
+- **Restated R10, fabric removed, 30 m/s.** The panel, as a flat plate of 0.67 m², takes 0.43 kN, 109 N at each of its four L-feet; the horizontal load at roof level is 0.33 kN; the post base moment is 0.60 kN m, a utilization of 0.14. The panel now stands at the rear edge on two feet on the panel bearer and two on the rear beam (CSH-DDR-003): the bearer reaches 0.02, the purlins carrying it 0.07 and the rear beam 0.11. The worst post lifts with 0.19 kN against 0.41 kN of dead load per post. Each anchor needs about 2.8 kN factored, mostly from the base moment [G13].
+- **Rivet nuts.** Bolts into the closed beams go into M8 steel rivet nuts. The largest pull on one is about 0.16 kN factored, from the worst post's uplift shared by its two head cleat nuts or from one L-foot [G15]; the chosen rivet nut's pull-out rating in a 2 mm wall must be well above this, which is typical of steel rivet nuts but is to be confirmed from the maker's data.
 - **Restated R10, fabric fitted, 15 m/s.** The pressure is 135 Pa, a quarter of the 30 m/s value. The fabric's edge pull brings the long beams to a utilization of 0.88 on the same solid-fabric, 5 % sag case; the posts are at 0.07 and each anchor needs about 1.5 kN factored [G14]. The restated R10 is met on paper; the anchors still depend on the slab at each site. A cord lacing that releases the fabric at a set load was recommended for study at TRL 4, which is on hold.
-- **Anchors, original fabric-on 30 m/s case.** With the center of pressure 0.6 m off center, the worst post lifts with 1.83 kN, or 1.46 kN net of dead load and 2.41 kN factored [G9]. Adding the base moment over the 160 mm bolt pitch, each M16 anchor needs a factored tension of about 6.4 kN [G10]. Whether a given anchor in a given slab can provide it depends on the slab's thickness, concrete and edge distances, so the anchors cannot be verified at TRL 3. Under the restated R10 the governing anchor load falls to about 2.8 kN [G13]. Without anchors, 324 kg of ballast would be needed [G11], so anchoring stays mandatory.
+- **Anchors, original fabric-on 30 m/s case.** With the center of pressure 0.6 m off center, the worst post lifts with 1.76 kN, or 1.35 kN net of dead load and 2.27 kN factored [G9]. Adding the base moment over the 160 mm bolt pitch, each M16 anchor needs a factored tension of about 6.4 kN [G10]. Whether a given anchor in a given slab can provide it depends on the slab's thickness, concrete and edge distances, so the anchors cannot be verified at TRL 3. Under the restated R10 the governing anchor load falls to about 2.8 kN [G13]. Without anchors, 309 kg of ballast would be needed [G11], so anchoring stays mandatory.
 - **Tank.** An empty 8 kg tank sees 163 N of drag; its overturning moment of 57 N m is well above the 21 N m that holds it down, so it would tip [G12]. A strap to the rear left post and two small anchors are added to BOM item 13.
 
 ## H. Handling (R17, R14)
 
-The heaviest part is a front post with its brace at 22.0 kg, against R17's 40 kg; a long beam weighs 9.0 kg and the panel 7 kg. A full tank weighs about 128 kg and must be drained before it is moved [H1]. The frame has about 48 bolts and anchors and no welds [H2], so R14 is met by design; the 2-day build time cannot be checked on paper.
+The heaviest part is a front post at 21.0 kg (its brace now bolts on separately), against R17's 40 kg; a long beam weighs 9.0 kg and the panel 7 kg. A full tank weighs about 128 kg and must be drained before it is moved [H1]. The constructable design has 79 bolts and anchors, 36 of them M8 bolts into rivet nuts, and no welds [H2], so R14 is met by design; it needs two hand tools beyond R14's list (a rivet nut tool and a vice for the brace ends; open decision in CSH-DEC-001), and the 2-day build time cannot be checked on paper.
 
 ## I. Control, electrical and hygiene (R6, R12, R9)
 
@@ -125,7 +130,7 @@ The heaviest part is a front post with its brace at 22.0 kg, against R17's 40 kg
 
 ## J. Cost (R13)
 
-The BOM has 16 lines, all priced, totaling $773.00. Amish set `budget_usd` at $775 on 2026-09-25 (CSH-DDR-002; it was $700, and $750 was proposed at TRL 2), so the parts cost is $2.00 (0.3 %) under budget [J1]. The TRL 3 changes added $23 (strap, vacuum breaker and a longer mist line), and the 25 Ah battery adds $15 (was $758.00). The steel lines (1, 2 and 4) come to $230 for about 143 kg, about $1.61/kg including cutting, drilling and galvanizing, which looks low for small quantities, so cost is at risk of rising further until quoted [J2]. R13 is met by $2.00 but at risk.
+The BOM has 16 lines, all priced, totaling $882.00 against the $775 `budget_usd` Amish set on 2026-09-25 (CSH-DDR-002): $107.00 (13.8 %) over [J1]. The concept came to $773.00; the parts added to make it buildable (CSH-DDR-003: cleats, rivet nuts, panel bearer and mounting kit, base cleats, equipment plate, enclosure rails, sensor arm, line clips, tank level switch, I2C extender, cloth notch and more fixings) add $109. The steel lines (1, 2 and 4) come to $269 for about 167 kg, about $1.61/kg including cutting, drilling and galvanizing, which still looks low for small quantities [J2]. R13 is not met; a budget of $925 is proposed, awaiting Amish (CSH-DEC-001). `budget_usd` is not changed.
 
 ## K. Results against every requirement
 
@@ -133,25 +138,25 @@ The BOM has 16 lines, all priced, totaling $773.00. Amish set `budget_usd` at $7
 
 | ID | Requirement | Value | Target | Status |
 | --- | --- | --- | --- | --- |
-| R13 | Cost | $773 [J1] | $775 or less | At risk: $2 (0.3 %) under; steel prices look low [J2] |
-| R9 | Water hygiene | Water under 24 h old with the routine [C5]; line drains in about 27 s [C7]; tank about 34 °C [I3] | Age 48 h or less; drained within 5 min | At risk: water sits in the *Legionella* growth range |
+| R13 | Cost | $882 [J1] | $775 or less | **Not met**: $107 (13.8 %) over after the parts added for construction; new budget proposed, awaiting Amish |
+| R9 | Water hygiene | Water under 24 h old with the routine [C5]; line drains in about 30 s [C7]; tank about 34 °C [I3] | Age 48 h or less; drained within 5 min | At risk: water sits in the *Legionella* growth range |
 | R16 | Maintenance | Scaling of 0.4 mm orifices | Descaling interval 1 month or more | At risk; not verifiable at TRL 3 |
-| R5 | No wetting | Needs Dv0.9 below about 81 µm at 7 bar [D3] | No wetting at 1.5 m | Not verifiable at TRL 3 (no droplet data) |
+| R5 | No wetting | Needs Dv0.9 below about 80 µm at 7 bar [D3] | No wetting at 1.5 m | Not verifiable at TRL 3 (no droplet data) |
 | R4 | Air cooling from misting | 2.71 °C while spraying (1.35 °C averaged) at 1 m/s [E2] | 2 °C or more while spraying (restated) | Met; holds to 1.35 m/s [E3] |
 | R8 | Energy autonomy | 203.8 Wh used, 337.5 Wh harvested; 25 Ah battery 1.256 days [F2] | Energy-neutral; 1 day without sun | Met; no charging above about 41 °C air [F5] |
-| R10 | Wind resistance | Fabric off at 30 m/s: posts 0.14, purlins 0.15 [G13]; fabric on at 15 m/s: long beams 0.88 [G14]; anchors about 2.8 kN each | Restated: survive 30 m/s with fabric removed; fabric on only below 15 m/s | Met on paper; anchors to be confirmed per site. Original fabric-on case: beams 3.52 [G7] |
-| R1 | Shaded waiting area | 6.30 m² or more shadow above 45° sun [A2]; 7 standing + 3 seated + wheelchair [A3] | 6 m²; 6 people and a wheelchair | Met |
-| R2 | Headroom | 2,234 mm at the rear braces [B2] | 2,200 mm or more | Met |
+| R10 | Wind resistance | Fabric off at 30 m/s: posts 0.14, bearer 0.02, purlins 0.07 [G13]; fabric on at 15 m/s: long beams 0.88 [G14]; anchors about 2.8 kN each | Restated: survive 30 m/s with fabric removed; fabric on only below 15 m/s | Met on paper; anchors to be confirmed per site. Original fabric-on case: beams 3.52 [G7] |
+| R1 | Shaded waiting area | 6.30 m² or more shadow above 45° sun [A2]; 8 standing + 3 seated + wheelchair [A3] | 6 m²; 6 people and a wheelchair | Met |
+| R2 | Headroom | 2,223 mm at the rear braces' flattened ends [B2] | 2,200 mm or more | Met |
 | R3 | Radiant heat reduction | About 17.3 °C for shade sails (literature) | 15 °C or more | Met on published evidence; unverified for this fabric |
 | R6 | Smart activation | Stop within 30 s [I1] | Within 60 s | Met by design |
 | R7 | Water use | 85 L used, 95 L drawn [C2], [C5] | 100 L or less | Met at 4 L/h per nozzle; at risk above 4.75 L/h [C3] |
 | R11 | Privacy | PIR only, no link fitted | No camera or microphone | Met by design |
 | R12 | Electrical safety | 12 V DC, 15 A fuse, margin 2.0 [I2] | 12 V, fused, IP65, BMS | Met by design |
-| R14 | Buildability | Bolted, about 48 fasteners [H2] | No welding; 2 days | Met by design; time unverified |
+| R14 | Buildability | Bolted, 79 fasteners [H2] | No welding; 2 days | Met by design; adds a rivet nut tool and a vice; time unverified |
 | R15 | Refill interval | 1.41 design days [C4] | 1 day or more | Met |
-| R17 | Movability | Heaviest part 22.0 kg [H1] | 40 kg or less | Met |
+| R17 | Movability | Heaviest part 21.0 kg [H1] | 40 kg or less | Met |
 
-In summary: none not met, 3 at risk (R9, R13, R16), 1 not verifiable at TRL 3 (R5) and 13 met (R1, R2, R3, R4, R6, R7, R8, R10, R11, R12, R14, R15, R17). In v0.1, before CSH-DDR-002, the count was 3 not met (R4, R10, R13), 3 at risk (R8, R9, R16), 1 not verifiable and 10 met.
+In summary: 1 not met (R13), 2 at risk (R9, R16), 1 not verifiable at TRL 3 (R5) and 13 met (R1, R2, R3, R4, R6, R7, R8, R10, R11, R12, R14, R15, R17). In v0.2, before CSH-DDR-003, R13 was at risk ($773 against $775). In v0.1, before CSH-DDR-002, the count was 3 not met (R4, R10, R13), 3 at risk (R8, R9, R16), 1 not verifiable and 10 met.
 
 ## Checks against the TRL 2 figures
 
@@ -160,3 +165,4 @@ In summary: none not met, 3 at risk (R9, R13, R16), 1 not verifiable at TRL 3 (R
 - The post stress of about 144 MPa at TRL 2 was an upper bound; the physical case gives 54 MPa unfactored. R10 moves from "unverified" to "not met" because of the fabric edge pull, which the TRL 2 estimate did not consider.
 - Headroom under the rear braces rises from about 2.1 m to 2,234 mm, so R2 is now met with margin.
 - The TRL 2 structure mass of about 130 kg becomes about 143 kg of steel before brackets and bolts.
+- v0.3 (constructable design, CSH-DDR-003): steel 167 kg with cleats and plates, headroom 2,223 mm, mist line 11.91 m, parts $882.

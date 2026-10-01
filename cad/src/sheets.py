@@ -1,4 +1,4 @@
-"""CoolShade general arrangement sheet CSH-DWG-001, Rev P2 (TRL 3).
+"""CoolShade general arrangement sheet CSH-DWG-001, Rev P4 (TRL 3, constructable design CSH-DDR-003).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/CSH-DWG-001.svg, .pdf and .png from the parametric model in
@@ -14,7 +14,8 @@ sys.path[:0] = [str(ROOT / ".kit"), str(ROOT / "cad" / "src")]
 from drawing import Sheet, _viewbox, _t, M, TB_Y, INK, MUTED  # noqa: E402
 from model import PARAMS as P, assembly, derived  # noqa: E402
 
-DATE = "2026-09-25"
+DATE = "2026-09-30"
+DATE_P = "2026-09-25"
 
 
 def safe_project_views(part, workdir, line_weight=0.35):
@@ -77,7 +78,7 @@ def dim_v(x, y1, y2, text, side=-1):
     return [f'<line x1="{x:.2f}" y1="{y1:.2f}" x2="{x:.2f}" y2="{y2:.2f}" stroke="{INK}" stroke-width="0.18"/>',
             f'<path d="M{x:.2f} {y1:.2f} l-0.5 {a} l1 0 Z" fill="{INK}"/>',
             f'<path d="M{x:.2f} {y2:.2f} l-0.5 {-a} l1 0 Z" fill="{INK}"/>',
-            f'<g transform="rotate(-90 {cx:.2f} {cy:.2f})">{_t(cx, cy, text, 2.3, 400, INK, "middle", mono=True)}</g>']
+            f'<g transform="translate({cx:.2f} {cy:.2f}) rotate(-90)">{_t(0, 0, text, 2.3, 400, INK, "middle", mono=True)}</g>']
 
 
 def ext(x1, y1, x2, y2):
@@ -96,12 +97,13 @@ def main():
     asm, _ = assembly()
     views = safe_project_views(asm, work)
     bb = asm.bounding_box()
-    s = Sheet(project="CoolShade", title="General arrangement", dwg_no="CSH-DWG-001", rev="P3",
+    s = Sheet(project="CoolShade", title="General arrangement", dwg_no="CSH-DWG-001", rev="P4",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="Galvanized S275 SHS frame; bought-in parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
-              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
-                         ("P2", "Recommendations accepted (DDR-002): 25 Ah battery, R10 wind notes", DATE, "AC"),
-                         ("P3", "Layout and labels tidied", DATE, "AC")])
+              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE_P, "AC"),
+                         ("P2", "Recommendations accepted (DDR-002): 25 Ah battery, R10 wind notes", DATE_P, "AC"),
+                         ("P3", "Layout and labels tidied", DATE_P, "AC"),
+                         ("P4", "Constructable design (CSH-DDR-003): 2,350 post grid, cleats, panel at rear", DATE, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -122,7 +124,7 @@ def main():
     L += dim_h(X(-P["roof_l"] / 2), X(P["roof_l"] / 2), Z(top_front) - 4, f"{P['roof_l']:,.0f} roof")
     L += dim_h(X(-PX), X(PX), zg + 4, f"{2 * PX:,.0f} c/c", right=True)
     L += [ext(X(-PX), zg + 1, X(-PX), zg + 5), ext(X(PX), zg + 1, X(PX), zg + 5)]
-    xl = X(bb.min.X) - 15
+    xl = X(bb.min.X) - 21
     L += [ext(X(-PX) - 2, Z(D["beam_under_front"]), xl - 1, Z(D["beam_under_front"]))]
     L += dim_v(xl, Z(D["beam_under_front"]), zg, f"{D['beam_under_front']:,.0f} beam underside")
     L += [ext(X(-PX + P['post'] / 2), Z(D["brace_low_front"]), xl - 13, Z(D["brace_low_front"]))]
@@ -152,7 +154,7 @@ def main():
     for i, (zz, label) in enumerate(((D["brace_low_rear"], f"{D['brace_low_rear']:,.0f} rear brace, min. headroom"),
                                      (D["nozzle_tip_rear"], f"{D['nozzle_tip_rear']:,.0f} nozzle tip"),
                                      (P["z_rear"], f"{P['z_rear']:,.0f} rear beam axis"))):
-        xd = xr + 6 * i
+        xd = xr + 8 * i
         L += [ext(Yr(PY), Zr(zz), xd + 1, Zr(zz))]
         L += dim_v(xd, Zr(zz), zg, label, side=1)
     L += [ext(Yr(-P["roof_d"] / 2), Zr(P["z_front"]), Yr(bb.min.Y) - 4, Zr(P["z_front"]))]
@@ -164,11 +166,13 @@ def main():
     s.add_notes("Main dimensions and interfaces (mm)", [
         f"Roof {P['roof_l']:,.0f} x {P['roof_d']:,.0f} ({D['roof_area_m2']:.1f} m2), mono-pitch {D['slope_deg']:.1f} deg, high at the street",
         f"Posts {P['post']:.0f} x {P['post']:.0f} x {P['post_t']:.0f} SHS on {2 * PX:,.0f} x {2 * PY:,.0f}; beams {P['beam']:.0f} x {P['beam_t']:.0f} SHS",
-        f"Knee braces {P['brace_od']:.0f} OD, {P['brace_drop']:.0f} down x {P['brace_reach']:.0f} along; headroom {D['brace_low_rear']:,.0f} min.",
-        f"Base plates {P['plate']:.0f} x {P['plate']:.0f} x {P['plate_t']:.0f}, 4 x M{P['anchor_d']:.0f} at {P['anchor_pitch']:.0f}; anchors about 2.8 kN factored",
+        f"Knee braces {P['brace_od']:.0f} OD, flattened ends; bends {P['brace_drop']:.0f} down, {P['brace_reach']:.0f} along; headroom {D['brace_low_rear']:,.0f} min.",
+        f"Base plates {P['plate']:.0f} sq. x {P['plate_t']:.0f} with 2 angle cleats; 4 x M{P['anchor_d']:.0f} at {P['anchor_pitch']:.0f}; about 2.8 kN factored",
+        "Roof joints: 50 x 50 x 5 angle cleats, M8 bolts into rivet nuts; no welding",
         f"Mist loop {D['line_len_mm'] / 1000:.1f} m, {P['line_id']:.1f} bore, 8 nozzles {P['nozzle_orifice']} mm; vacuum breaker at front",
         f"Tank {P['tank_nominal_l']:.0f} L, strapped to the rear left post; drain valve at the low point",
-        f"Enclosure {P['enc'][0]:.0f} x {P['enc'][1]:.0f} x {P['enc'][2]:.0f} on the rear right post, {D['enc_bot']:,.0f} to {D['enc_top']:,.0f}; battery 25 Ah",
+        f"Enclosure {P['enc'][0]:.0f} x {P['enc'][1]:.0f} x {P['enc'][2]:.0f} on rails, rear right post, {D['enc_bot']:,.0f} to {D['enc_top']:,.0f}; 25 Ah",
+        "Panel at the rear edge on a bearer and L-feet; pump on a plate, rear left post",
         "Fabric fitted only in forecast gusts below 15 m/s; frame checked fabric-off at 30 m/s (CSH-CAL-001)",
         "Third-angle; front view from the street (-Y); slab by others, checked per site",
     ], x=276, y=146, width=146)

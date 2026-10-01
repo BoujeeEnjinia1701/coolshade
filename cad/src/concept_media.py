@@ -27,7 +27,7 @@ parts = [
     Part("Posts, 80 x 80 mm steel, with knee braces", posts, "#64748B", 1, (0, 0, 0)),
     Part("Roof frame, 50 x 50 mm steel", frame, "#475569", 2, (0, 0, 700)),
     Part("Shade fabric, knitted HDPE", fabric, "#0F766E", 3, (0, 0, 1400)),
-    Part("Base plates and anchors", plates, "#A16207", 4, (0, 0, -350)),
+    Part("Base plates, cleats and anchors", plates, "#A16207", 4, (0, 0, -350)),
     Part("Solar panel, 100 W", panel, "#1E3A8A", 5, (0, 900, 2100)),
     Part("LiFePO4 battery, 12.8 V 25 Ah", battery, "#C2410C", 6, (1100, -350, -500)),
     Part("MPPT charge controller", mppt, "#16A34A", 7, (1100, 300, 450)),
@@ -50,15 +50,31 @@ bench = (Pos(150, 520, 440) * Box(1500, 420, 50) + Pos(150, 710, 700) * Box(1500
 context = [Part("Sidewalk", sidewalk, "#D1D5DB"), Part("Curb and road", curb + road, "#6B7280"),
            Part("Existing bench", bench, GREY)]
 
+def _robust_views():
+    """The kit's project_views stops on a degenerate ellipse edge from the hidden-line projection
+    of the detailed model; fall back to the edge-by-edge projection of sheets.py for that view set."""
+    import drawing
+    from sheets import safe_project_views
+    orig = drawing.project_views
+
+    def views(part, workdir, line_weight=0.35, center_lines=True):
+        try:
+            return orig(part, workdir, line_weight=line_weight, center_lines=center_lines)
+        except (AssertionError, ValueError, ZeroDivisionError):
+            return safe_project_views(part, workdir, line_weight=line_weight)
+    drawing.project_views = views
+
+
 if __name__ == "__main__":
+    _robust_views()
     render_all(
         parts, project="CoolShade", title="Solar misting shade canopy concept", dwg_no="CSH-DWG-010",
-        key_figures=["Shade roof 3.0 x 2.4 m (7.2 m²); headroom 2,234 mm minimum (CSH-CAL-001)",
+        key_figures=["Shade roof 3.0 x 2.4 m (7.2 m²); headroom 2,223 mm minimum (CSH-CAL-001)",
                      "8 low-pressure nozzles at 7 bar, 32 L/h while spraying (nozzle data to confirm)",
                      "85 L water and 204 Wh per hot, dry day; 2.7 °C air cooling while spraying at 1 m/s",
                      "100 W panel, 12.8 V 25 Ah LiFePO4 (1.26 days); 12 V DC only, no mains",
                      "Mists only above 32 °C, below 60 % RH, with people present",
-                     "Fabric on only in gusts below 15 m/s; $773 in parts (indicative), $775 budget"],
+                     "Fabric on only in gusts below 15 m/s; $882 in parts (indicative), budget under review"],
         cut=False, context=context,
         flow={"title": "daily water flow on a hot, dry day, L per day (estimates, CSH-CAL-001; 70 L evaporated absorbs about 47 kWh)",
               "unit": "L",
