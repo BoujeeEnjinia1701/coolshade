@@ -3,9 +3,9 @@ doc_id: CSH-REQ-001
 title: CoolShade requirements
 project: CoolShade
 doc_type: Requirements
-version: "0.6"
+version: "0.7"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -33,6 +33,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.7"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "R14 tool list adds a hand rivet nut tool and a bench vice, decided by Amish on 2026-10-02"
 ---
 
 # CoolShade requirements
@@ -58,7 +62,7 @@ Table 1. Requirements, targets and status after the TRL 3 calculations (CSH-CAL-
 | R11 | Privacy | No camera or microphone; presence by passive infrared only; if a status link is fitted, only counts and levels (on-time, water used, temperature, humidity, faults) leave the device | Design review | Met by design; no status link fitted (CSH-DDR-001, D7) |
 | R12 | Electrical safety | 12 V DC only, no mains; battery fused at the terminal; all electronics in a lockable IP65 enclosure; LiFePO4 chemistry with BMS and cold-charge cutoff | Design review | Met by design: 15 A terminal fuse, margin 2.0 on the largest current [I2] |
 | R13 | Cost | Estimated parts cost for one prototype within the $775 value-engineering target (`budget_usd`, a hypothetical control target set under CSH-DDR-002; was $700) | BOM | **Over the value-engineering target by $107:** estimated $882, 13.8 % over, after the parts added to make the design buildable (CSH-DDR-003); savings worth trying are in CSH-DEC-001 [J1, J2] |
-| R14 | Buildability | Bolted assembly; no welding; built with a drill, angle grinder, spanners and a ladder by two people in 2 days or less | Assembly review | Met by design: 79 bolts and anchors, 36 of them into rivet nuts, no welds [H2]; adds a hand rivet nut tool and a vice (open decision in CSH-DEC-001); build time unverified |
+| R14 | Buildability | Bolted assembly; no welding; built with a drill, angle grinder, spanners, a hand rivet nut tool, a bench vice and a ladder by two people in 2 days or less | Assembly review | Met by design: 79 bolts and anchors, 36 of them into rivet nuts, no welds [H2]; the hand rivet nut tool and bench vice were added to the tool list by Amish on 2026-10-02 (CSH-DEC-001); build time unverified |
 | R15 | Refill interval | 1 design day or more between tank refills | Water balance | Met: 1.41 design days per full tank [C4] |
 | R16 | Maintenance | Nozzles cleanable or replaceable without tools in 15 min or less; filter changed in 10 min or less; descaling interval 1 month or longer | Design review; later field log | **At risk** in hard-water areas: scale can block 0.4 mm orifices; not verifiable at TRL 3 |
 | R17 | Movability | Can be unbolted and moved to another site by two people in 1 day or less; no part heavier than 40 kg to lift (tank empty) | Mass estimate | Met: heaviest part a front post, 21.0 kg [H1] |

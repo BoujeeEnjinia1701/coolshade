@@ -3,9 +3,9 @@ doc_id: CSH-DDR-003
 title: CoolShade design for construction
 project: CoolShade
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target, with cost question A1 replaced by the register's Value engineering section
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "A2 decided by Amish on 2026-10-02 as recommended (rivet nut tool and bench vice added to R14)"
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-09-30
-- **Status:** made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review. The items in Table 3 are proposed, awaiting Amish, and are listed in the design decisions register (CSH-DEC-001).
+- **Status:** made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review. The item in Table 3 (A2) was decided as recommended: Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." It is recorded in the design decisions register (CSH-DEC-001). The changes in Tables 1 and 2 have no row of their own in the register and remain open for Amish's review.
 
 ## Context
 
@@ -67,15 +71,15 @@ The changes keep what CoolShade does and its pitch: a bolted four-post canopy, 3
 | Documents | CSH-CAL-001 v0.3, CSH-PRC-001 v0.5, CSH-REQ-001 v0.5, BOM and BOM notes. | Follows the model |
 | Concept media | Hero, exploded view, blueprint and 3D viewer regenerated from the new model. | Follows the model |
 
-*Table 3. Proposed, awaiting Amish.*
+*Table 3. Proposed, then decided by Amish on 2026-10-02.*
 
 | # | Question | Options | Recommendation |
 | --- | --- | --- | --- |
-| A2 | R14 lists the tools as a drill, angle grinder, spanners and a ladder; the constructable design adds a hand rivet nut tool and a bench vice (for the brace ends). | (a) add both to R14's tool list; (b) use through bolts instead of rivet nuts, which puts nuts under the cloth and can crush the tubes. | (a). |
+| A2 | R14 lists the tools as a drill, angle grinder, spanners and a ladder; the constructable design adds a hand rivet nut tool and a bench vice (for the brace ends). | (a) add both to R14's tool list; (b) use through bolts instead of rivet nuts, which puts nuts under the cloth and can crush the tubes. | (a). **Decided 2026-10-02: (a)**; R14 now lists both tools (CSH-REQ-001). |
 
 ## Consequences
 
-- `design_state: constructable` in `project.yaml`. The build plan CSH-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); open items are in the design decisions register CSH-DEC-001.
+- `design_state: constructable` in `project.yaml`. The build plan CSH-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); decisions are recorded in the design decisions register CSH-DEC-001.
 - Requirement status (CSH-CAL-001 v0.3): 1 over its value-engineering target (R13 cost), 2 at risk (R9 water hygiene, R16 nozzle scaling), 1 not verifiable at TRL 3 (R5 wetting), 13 met. Before this record it was none not met, 3 at risk (R9, R13, R16), 1 not verifiable and 13 met.
 - The photoreal renders (`media/render-hero.png`, `render-exploded.png`, `render-detail.png`), `media/card.png`, `media/social-preview.png` and the appearance model `cad/src/product_model.py` still show the concept: posts on the 2.1 m grid, the panel in the middle of the rear half on top of the cloth, the tank against the post and the hose bypassing the filter. They need updating on Amish's Mac, where Blender is.
 - Nothing here authorizes building, buying or testing; TRL 4 stays on hold by Amish's instruction.

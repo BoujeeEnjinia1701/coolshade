@@ -3,9 +3,9 @@ doc_id: CSH-PRC-001
 title: CoolShade design precis
 project: CoolShade
 doc_type: Design precis
-version: "0.6"
+version: "0.7"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -33,6 +33,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.7"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "First site type and partner decided by Amish on 2026-10-02; first candidates named"
 ---
 
 # CoolShade design precis
@@ -223,4 +227,4 @@ Open decisions and items to confirm are kept in the design decisions register (`
 - [ ] Hard water scaling and a descaling method (R16).
 - [ ] Site anchor details on different slabs; footing option where no slab exists.
 - [ ] Steel quotes, since the $882 estimated parts cost is over the $775 value-engineering target (R13).
-- [ ] First site type and co-design partner (proposed, awaiting Amish).
+- [x] First site type and co-design partner: decided 2026-10-02, a market lane with the market operator as co-design partner; first candidate to approach a farmers' market operator in the Phoenix area, with Arizona State University's urban heat researchers as the candidate measurement partner (CSH-DEC-001).

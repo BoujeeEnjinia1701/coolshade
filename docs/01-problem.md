@@ -3,9 +3,9 @@ doc_id: CSH-PRB-001
 title: CoolShade problem statement
 project: CoolShade
 doc_type: Problem statement
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002)
+- version: "0.5"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "First site type and partner decided by Amish on 2026-10-02; first candidates named"
 ---
 
 # CoolShade problem statement
@@ -86,7 +90,7 @@ No open, solar-powered, humidity- and occupancy-controlled misting shade for pub
 
 ## Open questions
 
-- Which sites to start with (bus stop, market, clinic queue) and through which partner? Proposed, awaiting Amish.
+- Which sites to start with (bus stop, market, clinic queue) and through which partner? Decided 2026-10-02: a market lane first, with the market operator as co-design partner, in a hot, dry city. The first candidate to approach is a farmers' market operator in the Phoenix area, with Arizona State University's urban heat researchers as the candidate measurement partner; nothing is agreed with either (CSH-DEC-001).
 - Is misting acceptable to users at all, given concerns about wet clothes, hair and hygiene? To be asked in co-design.
 - Who refills the tank and flushes the lines, and can they visit daily on hot days? CSH-CAL-001 assumes a daily drain-and-refill of about 95 L.
 - What local rules apply to public misting (water hygiene, permits, mains backflow)?

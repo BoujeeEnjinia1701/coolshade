@@ -3,9 +3,9 @@ doc_id: CSH-DEC-001
 title: CoolShade design decisions register
 project: CoolShade
 doc_type: Design decisions register
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: Budget treated as a value-engineering target
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Amish approved the recommendations for both open decisions; moved to decisions made; To confirm item 10 updated for the market lane"
 ---
 
 # CoolShade design decisions register
@@ -25,16 +29,11 @@ Every design decision still to be made, and every decision made, in one place. E
 
 ## Open decisions
 
-*Table 1. Decisions awaiting Amish.*
-
-| # | Decision needed | Options | Recommendation | Affects in the build | Source |
-| --- | --- | --- | --- | --- | --- |
-| 1 | R14's tool list (a drill, angle grinder, spanners and a ladder) leaves out the two hand tools the constructable design needs | (a) add a hand rivet nut tool and a bench vice to R14; (b) through bolts in place of rivet nuts, which put nuts under the cloth and can crush the tubes | (a) | Tools list in the build plan, section 7 | CSH-DDR-003, A2 |
-| 2 | First site type (bus stop, market or queue) and co-design partner | Bus stop, market lane or distribution queue; partner to be found | None yet | Slab, anchors, curb setback and orientation for the first build | CSH-DDR-001, O2; CSH-DDR-002 |
+None. All open decisions were decided on 2026-10-02.
 
 ## To confirm when parts are bought
 
-*Table 2. Items to check against the real parts and site before or while buying.*
+*Table 1. Items to check against the real parts and site before or while buying.*
 
 | # | What to confirm | Why it matters | Source |
 | --- | --- | --- | --- |
@@ -47,7 +46,7 @@ Every design decision still to be made, and every decision made, in one place. E
 | 7 | The solar mounting kit's L-feet reach the rails 15 mm above the tubes on the 7° slope, and the end clamps suit a 35 mm panel frame | The panel rails stand on L-feet on the bearer and the rear beam | CSH-DDR-003, P7 |
 | 8 | The shade cloth maker can make the 1,020 x 670 mm notch with a reinforced hem and eyelets | The cloth comes off without touching the panel | CSH-DDR-003, P7 |
 | 9 | The radiation shield has a top plate that takes one M8 bolt (or an adapter plate is made) | The shield hangs under the sensor arm | CSH-DDR-003, P9 |
-| 10 | The street-side posts stand 25 mm inside the roof's street edge; check the curb setback, bus mirrors and sight lines at the site | The posts moved out 125 mm each side to carry the cloth's edges | CSH-DDR-003, P1 |
+| 10 | The street-side posts stand 25 mm inside the roof's street edge; check the setback from vehicles, stalls and walkways and the sight lines at the first site (a market lane, decided 2026-10-02) | The posts moved out 125 mm each side to carry the cloth's edges | CSH-DDR-003, P1 |
 | 11 | A water hygiene plan acceptable to the local health authority, with a named responsible person and sampling | *Legionella* control (R9) is at risk; no public trial without it | CSH-CAL-001 [I3]; CSH-PRC-001 |
 | 12 | Water hardness at the site and a descaling method and interval for the 0.4 mm nozzles | Scaling (R16) is at risk | CSH-REQ-001 R16 |
 | 13 | Fabric porosity and stretch, which set the fabric's edge pull | The 15 m/s fabric-on limit is set on the conservative solid-fabric case | CSH-CAL-001 [G7], [G8] |
@@ -61,7 +60,7 @@ Value-engineering target: USD 775 (a hypothetical control target, not a limit). 
 
 ## Decisions made
 
-*Table 3. Decisions made, newest last.*
+*Table 2. Decisions made, newest last.*
 
 | Date | Decision | Decided by | Record |
 | --- | --- | --- | --- |
@@ -72,3 +71,5 @@ Value-engineering target: USD 775 (a hypothetical control target, not a limit). 
 | 2026-09-25 | R4 restated as 2 °C while spraying; no fans | Amish, same instruction | CSH-DDR-002, N2 |
 | 2026-09-25 | 25 Ah battery in place of 20 Ah; keep the fail-safe normally open drain valve | Amish, same instruction | CSH-DDR-002, N3 |
 | 2026-09-30 | Design for construction: posts on a 2,800 x 2,350 mm grid with the long beams on their tops, angle cleats and rivet nuts at every roof joint, bolted post bases, flattened-end knee braces, panel at the rear edge on a bearer and L-feet with a notch in the cloth, equipment plate, enclosure rails, angle sensor arm, tank stop cleats, tank level switch and other changes (P1 to P16) | Made under Amish's 2026-09-30 instruction to make the design physically buildable ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations."); open for his review | CSH-DDR-003 |
+| 2026-10-02 | R14's tool list gains a hand rivet nut tool and a bench vice (option a); the rivet nuts are kept (open item 1) | Amish: "i approve your recommendations for all 555 open decisions." | CSH-DDR-003, A2 |
+| 2026-10-02 | First site type a market lane, with the market operator as co-design partner, in a hot, dry city; first candidate to approach a farmers' market operator in the Phoenix area, with Arizona State University's urban heat researchers as the candidate measurement partner (open item 2) | Amish: "i approve your recommendations for all 555 open decisions." | CSH-DDR-001, O2; CSH-DDR-002 |

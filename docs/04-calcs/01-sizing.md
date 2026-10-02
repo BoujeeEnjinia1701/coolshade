@@ -3,9 +3,9 @@ doc_id: CSH-CAL-001
 title: CoolShade sizing calculations
 project: CoolShade
 doc_type: Calculation
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.5"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "R14 row text updated for the tool list decided on 2026-10-02; no figures changed"
 ---
 
 # CoolShade sizing calculations
@@ -156,7 +160,7 @@ The BOM has 16 lines, all priced, totaling an estimated $882.00 against the $775
 | R7 | Water use | 85 L used, 95 L drawn [C2], [C5] | 100 L or less | Met at 4 L/h per nozzle; at risk above 4.75 L/h [C3] |
 | R11 | Privacy | PIR only, no link fitted | No camera or microphone | Met by design |
 | R12 | Electrical safety | 12 V DC, 15 A fuse, margin 2.0 [I2] | 12 V, fused, IP65, BMS | Met by design |
-| R14 | Buildability | Bolted, 79 fasteners [H2] | No welding; 2 days | Met by design; adds a rivet nut tool and a vice; time unverified |
+| R14 | Buildability | Bolted, 79 fasteners [H2] | No welding; 2 days | Met by design; rivet nut tool and bench vice in R14 since 2026-10-02; time unverified |
 | R15 | Refill interval | 1.41 design days [C4] | 1 day or more | Met |
 | R17 | Movability | Heaviest part 21.0 kg [H1] | 40 kg or less | Met |
 

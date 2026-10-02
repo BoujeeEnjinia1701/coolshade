@@ -279,3 +279,30 @@ Unchanged in substance. The build plan adds safety stops S1 to S9 (slab drilling
 ### Recommended next step
 
 Amish reviews CSH-DDR-003 and the open decisions in CSH-DEC-001; the Value engineering section there holds the $775 target, the $882 estimate and the savings worth trying. TRL 4 (building to this plan) stays on hold by his instruction.
+
+## Session 2026-10-02: open decisions decided
+
+Amish approved every recommendation for the open decisions on 2026-10-02: "i approve your recommendations for all 555 open decisions."
+
+### Decisions recorded
+
+Two, both moved to "Decisions made" in CSH-DEC-001: R14's tool list gains a hand rivet nut tool and a bench vice, and the rivet nuts are kept (CSH-DDR-003, A2); the first site type is a market lane with the market operator as co-design partner in a hot, dry city, with a farmers' market operator in the Phoenix area as the first candidate to approach and Arizona State University's urban heat researchers as the candidate measurement partner.
+
+### Documents changed
+
+- `docs/06-design-decisions.md` CSH-DEC-001 v0.3: decisions made; open decisions section now reads "None"; To confirm item 10 updated for a market lane site.
+- `docs/decisions/0003-design-for-construction.md` CSH-DDR-003 v0.3: A2 decided as recommended (status Draft kept).
+- `docs/03-requirements.md` CSH-REQ-001 v0.7: R14 restated with the hand rivet nut tool and bench vice.
+- `docs/04-calcs/01-sizing.md` CSH-CAL-001 v0.5: R14 row text only; no figures changed.
+- `docs/01-problem.md` CSH-PRB-001 v0.5 and `docs/02-concept.md` CSH-PRC-001 v0.7: first site type and candidate partners.
+
+### Follow-up actions to carry approved decisions into the design
+
+1. Decision 2 (model, drawings, pictures): set the slab, anchors, setback and orientation of the first build for a market lane once a site is offered; the model and build plan pictures now show a curbside stop layout.
+2. Decision 2 (docs): carry the market lane into the water hygiene plan (To confirm item 11), naming the local health authority and responsible person once a site is offered.
+
+### Points found in the review
+
+- The design for construction (DDR-003, P1 to P16) is still "open for his review" but has no row in the open decisions table; it should get one, and the recommendation is to accept it, with steel quotes taken before buying.
+- The *Legionella* water hygiene plan ("To confirm" item 11) is a safety stop for any public trial, not a purchase check; it belongs with the open decisions or the safety stops.
+- The constructable design is $882 against the $775 target, $107 (13.8 percent) over, and the steel at about $1.61 per kg including cutting, drilling and galvanizing looks low for small quantities, so the gap may widen.
