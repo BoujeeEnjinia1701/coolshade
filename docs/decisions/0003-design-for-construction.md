@@ -3,7 +3,7 @@ doc_id: CSH-DDR-003
 title: CoolShade design for construction
 project: CoolShade
 doc_type: Design decision record
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,12 +21,16 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "A2 decided by Amish on 2026-10-02 as recommended (rivet nut tool and bench vice added to R14)"
+- version: "0.4"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Changes P1 to P16 (Table 1) and their knock-on changes (Table 2) accepted by Amish on 2026-10-02"
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-09-30
-- **Status:** made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review. The item in Table 3 (A2) was decided as recommended: Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." It is recorded in the design decisions register (CSH-DEC-001). The changes in Tables 1 and 2 have no row of their own in the register and remain open for Amish's review.
+- **Status:** accepted. Amish, 2026-10-02: "APPROVED: Design-for-construction changes in 10 repos (CityTwin, CoolShade, PalletPilot, Heliolite, PotholeLog, EarthPress, ReadyKit, CellCheck, CargoMule and ThermaCart)". This covers the changes P1 to P16 in Table 1 and their knock-on changes in Table 2, made under Amish's 2026-09-30 instruction to make the design physically buildable, and is recorded in the design decisions register (CSH-DEC-001). The item in Table 3 (A2) was decided as recommended earlier the same day: Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." It is recorded in the register too.
 
 ## Context
 

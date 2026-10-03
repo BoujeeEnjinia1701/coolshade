@@ -3,9 +3,9 @@ doc_id: CSH-BLD-001
 title: CoolShade prototype build plan
 project: CoolShade
 doc_type: Build plan
-version: "0.1"
+version: "0.3"
 status: Draft
-date: '2026-09-30'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,14 @@ revisions:
     date: '2026-09-30'
     author: Amish Chadha
     change: First build plan at TRL 3, with pictures by component and step; design made constructable (CSH-DDR-003)
+  - version: "0.2"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Section 2: the changes recorded in CSH-DDR-003 accepted by Amish on 2026-10-02"
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Safety stops S7 and S9 name the market operator's manager and the environmental health authority for a market lane"
 ---
 
 # CoolShade prototype build plan
@@ -31,7 +39,7 @@ The prototype is one CoolShade canopy on an existing concrete slab: four 80 mm s
 
 ## 2. What changed to make it buildable
 
-The concept showed what CoolShade does; most of its parts met as overlapping blocks with no fixing. Each change below keeps what the canopy does, and all of them are recorded in decision record CSH-DDR-003, open for Amish's review.
+The concept showed what CoolShade does; most of its parts met as overlapping blocks with no fixing. Each change below keeps what the canopy does, and all of them are recorded in decision record CSH-DDR-003, accepted by Amish on 2026-10-02.
 
 *Table 1. Changes from the concept.*
 
@@ -570,9 +578,9 @@ Stop at each point. Carry on only when everything listed is true.
 - **S4. Before the battery goes in.** Battery voltage about 12.8 to 13.4 V, no swelling or damage, the maker's datasheet in hand; 15 A fuse out; polarity of every power lead checked with a meter, not by colour.
 - **S5. Before the battery fuse goes in.** No short from any rail to the enclosure; the pump and valve drivers off; panel unplugged. First charge attended, lid open, battery temperature checked; stop if it passes 45 °C.
 - **S6. Before the line is pressurized.** Potable water only; every fitting pushed fully home and clipped; nozzles out for the first flush; eye protection on; the drain valve opens when the pump stops. Never open a fitting until the line is depressurized.
-- **S7. Before misting with anyone nearby.** The tank cleaned, disinfected and filled with fresh potable water; the line drained after every run; a written hygiene routine (daily drain and refill, weekly disinfection) and a named responsible person; no misting if any of this has lapsed.
+- **S7. Before misting with anyone nearby.** The tank cleaned, disinfected and filled with fresh potable water; the line drained after every run; a written hygiene routine (daily drain and refill, weekly disinfection) and a named responsible person (at a market lane, the market operator's manager); no misting if any of this has lapsed.
 - **S8. Before the cloth goes on.** Forecast gusts below 15 m/s (54 km/h) for the time it will be on; every frame bolt tight; someone named to take it off before storms.
-- **S9. Before any public use (outside this plan).** An engineer's check of the slab and anchors at the site; the asset owner's permission; a hygiene plan accepted by the local health authority; signs that the mist is not drinking water or a medical service.
+- **S9. Before any public use (outside this plan).** An engineer's check of the slab and anchors at the site; the asset owner's permission; a hygiene plan accepted by the environmental health authority of the city or county where the site stands (a market lane is the first site type); signs that the mist is not drinking water or a medical service.
 
 ## 7. Tools, skills and workspace
 

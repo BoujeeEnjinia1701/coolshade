@@ -303,6 +303,46 @@ Two, both moved to "Decisions made" in CSH-DEC-001: R14's tool list gains a hand
 
 ### Points found in the review
 
-- The design for construction (DDR-003, P1 to P16) is still "open for his review" but has no row in the open decisions table; it should get one, and the recommendation is to accept it, with steel quotes taken before buying.
+- The design for construction (DDR-003, P1 to P16) was still "open for his review" but had no row in the open decisions table; the recommendation was to accept it, with steel quotes taken before buying. Amish accepted it later on 2026-10-02 (see the next session).
 - The *Legionella* water hygiene plan ("To confirm" item 11) is a safety stop for any public trial, not a purchase check; it belongs with the open decisions or the safety stops.
 - The constructable design is $882 against the $775 target, $107 (13.8 percent) over, and the steel at about $1.61 per kg including cutting, drilling and galvanizing looks low for small quantities, so the gap may widen.
+
+## Session 2026-10-02: design-for-construction changes accepted
+
+Amish, 2026-10-02: "APPROVED: Design-for-construction changes in 10 repos (CityTwin, CoolShade, PalletPilot, Heliolite, PotholeLog, EarthPress, ReadyKit, CellCheck, CargoMule and ThermaCart)". This accepts the design-for-construction changes P1 to P16 in Table 1 of CSH-DDR-003, with their knock-on changes in Table 2, which were left open for his review when the open decisions were decided earlier the same day. No other item is decided by it. trl stays 3; no build or test work was done, and the model, BOM, calculations and pictures are unchanged.
+
+### Documents changed
+
+- `docs/decisions/0003-design-for-construction.md` (CSH-DDR-003 v0.4, status Draft): status line now "accepted" with Amish's words.
+- `docs/06-design-decisions.md` (CSH-DEC-001 v0.4): Decisions made row added, dated 2026-10-02; the 2026-09-30 row no longer calls the changes open for review.
+- `docs/05-build-plan.md` (CSH-BLD-001 v0.2): section 2 says CSH-DDR-003 is accepted.
+- PDFs regenerated.
+
+### Recommended next step
+
+Take steel quotes before buying, as noted in the previous session. TRL 4 remains on hold by Amish's instruction.
+
+## Session 2026-10-02: approved follow-ups carried out
+
+Amish approved on 2026-10-02 that every follow-up action from the open-decision sign-off be carried out. trl stays 3; nothing was built, bought or tested.
+
+### Follow-ups (2)
+
+| # | Follow-up | Result |
+| --- | --- | --- |
+| 1 | Set the slab, anchors, setback and orientation of the first build for a market lane | Not done: needs a site to be offered; the model and pictures keep the curbside stop until then (see To confirm item 10) |
+| 2 | Carry the market lane into the water hygiene plan (To confirm item 11) | Done. Item 11 and safety stops S7 and S9 now name the market operator's manager and the environmental health authority by role; the authority itself is named once a site is chosen |
+
+No model, BOM, calculation or picture change was called for: requirement statuses, cost and mass are unchanged. The appearance model (`cad/src/product_model.py`) already follows `cad/src/model.py`; render scenes were exported again to /home/claude/renders/coolshade.
+
+### Documents changed
+
+- `docs/06-design-decisions.md` (CSH-DEC-001 v0.5), `docs/05-build-plan.md` (CSH-BLD-001 v0.3); PDFs regenerated.
+
+### Cross-repo actions
+
+None.
+
+## 2026-10-02: photoreal renders redone on the constructable design
+
+Rendered with Blender Cycles on Amish's Mac from the updated appearance model; captioned with `.kit/photo_caption.py`; `media/card.png` and `media/social-preview.png` regenerated with `.kit/cards.py`. Views: hero, exploded, detail. image_qc passes. Appearance deviations are those logged above as proposed, awaiting Amish.

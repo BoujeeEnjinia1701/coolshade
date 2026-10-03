@@ -3,7 +3,7 @@ doc_id: CSH-DEC-001
 title: CoolShade design decisions register
 project: CoolShade
 doc_type: Design decisions register
-version: "0.3"
+version: "0.5"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,6 +21,14 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "Amish approved the recommendations for both open decisions; moved to decisions made; To confirm item 10 updated for the market lane"
+  - version: "0.4"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "Design for construction (CSH-DDR-003, P1 to P16) accepted by Amish on 2026-10-02; moved from open for review to decisions made"
+  - version: "0.5"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: "To confirm item 11 carries the market lane: health authority and responsible person named by role"
 ---
 
 # CoolShade design decisions register
@@ -47,7 +55,7 @@ None. All open decisions were decided on 2026-10-02.
 | 8 | The shade cloth maker can make the 1,020 x 670 mm notch with a reinforced hem and eyelets | The cloth comes off without touching the panel | CSH-DDR-003, P7 |
 | 9 | The radiation shield has a top plate that takes one M8 bolt (or an adapter plate is made) | The shield hangs under the sensor arm | CSH-DDR-003, P9 |
 | 10 | The street-side posts stand 25 mm inside the roof's street edge; check the setback from vehicles, stalls and walkways and the sight lines at the first site (a market lane, decided 2026-10-02) | The posts moved out 125 mm each side to carry the cloth's edges | CSH-DDR-003, P1 |
-| 11 | A water hygiene plan acceptable to the local health authority, with a named responsible person and sampling | *Legionella* control (R9) is at risk; no public trial without it | CSH-CAL-001 [I3]; CSH-PRC-001 |
+| 11 | A water hygiene plan for a market lane, acceptable to the environmental health authority of the city or county where the first site stands (named once the site is chosen; the Phoenix area is the first candidate), with the market operator's manager named as the person responsible for the daily drain and refill, the weekly disinfection and the sampling | *Legionella* control (R9) is at risk; no public trial without it | CSH-CAL-001 [I3]; CSH-PRC-001 |
 | 12 | Water hardness at the site and a descaling method and interval for the 0.4 mm nozzles | Scaling (R16) is at risk | CSH-REQ-001 R16 |
 | 13 | Fabric porosity and stretch, which set the fabric's edge pull | The 15 m/s fabric-on limit is set on the conservative solid-fabric case | CSH-CAL-001 [G7], [G8] |
 
@@ -70,6 +78,7 @@ Value-engineering target: USD 775 (a hypothetical control target, not a limit). 
 | 2026-09-25 | Load-release cord lacing to be studied at TRL 4 (on hold with TRL 4) | Amish, same instruction | CSH-DDR-002, N1c |
 | 2026-09-25 | R4 restated as 2 °C while spraying; no fans | Amish, same instruction | CSH-DDR-002, N2 |
 | 2026-09-25 | 25 Ah battery in place of 20 Ah; keep the fail-safe normally open drain valve | Amish, same instruction | CSH-DDR-002, N3 |
-| 2026-09-30 | Design for construction: posts on a 2,800 x 2,350 mm grid with the long beams on their tops, angle cleats and rivet nuts at every roof joint, bolted post bases, flattened-end knee braces, panel at the rear edge on a bearer and L-feet with a notch in the cloth, equipment plate, enclosure rails, angle sensor arm, tank stop cleats, tank level switch and other changes (P1 to P16) | Made under Amish's 2026-09-30 instruction to make the design physically buildable ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations."); open for his review | CSH-DDR-003 |
+| 2026-09-30 | Design for construction: posts on a 2,800 x 2,350 mm grid with the long beams on their tops, angle cleats and rivet nuts at every roof joint, bolted post bases, flattened-end knee braces, panel at the rear edge on a bearer and L-feet with a notch in the cloth, equipment plate, enclosure rails, angle sensor arm, tank stop cleats, tank level switch and other changes (P1 to P16) | Made under Amish's 2026-09-30 instruction to make the design physically buildable ("If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations."); the changes themselves were accepted on 2026-10-02 (below) | CSH-DDR-003 |
 | 2026-10-02 | R14's tool list gains a hand rivet nut tool and a bench vice (option a); the rivet nuts are kept (open item 1) | Amish: "i approve your recommendations for all 555 open decisions." | CSH-DDR-003, A2 |
+| 2026-10-02 | Design for construction accepted: the changes P1 to P16 and their knock-on changes, as made | Amish: "APPROVED: Design-for-construction changes in 10 repos (CityTwin, CoolShade, PalletPilot, Heliolite, PotholeLog, EarthPress, ReadyKit, CellCheck, CargoMule and ThermaCart)" | [CSH-DDR-003](decisions/0003-design-for-construction.md), Tables 1 and 2 |
 | 2026-10-02 | First site type a market lane, with the market operator as co-design partner, in a hot, dry city; first candidate to approach a farmers' market operator in the Phoenix area, with Arizona State University's urban heat researchers as the candidate measurement partner (open item 2) | Amish: "i approve your recommendations for all 555 open decisions." | CSH-DDR-001, O2; CSH-DDR-002 |
