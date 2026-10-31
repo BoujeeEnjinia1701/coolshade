@@ -59,7 +59,17 @@ A four-post bolted steel canopy, 3.0 x 2.4 m, on a 2.8 x 2.35 m post grid, with 
 
 TRL 3 calculations ([CSH-CAL-001](docs/04-calcs/01-sizing.md)): about 17 °C lower mean radiant temperature from the shade (from published shade sail measurements), 2.71 °C lower air temperature while spraying at 1 m/s wind (1.35 °C averaged over the spray cycle), 85 L of water and 204 Wh per hot, dry day, a 25 Ah battery lasting 1.26 days without sun, one tank lasting 1.41 days, headroom of 2,223 mm, and an estimated $882 in parts, $107 over the $775 value-engineering target (a hypothetical control target, not a limit) once every part needed to build it is counted. The frame and anchors are sized to survive a 30 m/s gust with the fabric removed; the fabric goes on only when forecast gusts are below 15 m/s (54 km/h), because its edge pull would overload the roof beams in a storm. Cost (R13) is over the value-engineering target by $107; savings worth trying are in the design decisions register. At risk: *Legionella* control in warm stored water and nozzle scaling; wetting cannot be judged until droplet data are in hand. Design decisions: [CSH-DDR-001](docs/decisions/0001-trl2-review-decisions.md), [CSH-DDR-002](docs/decisions/0002-recommendations-accepted.md) and [CSH-DDR-003](docs/decisions/0003-design-for-construction.md) (design for construction), indexed in the [design decisions register](docs/06-design-decisions.md).
 
-Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [docs/03-requirements.md](docs/03-requirements.md).
+Full design precis: [docs/02-concept.md](docs/02-concept.md). User requirements: [docs/03a-user-requirements.md](docs/03a-user-requirements.md). Product requirements: [docs/03-requirements.md](docs/03-requirements.md) (13 of 17 met on paper or by design, traced in the [traceability matrix](docs/03b-traceability.md)).
+
+## STEM check
+
+Twenty-one claims of the design are checked (CSH-STM-001): 8 are within known science and 13 need maker's data, a site or field measurements at TRL 4 (how much of the mist cools the waiting zone, droplet size and wetting, the battery in the heat, scale in hard water, *Legionella* control, the presence sensor in hot air, the cloth in a gust, the tank strap, the anchors and the rivet nut rating); none fails, so the check stays open. One detail failed in the kit 1.9.1 upgrade and was fixed under Amish's standing instruction: the grey controller enclosure ran 3.6 K above the air and stopped charging the battery above 41.4 °C air, so it is now white (D9), a partial fix. An independent reviewer downgraded three rows and added failure modes, all recorded in the document.
+
+## Concept options
+
+![Three working principles side by side at one scale](media/options.png)
+
+Option A, the solar misting shade canopy (score 134 of 190, the current design), option B, a wet-pad fan cooler under shade (135), and option C, a passive double-skin reflective roof (159, but it cools no air) are modelled at the same level of detail, D3, in `cad/src/model.py`: 372, 472 and 432 parts. A and B are within 10 %, so both go to Amish. The choice is **proposed, awaiting Amish**; the recommendation is to keep A (CSH-OPT-001, CSH-DDR-004).
 
 ## Key components
 
@@ -79,7 +89,7 @@ Full design precis: [docs/02-concept.md](docs/02-concept.md). Requirements: [doc
 14. Normally open drain valve and vacuum breaker
 15. Hose and wiring harness
 
-The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is [cad/src/model.py](cad/src/model.py), with STEP and STL exports in `cad/step/` and `cad/stl/`; `python cad/src/model.py --check` runs its constructability checks.
+The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric model is [cad/src/model.py](cad/src/model.py) (kit 1.9, detail level D3: real stock, every bolt, nut, washer and rivet nut, edge breaks; options B and C in `cad/src/csh_options.py`), with STEP per part and per assembly in `cad/step/` and STL of the chosen design in `cad/stl/`; `python cad/src/model.py --check` runs its constructability checks and `python .kit/cad_check.py --export` the fidelity check (`cad/fidelity.json`).
 
 ## Building the prototype
 
@@ -99,19 +109,18 @@ The prototype build plan ([docs/05-build-plan.md](docs/05-build-plan.md), CSH-BL
 
 | Folder | Contents |
 | --- | --- |
-| `docs/` | Problem, concept, requirements, calculations and design decisions |
-| `cad/src/` | build123d Python source, the source of truth for all geometry |
-| `cad/step/`, `cad/stl/` | Exported models for FreeCAD, other CAD tools and printing |
-| `cad/drawings/` | 2D sketches and dimensioned drawings |
-| `bom/` | Bill of materials |
-| `electronics/` | KiCad schematics and PCB layouts |
-| `firmware/` | Microcontroller code |
-| `media/` | Renders, perspectives and photos |
-| `build-log/` | Dated prototyping notes |
+| `docs/` | Controlled documents: problem, STEM check, concept and concept options, user and product requirements, traceability, calculations, build plan, decisions, regulatory, feasibility, risk, market, plan and the review note |
+| `docs/04-calcs/` | `sizing.py` (CSH-CAL-001) and `stem_check.py` (CSH-STM-001) |
+| `cad/src/` | build123d source, the source of truth for all geometry: `model.py` (options A, B and C), `csh_parts.py`, `csh_options.py`, `sheets.py`, `build_plan_media.py`, `concept_media.py`, `product_model.py` |
+| `cad/step/`, `cad/stl/` | STEP per part and per assembly; STL of the chosen design |
+| `cad/drawings/` | CSH-DWG-001 general arrangement and CSH-DWG-101 to 116 making sketches |
+| `bom/` | Priced bill of materials |
+| `media/` | Concept media and renders |
+| `electronics/`, `firmware/`, `build-log/` | Reserved for TRL 4 and later |
 
 ## Documentation
 
-Controlled documents follow the portfolio [documentation standard](.kit/STANDARDS.md). Each carries a document ID (CSH-PRC-001 for the precis), a version and a revision history. Branded PDFs are built with `python .kit/render.py` and attached to GitHub Releases when a document is tagged, for example `CSH-PRC-001/v1.0`.
+Controlled documents follow the portfolio [documentation standard](.kit/STANDARDS.md). Each carries a document ID (CSH-PRC-001 for the precis, CSH-STM-001, CSH-OPT-001, CSH-URS-001, CSH-PRS-001, CSH-RTM-001, CSH-REG-001, CSH-FEA-001, CSH-RSK-001, CSH-MKT-001 and CSH-PLN-001 for the pipeline), a version and a revision history. Branded PDFs are built with `python .kit/render.py` and attached to GitHub Releases when a document is tagged, for example `CSH-PRC-001/v1.0`.
 
 ## Credits
 

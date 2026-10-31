@@ -3,9 +3,9 @@ doc_id: CSH-DEC-001
 title: CoolShade design decisions register
 project: CoolShade
 doc_type: Design decisions register
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-10-02'
+date: '2026-10-30'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: "To confirm item 11 carries the market lane: health authority and responsible person named by role"
+  - version: "0.6"
+    date: '2026-10-30'
+    author: Amish Chadha
+    change: "Kit 1.9.1 upgrade: D8 (concept choice), D10 (presence sensor) and D11 (tank disinfection) opened as Proposed, awaiting Amish; D9 (white enclosure) decided under the standing instruction; D12 records that no design dimension changed"
 ---
 
 # CoolShade design decisions register
@@ -37,7 +41,13 @@ Every design decision still to be made, and every decision made, in one place. E
 
 ## Open decisions
 
-None. All open decisions were decided on 2026-10-02.
+Table 0. Decisions waiting for Amish (all Proposed, awaiting Amish).
+
+| # | Decision needed | Options | Recommendation | Affects in the build | Source |
+| --- | --- | --- | --- | --- | --- |
+| D8 | Concept choice | A solar misting shade canopy (134 of 190); B wet-pad fan cooler (135); C passive double-skin roof (159, cools no air); or A with C's white skin as an add-on | Keep A; consider C's skin as an add-on (to assess); B is the fallback. A and B are within 10 %, so both go to Amish | Nothing changes if A is kept; B or C would need a new BOM, drawing and build plan | CSH-OPT-001; CSH-DDR-004 |
+| D10 | Presence sensor in air near body temperature | Keep the PIR sensor and take its range from the maker's data; or a radar presence sensor (no images, but radio approval and a different privacy picture) | Keep the PIR for the first prototype and ask the maker for the derating; no change until Amish decides | BOM line 9 and the controller; PR-011 | CSH-STM-001 S15 |
+| D11 | Disinfecting the tank water | Water age and cleaning only (as designed); or dosing a disinfectant, which adds a part, a hazard and a rule to follow | Keep the design; leave dosing to the health authority's hygiene plan | BOM lines 11, 13; PR-009 | CSH-STM-001 S14; CSH-REG-001 G1 |
 
 ## To confirm when parts are bought
 
@@ -58,6 +68,7 @@ None. All open decisions were decided on 2026-10-02.
 | 11 | A water hygiene plan for a market lane, acceptable to the environmental health authority of the city or county where the first site stands (named once the site is chosen; the Phoenix area is the first candidate), with the market operator's manager named as the person responsible for the daily drain and refill, the weekly disinfection and the sampling | *Legionella* control (R9) is at risk; no public trial without it | CSH-CAL-001 [I3]; CSH-PRC-001 |
 | 12 | Water hardness at the site and a descaling method and interval for the 0.4 mm nozzles | Scaling (R16) is at risk | CSH-REQ-001 R16 |
 | 13 | Fabric porosity and stretch, which set the fabric's edge pull | The 15 m/s fabric-on limit is set on the conservative solid-fabric case | CSH-CAL-001 [G7], [G8] |
+| 14 | The enclosure maker offers a white or light grey finish with a solar absorptance of 0.25 or less, or a sunshield can be fitted | The battery keeps charging to 42.7 °C air (D9) | CSH-STM-001 S11 |
 
 ## Value engineering
 
@@ -82,3 +93,5 @@ Value-engineering target: USD 775 (a hypothetical control target, not a limit). 
 | 2026-10-02 | R14's tool list gains a hand rivet nut tool and a bench vice (option a); the rivet nuts are kept (open item 1) | Amish: "i approve your recommendations for all 555 open decisions." | CSH-DDR-003, A2 |
 | 2026-10-02 | Design for construction accepted: the changes P1 to P16 and their knock-on changes, as made | Amish: "APPROVED: Design-for-construction changes in 10 repos (CityTwin, CoolShade, PalletPilot, Heliolite, PotholeLog, EarthPress, ReadyKit, CellCheck, CargoMule and ThermaCart)" | [CSH-DDR-003](decisions/0003-design-for-construction.md), Tables 1 and 2 |
 | 2026-10-02 | First site type a market lane, with the market operator as co-design partner, in a hot, dry city; first candidate to approach a farmers' market operator in the Phoenix area, with Arizona State University's urban heat researchers as the candidate measurement partner (open item 2) | Amish: "i approve your recommendations for all 555 open decisions." | CSH-DDR-001, O2; CSH-DDR-002 |
+| 2026-10-30 | D9: the controller enclosure is white or light grey (solar absorptance 0.25, was 0.5), after the STEM check found the grey enclosure stops charging the battery above 41.4 °C air; charging now holds to 42.7 °C | Decided under Amish's standing STEM-fix instruction of 2026-10-23; he can reverse it | CSH-STM-001 S11 and Table 2; CSH-CAL-001 F5; `bom/bom.csv` line 8 |
+| 2026-10-30 | D12: no design dimension changed in the kit 1.9.1 upgrade. The model is richer (372 parts for option A, bolts, nuts, washers, rivet nuts, a hollow tank, edge breaks) and the sizing script reads the same `PARAMS`; the only change to the design is D9 | Recorded; no decision needed | `cad/src/model.py`; `cad/fidelity.json` |

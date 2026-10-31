@@ -1,0 +1,47 @@
+{
+ "level": "D3",
+ "stage": "P3",
+ "hash": "4e1b37381e8d5a03",
+ "options": {
+  "A": {
+   "title": "Solar misting shade canopy",
+   "parts": 372,
+   "made_or_bought": 88,
+   "fasteners": 284,
+   "welds": 0,
+   "bare": [],
+   "bare_share": 0.0,
+   "interference": [],
+   "mass_kg": 233.5,
+   "step_files": 88
+  },
+  "B": {
+   "title": "Wet-pad fan cooler under shade",
+   "parts": 472,
+   "made_or_bought": 108,
+   "fasteners": 344,
+   "welds": 20,
+   "bare": [],
+   "bare_share": 0.0,
+   "interference": [],
+   "mass_kg": 290.5,
+   "step_files": 0
+  },
+  "C": {
+   "title": "Passive double-skin reflective roof",
+   "parts": 432,
+   "made_or_bought": 64,
+   "fasteners": 352,
+   "welds": 16,
+   "bare": [],
+   "bare_share": 0.0,
+   "interference": [],
+   "mass_kg": 259.0,
+   "step_files": 0
+  }
+ },
+ "failures": [],
+ "warnings": [],
+ "passed": true,
+ "seconds": 258.4
+}

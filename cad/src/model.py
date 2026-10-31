@@ -31,6 +31,9 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+HERE = Path(__file__).resolve().parent
+sys.path[:0] = [str(HERE), str(HERE.parents[1] / ".kit")]
+
 # Top-level parameters (mm). Edit these, not the geometry below.
 PARAMS = {
     # roof plan and slope; roof plane (beam centre line) at the street and rear edges
@@ -182,19 +185,74 @@ def ahex(axis, u, v, s0, s1, af):
     return b.Plane(origin=a, z_dir=d.normalized()) * b.extrude(b.RegularPolygon(af / math.sqrt(3), 6), d.length)
 
 
-def bolt(axis, u, v, s0, s1, d, nut=True, head=True, tip=None):
-    """A bolt along axis at (u, v) whose head bears on the plane s0 and whose clamped thickness
-    ends at s1 (a nut there if nut, else the shank runs to tip, into a rivet nut or the slab).
-    Returns (solid, hole): hole is the clearance hole from s0 to s1 to cut from the parts."""
+PIECES = {}      # separate solids of the last build_components() that the kit-1.9 parts list needs apart
+FAST = []        # every fastener piece made by bolt() during the last build_components(): dict(name, shape, sys)
+_CTX = ["frame"]  # the sub-system the next fasteners belong to (frame, panel, enc, sensor, plant, mist)
+
+
+def setctx(name):
+    _CTX[0] = name
+
+
+def at_axis(axis, u, v, s, sg, shape):
+    """Place a cad_parts shape (built along +Z) with its origin at (u, v, s) and its +Z along sg * axis."""
+    b = _b3d()
+    return b.Plane(origin=_pt(axis, u, v, s), z_dir=b.Vector(*_pt(axis, 0, 0, sg))) * shape
+
+
+def rivet_nut(d, wall):
+    """Steel blind rivet nut (flanged): flange on the outer face of a wall of thickness 'wall' (local z = 0 at
+    that face, z > 0 into the tube), body in an 11 mm hole, formed tail 5 mm inside, threaded bore."""
+    b = _b3d()
+    flange = b.Pos(0, 0, -0.5) * b.Cylinder(7.0, 1.0)
+    body = b.Pos(0, 0, wall / 2) * b.Cylinder(5.45, wall)
+    tail = b.Pos(0, 0, wall + 2.5) * b.Cylinder(5.5, 5.0)
+    return (flange + body + tail) - b.Pos(0, 0, (wall + 4.0) / 2) * b.Cylinder(d / 2 + 0.05, wall + 7.0)
+
+
+def bolt(axis, u, v, s0, s1, d, nut=True, head=True, tip=None, rivet=None):
+    """A bolt along axis at (u, v) whose washered head bears on the plane s0 and whose clamped thickness
+    ends at s1 (a washer and nut there if nut, else the shank runs to tip, into a rivet nut or the slab).
+    head=False gives a countersunk head sunk into the first plate. rivet=<wall thickness> adds an M-d steel
+    rivet nut in the wall that ends at s1. The pieces (bolt, washers, nut, rivet nut) are also registered in
+    FAST, each as its own solid. Returns (solid, hole) or, with rivet, (solid, hole in the cleat, hole in the
+    tube): the holes to cut from the parts."""
+    import cad_parts as cp
+    b = _b3d()
     sg = 1 if s1 > s0 else -1
-    parts = []
+    S_, K_, M_, D2_, W_, PITCH = cp.ISO[d]
+    pieces = []
+    pre = _CTX[0]
+
+    def reg(name, shape):
+        FAST.append(dict(name=name, shape=shape, sys=pre))
+        pieces.append(shape)
+
+    hs = s0 - sg * W_ if head else s0
+    end = s1 + sg * (W_ + M_ + 2.5 * PITCH) if nut else (tip if tip is not None else s1 + sg * 6)
+    L = math.ceil(abs(end - hs) / 5.0) * 5.0
     if head:
-        parts.append(ahex(axis, u, v, s0 - sg * 0.65 * d, s0, AF[d]))
-    end = s1 + sg * (0.8 * d + 0.3 * d) if nut else (tip if tip is not None else s1 + sg * 6)
-    parts.append(acyl(axis, u, v, s0, end, d / 2 - 0.3))
+        reg(f"M{d} washer (ISO 7089)", at_axis(axis, u, v, s0, -sg, cp.washer(d)))
+        reg(f"M{d}x{L:g} hex bolt (ISO 4017)", at_axis(axis, u, v, hs, -sg, cp.hex_bolt(d, L)))
+    else:                                                   # countersunk head, flush with the plate face
+        hh = d / 2.0
+        csk = b.Pos(0, 0, -hh / 2) * b.Cone(d / 2, d, hh)
+        shank = b.Pos(0, 0, -L / 2) * b.Cylinder(d / 2, L)
+        reg(f"M{d}x{L:g} countersunk bolt (ISO 10642)", at_axis(axis, u, v, s0, -sg, csk + shank))
     if nut:
-        parts.append(ahex(axis, u, v, s1, s1 + sg * 0.8 * d, AF[d]))
-    return fuse(parts), acyl(axis, u, v, s0 - sg * 0.01, s1 + sg * 0.01, d / 2 + 0.5)
+        reg(f"M{d} washer (ISO 7089)", at_axis(axis, u, v, s1, sg, cp.washer(d)))
+        reg(f"M{d} hex nut (ISO 4032)", at_axis(axis, u, v, s1 + sg * W_, sg, cp.hex_nut(d)))
+    solid = fuse(pieces)
+    if rivet is None:
+        hole = acyl(axis, u, v, s0 - sg * 0.01, s1 + sg * 0.01, d / 2 + 0.5)
+        if not head:
+            hole = hole + at_axis(axis, u, v, s0 - sg * 0.02, -sg, b.Pos(0, 0, -d / 4 - 0.17) * b.Cone(d / 2 + 0.3, d + 0.3, d / 2 + 0.3))
+        return solid, hole
+    a = s1 - sg * rivet
+    FAST.append(dict(name=f"M{d} steel rivet nut", shape=at_axis(axis, u, v, a, sg, rivet_nut(d, rivet)), sys=pre))
+    hole_c = acyl(axis, u, v, s0 - sg * 0.01, a + sg * 0.01, d / 2 + 0.5) + acyl(axis, u, v, a - sg * 1.2, a + sg * 0.01, 7.4)
+    hole_t = acyl(axis, u, v, a - sg * 0.01, s1 + sg * 0.01, 5.5)
+    return solid, hole_c, hole_t
 
 
 def roof_plane(p=PARAMS):
@@ -282,6 +340,9 @@ def build_components(p=PARAMS):
     PX, PY, S, T = p["post_x"], p["post_y"], p["post"], p["post_t"]
     half, bt = p["beam"] / 2, p["beam_t"]
     C, holes = {}, {}
+    FAST.clear()
+    PIECES.clear()
+    setctx("frame")
 
     def add(key, name, shape, bom, kind, group):
         C[key] = Comp(name, shape, bom, kind, group)
@@ -315,7 +376,6 @@ def build_components(p=PARAMS):
         for dx in (-ap, ap):
             for dy in (-ap, ap):
                 s_, h_ = bolt("z", cx + dx, cy + dy, pt_ + bct, 0.0, 16, nut=False, tip=-p["anchor_embed"])
-                s_ = s_ + zcyl(cx + dx, cy + dy, pt_ + bct + 0.65 * 16 + 3, 7.7, 6)       # stud end above the nut
                 anchors.append(s_)
                 hole_in([f"plate_{pk[5:]}", f"bcleat_{pk[5:]}"], h_)
     add("base_bolts", "M12 bolts, base cleats (8)", fuse(base_bolts), 16, "fixing", None)
@@ -338,9 +398,10 @@ def build_components(p=PARAMS):
             f = cx + sg * S / 2
             cl.append(bx(f, f + sg * ctk, cy - chl / 2, cy + chl / 2, top - cw, top)
                       + bx(f, f + sg * cw, cy - chl / 2, cy + chl / 2, top - ctk, top))
-            s_, h_ = bolt("z", cx + sg * (S / 2 + ctk + (cw - ctk) / 2), cy, top - ctk, top + bt, 8, nut=False, tip=top + bt + 6)
+            s_, hc_, ht_ = bolt("z", cx + sg * (S / 2 + ctk + (cw - ctk) / 2), cy, top - ctk, top + bt, 8, nut=False, tip=top + bt + 6, rivet=bt)
             head_bolts.append(s_)
-            hole_in([f"hcleat_{pk[5:]}", bk], h_)
+            hole_in([f"hcleat_{pk[5:]}"], hc_)
+            hole_in([bk], ht_)
         add(f"hcleat_{pk[5:]}", f"Head cleats (2), {pname[k]}", fuse(cl), 2, "made", "frame")
         s_, h_ = bolt("x", cy, top - 28, cx - S / 2 - ctk, cx + S / 2 + ctk, 10)
         head_bolts.append(s_)
@@ -370,9 +431,10 @@ def build_components(p=PARAMS):
         s_, h_ = bolt("x", cy, B1[2] - tab / 2, face - sx * tt, face + sx * S, 10)
         brace_bolts.append(s_)
         hole_in([f"brace_{pk[5:]}", pk], h_)
-        s_, h_ = bolt("z", B2[0] - sx * tab / 2, cy, zb - tt, zb + bt, 8, nut=False, tip=zb + bt + 6)
+        s_, hc_, ht_ = bolt("z", B2[0] - sx * tab / 2, cy, zb - tt, zb + bt, 8, nut=False, tip=zb + bt + 6, rivet=bt)
         brace_bolts.append(s_)
-        hole_in([f"brace_{pk[5:]}", f"beam_{'f' if cy < 0 else 'r'}"], h_)
+        hole_in([f"brace_{pk[5:]}"], hc_)
+        hole_in([f"beam_{'f' if cy < 0 else 'r'}"], ht_)
     add("brace_bolts", "Knee brace bolts: M10 through, M8 into rivet nuts", fuse(brace_bolts), 16, "fixing", None)
 
     # ---- end beams, purlins, bearer and their cleats
@@ -419,12 +481,14 @@ def build_components(p=PARAMS):
         frame_cleats.append(legA + legB)
         wA = p["beam_t"] if kindA != "purlin" else p["purlin_t"]
         wB = p["beam_t"] if kindB != "purlin" else p["purlin_t"]
-        s_, h_ = bolt("y", X0 + tx * (ctk + (cw - ctk) / 2 - 2.5), zc, Y0 + ty * ctk, Y0 - ty * wA, 8, nut=False, tip=Y0 - ty * (wA + 6))
+        s_, hc_, ht_ = bolt("y", X0 + tx * (ctk + (cw - ctk) / 2 - 2.5), zc, Y0 + ty * ctk, Y0 - ty * wA, 8, nut=False, tip=Y0 - ty * (wA + 6), rivet=wA)
         frame_bolts.append(s_)
-        hole_in(["frame_cleats", keyA], h_)
-        s_, h_ = bolt("x", Y0 + ty * (ctk + (cw - ctk) / 2 - 2.5), zc, X0 + tx * ctk, X0 - tx * wB, 8, nut=False, tip=X0 - tx * (wB + 6))
+        hole_in(["frame_cleats"], hc_)
+        hole_in([keyA], ht_)
+        s_, hc_, ht_ = bolt("x", Y0 + ty * (ctk + (cw - ctk) / 2 - 2.5), zc, X0 + tx * ctk, X0 - tx * wB, 8, nut=False, tip=X0 - tx * (wB + 6), rivet=wB)
         frame_bolts.append(s_)
-        hole_in(["frame_cleats", keyB], h_)
+        hole_in(["frame_cleats"], hc_)
+        hole_in([keyB], ht_)
 
     for sx in (-1, 1):
         for sy in (-1, 1):
@@ -446,12 +510,14 @@ def build_components(p=PARAMS):
     add("fabric", "Shade fabric", fab, 3, "bought", "fabric")
 
     # ---- 5 panel, rails, L-feet, end clamps
+    setctx("panel")
     pw, pd, ph = p["panel"]
     rail, rx, rg = p["rail"], p["rail_x"], p["rail_gap"]
     n_rail0 = half + rg                           # rail bottom above the roof plane at the foot centre
     n_pan = n_rail0 + rail
     sc = roof_s(p["panel_y"], n_pan, p)
     sa, sb = sc - pd / 2, sc + pd / 2
+    PIECES["panel"] = dict(sa=sa, sb=sb, sc=sc, n_pan=n_pan, pw=pw, pd=pd, ph=ph, rx=rx, rail=rail)
     add("panel", "Solar panel, 100 W", RP * b.Pos(0, sc, n_pan + ph / 2) * b.Box(pw, pd, ph), 5, "bought", "panel")
     rails = fuse(RP * b.Pos(sx * rx, sc, n_rail0 + rail / 2) * b.Box(rail, pd + 50, rail) for sx in (-1, 1))
     clamps = fuse(RP * b.Pos(sx * rx, s0 + sg * 10, n_pan + ph / 2) * b.Box(rail, 20, ph)
@@ -463,15 +529,17 @@ def build_components(p=PARAMS):
             base = bx(sx * (rx - 10), xo + sx * 4, yc - 20, yc + 20, ttop, ttop + 4)
             leg = bx(xo, xo + sx * 4, yc - 20, yc + 20, ttop, ttop + 50)
             feet.append(base + leg)
-            s_, h_ = bolt("z", sx * (rx + 5), yc, ttop + 4, ttop - bt, 8, nut=False, tip=ttop - bt - 6)
+            s_, hc_, ht_ = bolt("z", sx * (rx + 5), yc, ttop + 4, ttop - bt, 8, nut=False, tip=ttop - bt - 6, rivet=bt)
             foot_bolts.append(s_)
-            hole_in(["feet", keyb], h_)
+            hole_in(["feet"], hc_)
+            hole_in([keyb], ht_)
     add("rails", "Panel rails (2)", rails, 5, "bought", "panel")
     add("feet", "L-feet (4)", fuse(feet), 5, "bought", "panel")
     add("clamps", "Panel end clamps (4)", clamps, 5, "bought", "panel")
     add("foot_bolts", "L-foot bolts, M8 into rivet nuts (4)", fuse(foot_bolts), 16, "fixing", None)
 
     # ---- 8 enclosure on rails on the rear right post; 6 battery, 7 MPPT, controller board
+    setctx("enc")
     ew, ed, eh = p["enc"]
     rh, rt, rl = p["enc_rail"]
     cx, cy = PX, PY
@@ -510,6 +578,7 @@ def build_components(p=PARAMS):
     add("board", "Controller board", bx(xg, xg + 20, ey + 10, ey + 110, ez + 40, ez + 150), 8, "bought", "mppt")
 
     # ---- 9 sensor arm, radiation shield, PIR
+    setctx("sensor")
     fx, fy = PX, -PY
     ya = fy - S / 2
     az = p["shield_z"]
@@ -522,9 +591,10 @@ def build_components(p=PARAMS):
         arm_bolts.append(s_)
         hole_in(["arm", "post_fr"], h_)
     shx, shy = xa1 - 50, ya - aw / 2 - 4
-    s_, h_ = bolt("z", shx, shy, az + aw / 2, az + aw / 2 - at - 4, 8, nut=False, tip=az + aw / 2 - at - 4)
+    s_, h_ = bolt("z", shx, shy, az + aw / 2, az + aw / 2 - at - 4, 8, nut=False, tip=az + aw / 2 - at - 4 - 14)
     arm_bolts.append(s_)
     hole_in(["arm", "shield"], h_)
+    hole_in(["shield"], acyl("z", shx, shy, az + aw / 2 - at - 4 - 18, az + aw / 2 - at - 3.9, 4.5))
     add("arm", "Sensor arm", arm, 9, "made", "sensors")
     add("arm_bolts", "Sensor arm bolts, M8 (3)", fuse(arm_bolts), 16, "fixing", None)
     ztop = az + aw / 2 - at
@@ -541,6 +611,7 @@ def build_components(p=PARAMS):
     add("pir", "PIR presence sensor with bracket", pir, 9, "bought", "sensors")
 
     # ---- 10 pump, 11 filter, 14 drain valve on the equipment plate (rear left post, front face)
+    setctx("plant")
     lx, ly = -PX, PY
     x0p, x1p, z0p, z1p, tpl = p["eq_plate"]
     yf = ly - S / 2                                 # post front face
@@ -579,6 +650,8 @@ def build_components(p=PARAMS):
     vb_x = 150.0
     tees.append(box(vb_x, -yl, zf, 20, 20, 20))
     riser = rod((xl0, yl, zrr), (xl0, yl, 1000 + dh), r) + rod((xl0, yl, pz), (lx - 40, yl, pz), r)
+    PIECES["line"] = fuse([line, riser])
+    PIECES["tees"] = [(x, sy, t_) for (x, sy), t_ in zip([(x, sy) for x in p["nozzle_x"] for sy in (-1, 1)] + [(150.0, -1)], tees)]
     add("mistline", "Mist line loop, tees and 8 nozzles", fuse([line, riser] + tees), 12, "bought", "mistline")
     add("vbreaker", "Vacuum breaker", zcyl(vb_x, -yl, zf + 10 + 22.5, 12, 45), 14, "bought", "drain")
     clips = []
@@ -613,7 +686,10 @@ def build_components(p=PARAMS):
         loc = loc - acyl("z", 32, 0, -1, 6, 5.5)
         pl = b.Pos(tx + tr * math.cos(a), ty + tr * math.sin(a), 0) * b.Rot(0, 0, adeg)
         stops.append(pl * loc)
+        n0 = len(FAST)
         stop_bolts.append(pl * bolt("z", 32, 0, 5, 0, 10, nut=False, tip=-60)[0])
+        for f_ in FAST[n0:]:
+            f_["shape"] = pl * f_["shape"]
     add("stops", "Tank stop cleats (2)", fuse(stops), 13, "made", "tank")
     add("stop_bolts", "Tank stop anchors, M10 (2)", fuse(stop_bolts), 13, "fixing", None)
 
@@ -637,8 +713,9 @@ def build_components(p=PARAMS):
               fyc + (fr + 7) * math.sin(math.atan2(oy + 25 * math.sin(oa) - fyc, ox + 25 * math.cos(oa) - fxc)), 1080.0)]
     hose2 = [(fxc, fyc, 980 + fh / 2), (fxc, fyc, pz - qh / 2)]
     float_c = [(tx - 50, ty + 50, tht + 30), (tx - 50, ty + 50, z1p - 40), (-xi, yp - 8, z1p - 40)]   # tank level switch cable
-    harness = fuse([polyline_rod(sensor, cr), polyline_rod(pirc, cr), polyline_rod(panel_c, cr), polyline_rod(pump_c, cr), polyline_rod(float_c, cr),
-                    polyline_rod(hose1, 6.5), polyline_rod(hose2, 6.5)])
+    PIECES["cables"] = fuse([polyline_rod(sensor, cr), polyline_rod(pirc, cr), polyline_rod(panel_c, cr), polyline_rod(pump_c, cr), polyline_rod(float_c, cr)])
+    PIECES["hoses"] = fuse([polyline_rod(hose1, 6.5), polyline_rod(hose2, 6.5)])
+    harness = fuse([PIECES["cables"], PIECES["hoses"]])
     add("harness", "Cables and hoses", harness, 15, "bought", "harness")
     # grommet holes where the cables pass through walls
     gh = 6.0
@@ -693,6 +770,130 @@ def assembly(p=PARAMS):
         if c.group:
             parts[c.group] = c.shape if c.group not in parts else parts[c.group] + c.shape
     return b.Compound(children=[c.shape for c in C.values()]), parts
+
+
+# ------------------------------------------------------------------ kit 1.9 interface
+OPTIONS = {"A": "Solar misting shade canopy", "B": "Wet-pad fan cooler under shade",
+           "C": "Passive double-skin reflective roof"}
+PRINCIPLES = {
+    "A": "Shade first, then a fine 7 bar water mist from eight anti-drip nozzles that evaporates in hot, dry air and cools it, "
+         "switched on only when it is 32 C or hotter, 60 % RH or drier and someone is waiting.",
+    "B": "Shade first, then a 12 V fan draws hot, dry air through a wet cellulose pad (direct evaporative cooling) and blows the "
+         "cooled air at the waiting zone; water falls on the pad and never becomes a free aerosol.",
+    "C": "Shade only: a white aluminium composite skin on spacers 100 mm above the shade cloth reflects the sun, and the "
+         "sloping air gap vents the heat by buoyancy; no water, no power, no moving parts.",
+}
+CHOSEN = "A"
+OPTION_VIEWS = {k: {"el": 24, "az": -40, "scale": "person", "keep_context": True, "ground_z": 0} for k in OPTIONS}
+ALLOWED_CONTACTS = [("hinge", "Enclosure"), ("Door hinge", "Enclosure door"), ("Door hinge", "gasket"), ("Cam lock", "Enclosure door"),
+                    ("Hinge pin", "Door hinge"), ("Pop rivet", "Door hinge"), ("Pop rivet", "Enclosure")]
+
+_MAT = {  # legacy component key prefix -> (material, color, kind override)
+    "post": ("galvanised", None), "plate": ("galvanised", None), "bcleat": ("galvanised", None), "beam": ("galvanised", None),
+    "endb": ("galvanised", None), "purlin": ("galvanised", None), "bearer": ("galvanised", None), "hcleat": ("galvanised", None),
+    "brace": ("galvanised", None), "frame_cleats": ("galvanised", None), "enc_rails": ("galvanised", None), "arm": ("galvanised", None),
+    "eq_plate": ("galvanised", None), "stops": ("galvanised", None),
+}
+_SPLIT = {"bcleat", "hcleat", "frame_cleats", "feet", "clamps", "enc_rails", "stops", "clips"}
+
+
+def _sp(*a, **k):
+    import csh_parts
+    return csh_parts.sp(*a, **k)
+
+
+def parts_A(p=None):
+    """Option A as cad_parts.part() dicts, each tagged p['sys'] (frame, fabric, panel, enc, sensor, plant, mist, cables)."""
+    import cad_parts as cp
+    import csh_parts as cs
+    p = p or PARAMS
+    C = build_components(p)
+    out = []
+
+    def add(name, shape, mat, kind, bom, sys, color=None):
+        out.append(cs.sp(name, cs.soft(shape), mat, kind, bom, sys, color))
+
+    def solids(shape):
+        try:
+            from build123d import Solid
+            ss = [Solid(x.wrapped.Copy()) for x in shape.solids()]      # copies, so edge breaks act on one solid only
+            return ss if ss else [shape]
+        except Exception:
+            return [shape]
+
+    for k, c in C.items():
+        if c.kind == "fixing" or k in ("panel", "rails", "enclosure", "battery", "mppt", "board", "harness", "mistline", "vbreaker", "drain"):
+            continue
+        pre = k.split("_")[0] if k.split("_")[0] in ("post", "plate", "bcleat", "beam", "endb", "purlin", "hcleat", "brace") else k
+        sysn = {"fabric": "fabric", "feet": "panel", "clamps": "panel", "enc_rails": "enc", "arm": "sensor", "shield": "sensor", "pir": "sensor",
+                "eq_plate": "plant", "pump": "plant", "filter": "plant", "tank": "plant", "strap": "plant", "stops": "plant",
+                "clips": "mist"}.get(k, "frame")
+        mat, col = _MAT.get(pre, ("galvanised", None))
+        kind = "made" if c.kind == "made" else "bought"
+        if k == "fabric":
+            mat, col = "canvas", "#0F766E"
+        elif k in ("feet", "clamps"):
+            mat = "aluminium"
+        elif k == "shield":
+            mat = "hdpe_natural"
+        elif k == "pir":
+            mat, col = "matte_black", "#4B5563"
+        elif k == "pump":
+            mat, col = "matte_black", "#2563EB"
+        elif k == "filter":
+            mat = "hdpe_natural"
+        elif k == "tank":
+            mat, col = "hdpe_black", "#3B4A57"
+            tx_, ty_ = p["tank_xy"]
+            c.shape = c.shape - zcyl(tx_, ty_, (6.0 + p["tank_h"] - 5.0) / 2, p["tank_d"] / 2 - 5.0, p["tank_h"] - 11.0)
+        elif k == "strap":
+            mat = "rubber_belt"
+        elif k == "clips":
+            mat = "zinc_plated"
+        if k in _SPLIT:
+            for i, sol in enumerate(solids(c.shape), 1):
+                add(f"{c.name.split(' (')[0]} {i}", sol, mat, kind, c.bom, sysn, col)
+        else:
+            add(c.name, c.shape, mat, kind, c.bom, sysn, col)
+    # drain valve (brass body, coil) and vacuum breaker, mist line, tees with nozzles
+    add("Drain valve, 12 V normally open solenoid", C["drain"].shape, "brass", "bought", 14, "mist")
+    add("Vacuum breaker (air admittance valve)", C["vbreaker"].shape, "brass", "bought", 14, "mist")
+    add("Mist line loop and riser, 9.5 mm nylon", PIECES["line"], "matte_black", "bought", 12, "mist")
+    for i, (x, sy, t_) in enumerate(PIECES["tees"], 1):
+        t_ = t_ - PIECES["line"]
+        vbt = i == len(PIECES["tees"])
+        add("Slip-lok tee for the vacuum breaker" if vbt else f"Slip-lok tee with anti-drip nozzle {i}", t_,
+            "matte_black" if vbt else "brass", "bought", 12, "mist")
+    add("Cables, outdoor UV-stable (power, sensor, level switch)", PIECES["cables"], "epdm", "bought", 15, "cables")
+    add("Hoses, tank to filter to pump", PIECES["hoses"], "epdm", "bought", 15, "plant")
+    # panel, enclosure and details
+    Pc = PIECES["panel"]
+    th_ = cs.rail_tbolts(p, Pc)
+    for q in out:
+        if q["name"].startswith("L-feet") or q["name"].startswith("L-foot"):
+            for h in th_["feet"]:
+                q["shape"] = q["shape"] - h
+    pp = cs.panel_parts(p, Pc, th_)
+    out += pp
+    out += cs.end_cap_parts(p)
+    enc, rail_screw_holes, _ = cs.enclosure_parts(p)
+    out += enc
+    for q in out:
+        if q["name"].startswith("Enclosure rails"):
+            for yy, z, h in rail_screw_holes:
+                q["shape"] = q["shape"] - h
+    # fasteners registered by bolt()
+    for f in FAST:
+        kind = "fastener"
+        out.append(cs.sp(f["name"], f["shape"], "stainless" if "rivet" in f["name"] else "zinc_plated", kind, None, f["sys"]))
+    return out
+
+
+def components(option=CHOSEN):
+    if option == "A":
+        return [q for q in parts_A()]
+    import csh_options
+    return csh_options.parts(option)
 
 
 # ------------------------------------------------------------------ constructability checks
@@ -820,18 +1021,16 @@ if __name__ == "__main__":
         sys.exit(1 if print_checks() else 0)
     b = _b3d()
     out = Path(__file__).resolve().parents[1]
-    (out / "step").mkdir(exist_ok=True)
     (out / "stl").mkdir(exist_ok=True)
-    C = build_components()
-    exports = {"coolshade-assembly": [c.shape for c in C.values()]}
-    for name, f in GROUPS.items():
-        exports[name] = [c.shape for c in C.values() if f(c)]
-    for name, shapes in exports.items():
-        shape = b.Compound(children=shapes)
-        b.export_step(shape, str(out / "step" / f"{name}.step"))
-        b.export_stl(shape, str(out / "stl" / f"{name}.stl"), tolerance=0.5, angular_tolerance=0.3)
+    P = components(CHOSEN)                       # kit parts of the chosen option (STEP files come from .kit/cad_check.py --export)
+    groups = {"coolshade-assembly": P,
+              "frame": [q for q in P if q["sys"] in ("frame", "fabric")],
+              "water-system": [q for q in P if q["sys"] in ("plant", "mist")]}
+    for name, parts in groups.items():
+        shape = b.Compound(children=[q["shape"] for q in parts])
+        b.export_stl(shape, str(out / "stl" / f"{name}.stl"), tolerance=0.15, angular_tolerance=0.3)
         bb = shape.bounding_box()
-        print(f"{name}: {bb.size.X:.0f} x {bb.size.Y:.0f} x {bb.size.Z:.0f} mm")
+        print(f"{name}: {len(parts)} parts, {bb.size.X:.0f} x {bb.size.Y:.0f} x {bb.size.Z:.0f} mm")
     D = derived()
     print(f"slope {D['slope_deg']:.2f} deg; brace low point {D['brace_low_rear']:.0f} (rear) and {D['brace_low_front']:.0f} (front) mm; "
           f"nozzle tips {D['nozzle_tip_rear']:.0f} (rear) and {D['nozzle_tip_front']:.0f} (front) mm; "

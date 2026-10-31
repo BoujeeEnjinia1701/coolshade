@@ -1,4 +1,4 @@
-"""CoolShade sizing calculations, CSH-CAL-001 v0.3 (TRL 3, constructable design CSH-DDR-003).
+"""CoolShade sizing calculations, CSH-CAL-001 v0.6 (TRL 3, constructable design CSH-DDR-003).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number quoted in docs/04-calcs/01-sizing.md. Each line carries a tag such as
@@ -51,7 +51,7 @@ V_BATT, VMP = 12.8, 18.0
 MPPT_EFF = 0.95
 # Enclosure heat, under the shade cloth
 G_ENC = 200.0                         # W/m2 on the worst face: 10 % of 900 W/m2 direct through the cloth plus 100 diffuse
-ALPHA_ENC, H_ENC = 0.5, 10.0          # absorptance (light grey), combined film coefficient W/m2K
+ALPHA_ENC, H_ENC = 0.25, 10.0         # absorptance (white or light grey enclosure, CSH-DEC-001 D9; was 0.5), combined film coefficient W/m2K
 Q_INT = 5.0                           # W: MPPT and driver losses at peak charge
 T_CHG_MAX = 45.0                      # LiFePO4 charge limit (typical cell data)
 # Wind and structure
@@ -70,7 +70,7 @@ A_PERSON = 0.5                        # m2 per standing person (assumption)
 WHEEL = (0.8, 1.2)                    # m, R1 wheelchair space
 BENCH = (1.5, 0.42)                   # m, existing bench footprint (context)
 
-print("CoolShade sizing, CSH-CAL-001 v0.3")
+print("CoolShade sizing, CSH-CAL-001 v0.6")
 print(f"Geometry from cad/src/model.py: roof {P['roof_l']:.0f} x {P['roof_d']:.0f} mm, posts {P['post']:.0f} x {P['post_t']:.0f} SHS "
       f"on {2 * P['post_x']:.0f} x {2 * P['post_y']:.0f} mm, slope {D['slope_deg']:.2f} deg")
 results = {}
@@ -426,16 +426,16 @@ tag("J1", f"BOM {len(bom)} lines, total ${total:,.2f}: ${total - budget:+,.2f} (
 tag("J2", f"Steel lines 1, 2 and 4 cost ${steel_usd:,.0f} for about {m_steel:.0f} kg, ${steel_usd / m_steel:.2f}/kg including cutting, drilling and galvanizing: low, so cost is at risk upward until quoted")
 results["R13"] = ("At risk" if total <= budget else "Not met",
                   f"${total:,.0f} against ${budget:,.0f} ({(total / budget - 1) * 100:+.1f} %) after the parts added for construction (CSH-DDR-003); "
-                  f"a new budget is proposed, awaiting Amish (CSH-DEC-001); steel prices look low until quoted")
+                  f"the budget is a value-engineering target and stays USD {budget:,.0f}; any raise is Proposed, awaiting Amish (CSH-DEC-001); steel prices look low until quoted")
 
 # ------------------------------------------------------------------ Summary
 print("\nRequirement status")
 order = [f"R{i}" for i in range(1, 18)]
 for k in order:
     s, note = results[k]
-    print(f"{k}: {s}; {note}")
+    print(f"PR-{int(k[1:]):03d} (was {k}): {s}; {note}")
 groups = {"Not met": [], "At risk": [], "Not verifiable at TRL 3": [], "Met": []}
 for k in order:
     s = results[k][0]
     groups["Met" if s.startswith("Met") else s].append(k)
-print("Counts: " + "; ".join(f"{g} {len(v)} ({', '.join(v)})" for g, v in groups.items()))
+print("Counts: " + "; ".join(f"{g} {len(v)} ({', '.join('PR-%03d' % int(x[1:]) for x in v)})" for g, v in groups.items()))

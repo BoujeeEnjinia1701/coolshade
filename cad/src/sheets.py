@@ -16,6 +16,7 @@ from model import PARAMS as P, assembly, derived  # noqa: E402
 
 DATE = "2026-09-30"
 DATE_P = "2026-09-25"
+DATE_U = "2026-10-30"
 
 
 def safe_project_views(part, workdir, line_weight=0.35):
@@ -103,7 +104,8 @@ def main():
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE_P, "AC"),
                          ("P2", "Recommendations accepted (DDR-002): 25 Ah battery, R10 wind notes", DATE_P, "AC"),
                          ("P3", "Layout and labels tidied", DATE_P, "AC"),
-                         ("P4", "Constructable design (CSH-DDR-003): 2,350 post grid, cleats, panel at rear", DATE, "AC")])
+                         ("P4", "Constructable design (CSH-DDR-003): 2,350 post grid, cleats, panel at rear", DATE, "AC"),
+                         ("P5", "Kit 1.9.1: redrawn on the D3 model; enclosure white (CSH-DEC-001 D9)", DATE_U, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)

@@ -3,9 +3,9 @@ doc_id: CSH-CAL-001
 title: CoolShade sizing calculations
 project: CoolShade
 doc_type: Calculation
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-10-02'
+date: '2026-10-30'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "R14 row text updated for the tool list decided on 2026-10-02; no figures changed"
+- version: "0.6"
+  date: '2026-10-30'
+  author: Amish Chadha
+  change: "Kit 1.9.1 upgrade: white enclosure (solar absorptance 0.25) after the STEM check, F5 and R8 recomputed (CSH-DEC-001 D9); requirement IDs PR-001 to PR-017 added beside R1 to R17 (CSH-PRS-001); D3 model masses compared in the checks section"
 ---
 
 # CoolShade sizing calculations
@@ -110,7 +114,7 @@ Between the end of the jet under the rear nozzles and head height there are 759 
 - **Harvest and storage.** The panel yields 337.5 Wh, 1.66 times the use. The battery is now 12.8 V 25 Ah (CSH-DDR-002); its 256.0 Wh usable covers 1.256 design days without sun [F2]. With the former 20 Ah battery it was 204.8 Wh and 1.005 days, a margin of 1 Wh.
 - **Latching valve option.** A latching drain valve would cut the use to 179.3 Wh and give 1.43 days with the 25 Ah battery, but a latching valve does not open by itself when power fails, so the line could sit full of warm water [F3]. The normally open valve is kept (CSH-DDR-002).
 - **Currents.** Peak charge current is 7.4 A (the MPPT is rated 10 A) and the pump draws 4.7 A; the battery recharges from empty in 0.76 design days of sun [F4].
-- **Heat.** The enclosure runs about 3.6 K above the air: 41.6 °C on the design day but 48.6 °C in 45 °C air. The battery stops charging above 45 °C, so charging stops whenever the air is above about 41.4 °C [F5]. On the hottest days the battery can only discharge; the design day (38 °C) is below that limit. R8 is met, with the hot-day charge limit noted.
+- **Heat.** The enclosure is white or light grey (solar absorptance 0.25, CSH-DEC-001 D9; grey at 0.5 ran 3.6 K above the air and stopped charging above 41.4 °C air). It now runs about 2.3 K above the air: 40.3 °C on the design day and 47.3 °C in 45 °C air. The battery stops charging above 45 °C, so charging stops whenever the air is above about 42.7 °C [F5]. On the hottest days the battery can only discharge; the design day (38 °C) is below that limit. R8 is met, with the hot-day charge limit noted.
 
 ## G. Structure and wind (R10)
 
@@ -134,7 +138,7 @@ The heaviest part is a front post at 21.0 kg (its brace now bolts on separately)
 
 - **Control.** A 10 s control loop with a 20 s debounce on the temperature and humidity conditions stops the spray within 30 s of a condition failing, inside R6's 60 s [I1]. The lag of the sensor in its radiation shield is not known.
 - **Electrical.** The largest continuous battery current is 7.4 A while charging and 5.2 A while misting, so a 15 A terminal fuse has a margin of 2.0 [I2]. R12 is met by design.
-- **Tank temperature.** On design days the tank water settles near the daily mean air temperature plus some solar gain, about 34 °C (with an assumed 26 °C night), inside the 20 to 50 °C range in which *Legionella* grows ([WHO](https://www.who.int/news-room/fact-sheets/detail/legionellosis)) [I3]. R9 stays at risk: the design controls water age (under 24 h with the routine) and line draining (about 27 s), but not temperature.
+- **Tank temperature.** On design days the tank water settles near the daily mean air temperature plus some solar gain, about 34 °C (with an assumed 26 °C night), inside the 20 to 50 °C range in which *Legionella* grows ([WHO](https://www.who.int/news-room/fact-sheets/detail/legionellosis)) [I3]. R9 stays at risk: the design controls water age (under 24 h with the routine) and line draining (about 30 s for the bulk of the water), but not temperature.
 
 ## J. Cost (R13)
 
@@ -151,7 +155,7 @@ The BOM has 16 lines, all priced, totaling an estimated $882.00 against the $775
 | R16 | Maintenance | Scaling of 0.4 mm orifices | Descaling interval 1 month or more | At risk; not verifiable at TRL 3 |
 | R5 | No wetting | Needs Dv0.9 below about 80 µm at 7 bar [D3] | No wetting at 1.5 m | Not verifiable at TRL 3 (no droplet data) |
 | R4 | Air cooling from misting | 2.71 °C while spraying (1.35 °C averaged) at 1 m/s [E2] | 2 °C or more while spraying (restated) | Met; holds to 1.35 m/s [E3] |
-| R8 | Energy autonomy | 203.8 Wh used, 337.5 Wh harvested; 25 Ah battery 1.256 days [F2] | Energy-neutral; 1 day without sun | Met; no charging above about 41 °C air [F5] |
+| R8 | Energy autonomy | 203.8 Wh used, 337.5 Wh harvested; 25 Ah battery 1.256 days [F2] | Energy-neutral; 1 day without sun | Met; no charging above about 43 °C air with the white enclosure [F5] |
 | R10 | Wind resistance | Fabric off at 30 m/s: posts 0.14, bearer 0.02, purlins 0.07 [G13]; fabric on at 15 m/s: long beams 0.88 [G14]; anchors about 2.8 kN each | Restated: survive 30 m/s with fabric removed; fabric on only below 15 m/s | Met on paper; anchors to be confirmed per site. Original fabric-on case: beams 3.52 [G7] |
 | R1 | Shaded waiting area | 6.30 m² or more shadow above 45° sun [A2]; 8 standing + 3 seated + wheelchair [A3] | 6 m²; 6 people and a wheelchair | Met |
 | R2 | Headroom | 2,223 mm at the rear braces' flattened ends [B2] | 2,200 mm or more | Met |
@@ -174,3 +178,5 @@ In summary: 1 over its value-engineering target (R13), 2 at risk (R9, R16), 1 no
 - Headroom under the rear braces rises from about 2.1 m to 2,234 mm, so R2 is now met with margin.
 - The TRL 2 structure mass of about 130 kg becomes about 143 kg of steel before brackets and bolts.
 - v0.3 (constructable design, CSH-DDR-003): steel 167 kg with cleats and plates, headroom 2,223 mm, mist line 11.91 m, parts $882.
+- v0.6 (kit 1.9.1): the D3 model of option A (372 parts, `cad/fidelity.json`) weighs 233.5 kg: frame 166.3 kg (the 167 kg of steel in G1 less the parts modelled elsewhere, plus bolts), plant 19.6 kg, panel 20.9 kg and fabric 13.1 kg. The model overstates the panel (a solid frame, 20.9 kg against the assumed 7 kg) and the fabric (a 4 mm solid sheet, 13.1 kg against the assumed 2 kg); the figures in sections G and H keep the assumed masses, which are the better estimates. The enclosure is white or light grey (D9), so F5 uses a solar absorptance of 0.25 (was 0.5).
+- Requirement IDs: R1 to R17 are now PR-001 to PR-017 in CSH-PRS-001 (the same number); `python docs/04-calcs/sizing.py` prints both.

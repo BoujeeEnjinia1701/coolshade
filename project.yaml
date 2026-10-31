@@ -6,22 +6,45 @@ area: Smart Cities
 trl: 3                   # Technology Readiness Level, see .kit/STANDARDS.md section 9
 trl_target: 3
 design_state: constructable   # concept or constructable, see .kit/STANDARDS.md section 18
+stage: P3                # pipeline stage, STANDARDS section 19; P3 reached 2026-10-30 (kit 1.9.1 upgrade)
+stem_check: open         # CSH-STM-001 v0.1: 8 within, 13 plausible for option A, none fails; plausible rows need maker's data, a site or field measurements (TRL 4)
+concept_options: [A, B, C]   # CSH-OPT-001
+concept_chosen: A (proposed)   # Proposed, awaiting Amish (CSH-DDR-004, CSH-DEC-001 D8); option A is the current design
 trl_evidence:
   - docs/01-problem.md
+  - docs/01b-stem-check.md
   - docs/02-concept.md
+  - docs/02a-concept-options.md
+  - docs/03a-user-requirements.md
   - docs/03-requirements.md
+  - docs/03b-traceability.md
   - docs/decisions/0001-trl2-review-decisions.md
   - docs/decisions/0002-recommendations-accepted.md
   - docs/decisions/0003-design-for-construction.md
+  - docs/decisions/0004-concept-options.md
   - docs/04-calcs/01-sizing.md
   - docs/04-calcs/sizing.py
+  - docs/04-calcs/stem_check.py
+  - docs/04-calcs/stem_results.csv
   - cad/src/model.py
-  - cad/step/coolshade-assembly.step
+  - cad/src/csh_parts.py
+  - cad/src/csh_options.py
+  - cad/src/product_model.py
+  - cad/fidelity.json
+  - cad/step/A-assembly.step
+  - cad/step/B-assembly.step
+  - cad/step/C-assembly.step
+  - cad/stl/coolshade-assembly.stl
   - cad/drawings/CSH-DWG-001.svg
   - cad/drawings/CSH-DWG-001.pdf
   - bom/bom.csv
   - docs/05-build-plan.md
   - docs/06-design-decisions.md
+  - docs/07-regulatory.md
+  - docs/08-feasibility.md
+  - docs/09-risk.md
+  - docs/10-market.md
+  - docs/11-plan.md
 shortlisted: false
 pitch: >-
   A solar-powered shade canopy with fine misting for bus stops, markets and queues, switching on only when heat stress is high.
